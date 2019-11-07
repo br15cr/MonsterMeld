@@ -1,0 +1,29 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class TestEnemies : MonoBehaviour
+{
+    private MonsterGroup group;
+
+    void Start()
+    {
+        group = GetComponent<MonsterGroup>();
+        if (group != null) {
+            for (int i = 0; i < this.transform.childCount; i++) {
+		        GameObject child = transform.GetChild(i).gameObject;
+		        Monster monst = child.GetComponent<Monster>();
+		        //Debug.Log(this.name +" Group: "+ group+" Child: "+ child + "\t Monst: " + monst + " "+(i+1).ToString()+ "/" + this.transform.childCount.ToString());
+                group.AddMonster(monst);
+            }
+        } else {
+            Debug.LogError("GROUP IS NULL!");
+        }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+}

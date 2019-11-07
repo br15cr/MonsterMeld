@@ -1,0 +1,143 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using UnityEngine;
+
+
+/*
+public enum CombatResult {
+    FIGHTING,
+    ALLY_WIN,
+    ENEMY_WIN
+}
+
+public struct MonsterBattleInfo {
+    public Monster ally;
+    public Monster enemy;
+    public CombatResult result;
+
+    public MonsterBattleInfo(Monster Ally,Monster Enemy) {
+        ally = Ally;
+        enemy = Enemy;
+        result = CombatResult.FIGHTING;
+    }
+}
+*/
+
+public class MonsterGroup : MonoBehaviour
+{
+    //private List<MonsterBattleInfo> battles;
+    private List<Monster> monsters;
+
+    public GameObject monsterPrefab;
+    public Vector3 spawnOffset = new Vector3(0,0,2);
+    public Color groupColor;
+
+    protected virtual void Start()
+    {
+        monsters = new List<Monster>();
+        //groupColor = Color.blue;
+    }
+
+    // Update is called once per frame
+    protected void Update()
+    {
+    }
+
+    public void CreateMonster()
+    {
+        Monster monster = GameObject.Instantiate(monsterPrefab).GetComponent<Monster>();
+        monster.transform.position = transform.position + spawnOffset;
+        AddMonster(monster);
+        // set monster to status quo
+    }
+
+    public void Follow(Transform target)
+    {
+        foreach (Monster m in monsters)
+        {
+            m.Follow(target);
+        }
+    }
+
+    public void Attack(Monster enemyMonster) // attack MonsterGroup variant?
+    {
+        MonsterGroup enemyGroup = enemyMonster.GetGroup();
+        /*
+        foreach(Monster m in monsters)
+        {
+            if(m.GetState() != MonsterState.ATTACK) {
+                m.AttackMonster(monster);
+            }
+            //if(m.GetState() != MonsterState.ATTACK)
+            //    m.AttackMonster(monster);
+        }
+        */
+
+        foreach (Monster e in enemyGroup.GetMonsters()) {
+            if (!e.HasEnemy()) {
+                bool allOccupied = true;   // if all our monsters are attacking
+                foreach (Monster m in monsters) {
+                    if (!m.HasEnemy()) {
+                        m.AttackMonster(e);
+                        allOccupied = false;
+                    }
+                }
+                if (allOccupied)
+                    return;
+            }
+        }
+
+        // Attack Monster group
+        // Find available enemy in group (doesn't have enemy and is close enough)
+        // attack it
+    }
+
+    public void AddMonster(Monster monster)
+    {
+        monster.SetGroup(this);
+        monster.SetColor(groupColor);
+        monsters.Add(monster);
+        //monster.OnDeath += MonsterDeath;
+        monster.OnKillTarget += MonsterKill;
+    }
+
+    public void RemoveMonster(Monster monster)
+    {
+        // remove event subscriptions
+        monsters.Remove(monster);
+    }
+
+    public ReadOnlyCollection<Monster> GetMonsters() {
+        return this.monsters.AsReadOnly();
+    }
+
+    protected virtual void MonsterAttacked(Monster monster,Monster monsterEnemey) {
+
+    }
+
+
+    public virtual void MonsterDeath(Monster monster,Monster monsterEnemy)
+    {
+        monsters.Remove(monster);
+    }
+
+    protected virtual void MonsterKill(Monster monster,Monster monsterEnemy)
+    {
+        monster.Follow(transform); // change this???
+    }
+
+    void OnGUI() {
+        /*
+        GUI.color = Color.black;
+
+        GUI.Box(new Rect(10,10,500,20 + 10*monsters.Count),"Monsters");
+        GUI.color = Color.white;
+        int i = 0;
+        foreach (Monster m in monsters) {
+            GUI.Label(new Rect(10, 10+(i*10), 1000, 20),m.name+" Health: "+m.GetHealth().ToString()+" State: "+m.GetState().ToString() + "Combat State: "+m.GetCombatState());
+            i++;
+        }
+        */
+    }
+}

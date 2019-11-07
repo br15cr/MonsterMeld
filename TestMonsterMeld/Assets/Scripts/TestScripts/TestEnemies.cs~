@@ -1,0 +1,26 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class TestEnemies : MonoBehaviour
+{
+    private MonsterGroup group;
+    // Start is called before the first frame update
+    void Start()
+    {
+        group = GetComponent<MonsterGroup>();
+        if (group != null) {
+            for (int i = 0; i < this.transform.childCount; i++) {
+                group.AddMonster(transform.GetChild(i).GetComponent<Monster>());
+            }
+        } else {
+            Debug.LogError("GROUP IS NULL!");
+        }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+}
