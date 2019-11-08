@@ -42,6 +42,8 @@ public class Monster : MonoBehaviour
 
     private float angle;
 
+    private Color teamColor;
+
     private TextMesh healthText; // Temporary
     private NavMeshAgent body;
     private int health = 100;
@@ -181,6 +183,7 @@ public class Monster : MonoBehaviour
     /// <param name="color">Color to set the monster to.</param>
     public void SetColor(Color color) {
         MeshRenderer mesh = GetComponentInChildren<MeshRenderer>();
+        teamColor = color;
         if(mesh != null)
         {
             mesh.material.color = color;
@@ -250,7 +253,8 @@ public class Monster : MonoBehaviour
 	    }
 	    Debug.Log(this.gameObject.name + " Found Enemy: " + bestEnemy);
 	    this.AttackMonster(bestEnemy);
-	    return bestEnemy;
+        Debug.Log(this.gameObject.name + " Checking Enemy: " + enemyTarget);
+        return bestEnemy;
     }
 
     
@@ -301,9 +305,14 @@ public class Monster : MonoBehaviour
     public void TargetDeath(Monster monster,Monster enemy) {
         if (OnKillTarget != null) {
 
+            // if enemy target is null then it might not call this
             if (enemyTarget != null)
             {
                 OnKillTarget(this, enemyTarget.GetComponent<Monster>());
+            }
+            else
+            {
+                Debug.LogError("ON TARGET KILL TO NULL TARGET!!!");
             }
         }
         combatState = MonsterCombatState.CHASE;
@@ -318,6 +327,7 @@ public class Monster : MonoBehaviour
     /// </summary>
     /// <param name="monster">Monster to hit.</param>
     public void HitMonster() {
+
 	    Monster monster = enemyTarget.GetComponent<Monster>();
 	    // send damage data to 'monster'
 	    monster.TakeDamage(new MonsterAttackInfo(this, 10));
@@ -390,7 +400,8 @@ public class Monster : MonoBehaviour
 
     void OnDrawGizmos(){
     	if(enemyTarget != null){
-    	    Gizmos.DrawLine(transform.position,enemyTarget.position);
+            Gizmos.color = teamColor;
+    	    Gizmos.DrawLine(transform.position,enemyTarget.position + transform.up * 2);
         }
     }
 

@@ -172,20 +172,23 @@ public class MonsterGroup : MonoBehaviour
         // find next monster to attack
         //monster.Follow(transform); // change this???
         Debug.Log(monster.name + " KILLED ENEMY!!! NEXT TARGET...");
+
         if (enemyGroup.Count == 0) {
             Debug.Log(monster.name + ": ENEMY COUNT AT 0!!!");
+
             inCombat = false;
             monster.Follow(transform);
         } else {
             Debug.Log(monster.name + ": FINDING NEXT ENEMY");
+
             monster.Follow(transform);
 
             Monster enemyFound = monster.ChooseEnemy(enemyGroup.GetMonsters());
-            if (enemyFound == null)
-            {
-                UnityEditor.EditorApplication.isPlaying = false;
-                throw new System.Exception("you dun goofed");
-            }
+            //if (enemyFound == null)
+            //{
+            //    UnityEditor.EditorApplication.isPlaying = false;
+            //    throw new System.Exception("you dun goofed");
+            //}
 	    }
     }
 

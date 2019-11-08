@@ -30,6 +30,13 @@ public class Player : MonoBehaviour
         }
         moveDirection *= speed;
         body.Move(moveDirection);
+        float div = moveDirection.x / moveDirection.y;
+        float angle = Mathf.Atan(div) * Mathf.Rad2Deg;
+        if (moveDirection.y < 0)
+        {
+            angle -= 180;
+        }
+        transform.rotation = Quaternion.Euler(0, angle, 0);
     }
 
     public void CallMonsters()
