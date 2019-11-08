@@ -287,7 +287,7 @@ public class Monster : MonoBehaviour
         //this.target = monster.transform;
         if (monster.AskAttack(this)) {
             this.enemyTarget = monster.transform;
-	        Debug.Log(this.name + " ATTACK APPROVED BY " + enemyTarget);
+	    Debug.Log(this.name + " ATTACK APPROVED BY " + enemyTarget);
             state = MonsterState.ATTACK;
             combatState = MonsterCombatState.CHASE;
             enemyTarget.GetComponent<Monster>().OnDeath += TargetDeath;
