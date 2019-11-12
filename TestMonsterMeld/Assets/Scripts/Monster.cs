@@ -38,7 +38,7 @@ public class Monster : MonoBehaviour
 {
     private const float ATTACK_DISTANCE = 2.0f;
     private const float ATTACK_DELAY = 1.0f; // change to variable
-    private const bool SHOW_DEBUG_TEXT = true;
+    private const bool SHOW_DEBUG_TEXT = false;
 
     private float angle;
 
@@ -76,62 +76,20 @@ public class Monster : MonoBehaviour
 
     // Update is called once per frame
     void Update() {
-        //TODO: Move to separate function
-        switch (state) {
-        case MonsterState.IDLE:
-                break;
-        case MonsterState.FOLLOW:
-            if(followTarget != null){ //if (target != null) {
-                    if (Vector3.Distance(transform.position, followTarget.position) > minDistance)
-                    {
-                        if (body.isStopped)
-                            body.isStopped = false;
-                        body.SetDestination(followTarget.position); //body.SetDestination(target.position);
-                    }else if (!body.isStopped)
-                    {
-                        body.isStopped = true;
-                    }
-            }
-            break;
-            case MonsterState.ATTACK:
-                if(followTarget != null){ //if (target != null) {
-                    switch (combatState) {
-                        case MonsterCombatState.CHASE:
-                            if (Vector3.Distance(transform.position, enemyTarget.transform.position) > ATTACK_DISTANCE) { //if (Vector3.Distance(transform.position, target.transform.position) > ATTACK_DISTANCE) {
-                                if (body.isStopped)
-                                    body.isStopped = false;
-                                body.SetDestination(enemyTarget.position);
-                                //Debug.Log(enemyTarget);
-                            }
-                            else
-                            {
-                                combatState = MonsterCombatState.HIT;
-                            }
-                            break;
-                        case MonsterCombatState.HIT:
-                            HitMonster();
-                            combatState = MonsterCombatState.CHARGE;
-                            attackWait = Time.time;
-                            break;
-                        case MonsterCombatState.CHARGE:
-                            if (Time.time >= attackWait + ATTACK_DELAY)
-                                combatState = MonsterCombatState.HIT;
-                            break;
-                    }
-                }
-            break;
-        }
-        // TODO: delete this if it gets out of hand
+	// Run monster behaviour
+        Behaviour();
+	
+	// TODO: delete this if it gets out of hand
 	if(SHOW_DEBUG_TEXT)
-		UpdateText();
+	    UpdateText(); // Display debuging information above monster
 
 	// Temporary Self-Healing
 	if(state != MonsterState.ATTACK){
-		if(health < 100){
-			  health++;
-		}else if(health > 100){
-		      health = 100;
-		}
+	    if(health < 100){
+		health++;
+	    }else if(health > 100){
+		health = 100;
+	    }
 	}
     }
 
@@ -201,6 +159,9 @@ public class Monster : MonoBehaviour
     public void SetGroup(MonsterGroup group) {
         this.group = group;
         followTarget = group.transform;
+	OnDeath += group.MonsterDeath;
+	OnKillTarget += group.MonsterKill;
+	OnAttacked += group.MonsterAttacked;
     }
 
     public bool HasGroup() {
@@ -230,29 +191,46 @@ public class Monster : MonoBehaviour
     ///   Picks an available enemy from enemyGroup to fight and returns it.
     /// </summary>
     public virtual Monster ChooseEnemy(ReadOnlyCollection<Monster> enemyGroup){
-	    Monster bestEnemy = null; // best choice so far for an enemy;
-	    float bestDist = 0;
-	    Debug.Log(this.gameObject.name+" Choosing Enemy...");
-	    foreach(Monster m in enemyGroup){
+	Monster bestEnemy = null; // best choice so far for an enemy;
+	float bestDist = 0;
+	Debug.Log(this.gameObject.name+" Choosing Enemy...");
+	foreach(Monster m in enemyGroup){
 
-	        if(bestEnemy != null){
-		    float dist = Vector3.Distance(transform.position,m.transform.position);
+	    if(bestEnemy != null){
+		float dist = Vector3.Distance(transform.position,m.transform.position);
+		if(bestEnemy.HasEnemy()){
 		    if(!m.HasEnemy()){
-		        if(dist < bestDist){
+			bestEnemy = m;
+			bestDist = dist;
+		    }else{
+			if(dist < bestDist){
 			    bestEnemy = m;
 			    bestDist = dist;
-		        }
+			}
 		    }
-	        }else{
-	    
+		}else{
 		    if(!m.HasEnemy()){
-		        bestEnemy = m;
-		        bestDist = Vector3.Distance(transform.position,m.transform.position);
+			if(dist < bestDist){
+			    bestEnemy = m;
+			    bestDist = dist;
+			}
 		    }
-	        }
+		}
+		// if(!m.HasEnemy()){
+		//     if(dist < bestDist){
+		// 	bestEnemy = m;
+		// 	bestDist = dist;
+		//     }
+		// }
+	    }else{
+		//if(!m.HasEnemy()){
+		bestEnemy = m;
+		bestDist = Vector3.Distance(transform.position,m.transform.position);
+		//}
 	    }
-	    Debug.Log(this.gameObject.name + " Found Enemy: " + bestEnemy);
-	    this.AttackMonster(bestEnemy);
+	}
+	Debug.Log(this.gameObject.name + " Found Enemy: " + bestEnemy);
+	this.AttackMonster(bestEnemy);
         Debug.Log(this.gameObject.name + " Checking Enemy: " + enemyTarget);
         return bestEnemy;
     }
@@ -285,16 +263,17 @@ public class Monster : MonoBehaviour
     /// <param name="monster">The monster to start combat with.</param>
     public void AttackMonster(Monster monster) {
         //this.target = monster.transform;
-        if (monster.AskAttack(this)) {
+	//Debug.Log("MONSTER IS NULL? " + (monster == null));
+	
+        if (monster.AskAttack(this) || monster.HasEnemy()) {
             this.enemyTarget = monster.transform;
 	    Debug.Log(this.name + " ATTACK APPROVED BY " + enemyTarget);
             state = MonsterState.ATTACK;
             combatState = MonsterCombatState.CHASE;
             enemyTarget.GetComponent<Monster>().OnDeath += TargetDeath;
-            UpdateText();
         }else{
-	        Debug.LogError("ATTACK DENIED!");
-	    }
+	    Debug.LogError("ATTACK DENIED!");
+	}
     }
 
 
@@ -315,9 +294,8 @@ public class Monster : MonoBehaviour
                 Debug.LogError("ON TARGET KILL TO NULL TARGET!!!");
             }
         }
-        combatState = MonsterCombatState.CHASE;
-        enemyTarget = null;
-        UpdateText();
+        //combatState = MonsterCombatState.CHASE;
+        //enemyTarget = null;
         //state = MonsterState.IDLE; // change to fight next monster
         
     }
@@ -340,18 +318,18 @@ public class Monster : MonoBehaviour
     public void TakeDamage(MonsterAttackInfo attackInfo) {
         health -= attackInfo.baseDamage;
         //healthText.text = health.ToString();
-        UpdateText();
         if(health <= 0) {
-            OnDeath += group.MonsterDeath;
-            OnDeath(this,enemyTarget.GetComponent<Monster>());  // send event to this monster group
+	    // Should this be here???
+            //OnDeath += group.MonsterDeath;
+            //OnDeath(this,enemyTarget.GetComponent<Monster>());  // send event to this monster group
             //OnDeath.
             Die();
         }
 
         if(state != MonsterState.ATTACK) {
+            AttackMonster(attackInfo.attacker);
             if(OnAttacked != null)
                 OnAttacked(this,attackInfo.attacker);
-            AttackMonster(attackInfo.attacker);
         }
 
         //Debug.Log(this.name + " Attacked! Health: " + this.health.ToString());
@@ -360,8 +338,13 @@ public class Monster : MonoBehaviour
     private void UpdateText() {
         if(healthText != null){
 	        string text = gameObject.name + "\n";
-	        if(health < 100)
-		    text += "HP: " + health.ToString() + "\n";
+	        if(health < 100){
+		    text += "HP: "; //text += "HP: " + health.ToString() + "\n";
+		    for(int i = 0; i < health/10;i++){
+			text += "X";
+		    }
+		    text += "\n";
+		}
 	        text += "ST: ";
 	        if(state == MonsterState.ATTACK)
 		    text += combatState.ToString();
@@ -379,6 +362,7 @@ public class Monster : MonoBehaviour
     }
 
     private void Die() {
+	OnDeath(this,enemyTarget.GetComponent<Monster>());  // send event to this monster group
         Destroy(this.gameObject);
     }
 
@@ -398,10 +382,75 @@ public class Monster : MonoBehaviour
 	transform.rotation = Quaternion.Euler(0,angle,0); //transform.rotation = Quaternion.Euler(0,angle*Mathf.Rad2Deg -90,0);
     }
 
+    protected virtual void Behaviour(){
+	switch (state) {
+	    case MonsterState.IDLE:
+		IdleBehaviour();
+                break;
+	    case MonsterState.FOLLOW:
+		FollowBehaviour();
+		break;
+            case MonsterState.ATTACK:
+                AttackBehaviour();
+		break;
+        }
+    }
+
+
+    protected virtual void IdleBehaviour(){
+	
+    }
+
+    protected virtual void FollowBehaviour(){
+	if(followTarget != null){ //if (target != null) {
+	    if (Vector3.Distance(transform.position, followTarget.position) > minDistance)
+	    {
+		if (body.isStopped)
+		    body.isStopped = false;
+		body.SetDestination(followTarget.position); //body.SetDestination(target.position);
+	    }else if (!body.isStopped) {
+                        body.isStopped = true;
+	    }
+	}
+    }
+
+    protected virtual void AttackBehaviour(){
+	if(enemyTarget != null){ //if (target != null) {
+	    switch (combatState) {
+		case MonsterCombatState.CHASE:
+		    //Debug.Log(name + " CHASING " + enemyTarget.name);
+		    if (Vector3.Distance(transform.position, enemyTarget.transform.position) > ATTACK_DISTANCE) { //if (Vector3.Distance(transform.position, target.transform.position) > ATTACK_DISTANCE) {
+			if (body.isStopped)
+			    body.isStopped = false;
+			body.SetDestination(enemyTarget.position);
+			//Debug.Log(enemyTarget);
+		    }
+		    else
+		    {
+			Debug.Log(name + " GOING TO HIT " + enemyTarget.name);
+			combatState = MonsterCombatState.HIT;
+		    }
+		    break;
+		case MonsterCombatState.HIT:
+		    HitMonster();
+		    combatState = MonsterCombatState.CHARGE;
+		    attackWait = Time.time;
+		    break;
+		case MonsterCombatState.CHARGE:
+		    if (Time.time >= attackWait + ATTACK_DELAY)
+			combatState = MonsterCombatState.HIT;
+		    break;
+	    }
+	}else{
+	    Debug.Log(name + " HAS NO ONE TO ATTACK");
+	}
+    }
+
     void OnDrawGizmos(){
     	if(enemyTarget != null){
             Gizmos.color = teamColor;
     	    Gizmos.DrawLine(transform.position,enemyTarget.position + transform.up * 2);
+	    Gizmos.DrawLine(enemyTarget.position + transform.up*2,enemyTarget.position);
         }
     }
 

@@ -41,6 +41,10 @@ public class MonsterGroup : MonoBehaviour
     public Vector3 spawnOffset = new Vector3(0,0,2);
     public Color groupColor;
 
+    // Events //
+    public event MonsterInfoDelegate OnAddMonster;
+    public event MonsterInfoDelegate OnRemoveMonster;
+
     // Properties //
     public bool InCombat {
 	    get { return this.inCombat; }
@@ -143,13 +147,18 @@ public class MonsterGroup : MonoBehaviour
         monster.name = nameList[Random.Range(0, nameList.Count)];
 	    //Debug.Log("MonsterGroup: Monsters:" + monsters + " Monster: " + monster);
         monsters.Add(monster);
+	if(OnAddMonster != null)
+	    OnAddMonster(monster);
         //monster.OnDeath += MonsterDeath;
-        monster.OnKillTarget += MonsterKill;
+        //monster.OnKillTarget += MonsterKill;
     }
 
     public void RemoveMonster(Monster monster)
     {
+	Debug.Log("REMOVING MONSTER FROM LIST");
         // remove event subscriptions
+	if(OnRemoveMonster != null)
+	    OnRemoveMonster(monster);
         monsters.Remove(monster);
     }
 
@@ -157,56 +166,74 @@ public class MonsterGroup : MonoBehaviour
         return this.monsters.AsReadOnly();
     }
 
-    protected virtual void MonsterAttacked(Monster monster,Monster monsterEnemey) {
-
+    public virtual void MonsterAttacked(Monster monster,Monster monsterEnemy) {
+	// this group begins attack on enemy group
+	Debug.Log(monster.name + " IS GETTING ATTACKED!");
+	Attack(monsterEnemy);
     }
 
 
     public virtual void MonsterDeath(Monster monster,Monster monsterEnemy)
     {
-        monsters.Remove(monster);
+	RemoveMonster(monster);
+	if(Count == 0){
+	    Debug.Log("NO MORE MONSTERS!");
+	    inCombat = false;
+	    enemyGroup = null;
+	}
+        //monsters.Remove(monster);
     }
 
-    protected virtual void MonsterKill(Monster monster,Monster monsterEnemy)
+    public virtual void MonsterKill(Monster monster,Monster monsterEnemy)
     {
         // find next monster to attack
         //monster.Follow(transform); // change this???
-        Debug.Log(monster.name + " KILLED ENEMY!!! NEXT TARGET...");
+	//Debug.Log("MONSTERKILL: IS IN MONSTER GROUP? " + (monster.GetGroup() == this));
+	Debug.Log("monster is null: " + (monster == null) + " monsterEnemy is null: " + (monsterEnemy == null));
+        //Debug.Log(monster.name + " KILLED ENEMY!!! NEXT TARGET...");
 
-        if (enemyGroup.Count == 0) {
-            Debug.Log(monster.name + ": ENEMY COUNT AT 0!!!");
+	if (enemyGroup != null){
+	    if (enemyGroup.Count == 0) {
+		Debug.Log(monster.name + ": ENEMY COUNT AT 0!!!");
 
-            inCombat = false;
-            monster.Follow(transform);
-        } else {
-            Debug.Log(monster.name + ": FINDING NEXT ENEMY");
+		inCombat = false;
+		enemyGroup = null;
+		//monster.Follow(transform);
+		Follow(transform);
+	    } else {
+		Debug.Log(monster.name + ": FINDING NEXT ENEMY");
 
-            monster.Follow(transform);
+		monster.Follow(transform);
 
-            Monster enemyFound = monster.ChooseEnemy(enemyGroup.GetMonsters());
-            //if (enemyFound == null)
-            //{
-            //    UnityEditor.EditorApplication.isPlaying = false;
-            //    throw new System.Exception("you dun goofed");
-            //}
+		Monster enemyFound = monster.ChooseEnemy(enemyGroup.GetMonsters());
+		//if (enemyFound == null)
+		//{
+		//    UnityEditor.EditorApplication.isPlaying = false;
+		//    throw new System.Exception("you dun goofed");
+		//}
 	    }
+	}else{
+	    Follow(transform); // temp solution, pls fix
+	}
     }
 
     void OnGUI() {
+	if(name.Equals("Player")){
 	    if(inCombat){
 	        GUI.color = Color.red;
-	        GUI.Box(new Rect(10,10,200,50), "In Combat with:\n" + enemyGroup.name);
+	        GUI.Box(new Rect(10,10,200,50), "In Combat with:\n" + enemyGroup.name + "\nCount: \t"+ Count);
 	    }
+	}
         /*
-        GUI.color = Color.black;
+	  GUI.color = Color.black;
 
-        GUI.Box(new Rect(10,10,500,20 + 10*monsters.Count),"Monsters");
-        GUI.color = Color.white;
-        int i = 0;
-        foreach (Monster m in monsters) {
-            GUI.Label(new Rect(10, 10+(i*10), 1000, 20),m.name+" Health: "+m.GetHealth().ToString()+" State: "+m.GetState().ToString() + "Combat State: "+m.GetCombatState());
-            i++;
-        }
+	  GUI.Box(new Rect(10,10,500,20 + 10*monsters.Count),"Monsters");
+	  GUI.color = Color.white;
+	  int i = 0;
+	  foreach (Monster m in monsters) {
+	  GUI.Label(new Rect(10, 10+(i*10), 1000, 20),m.name+" Health: "+m.GetHealth().ToString()+" State: "+m.GetState().ToString() + "Combat State: "+m.GetCombatState());
+	  i++;
+	  }
         */
     }
 }
