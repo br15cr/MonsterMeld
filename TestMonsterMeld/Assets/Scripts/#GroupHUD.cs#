@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -93,6 +93,7 @@ public class GroupHUD : MonoBehaviour
 	foreach(MonsterInfoPanel p in panels){
 	    if(p.Monster == m){
 		panelsToRemove.Add(p);
+		
 		//Debug.Log("MATCHED MONSTER");
 		//MonsterInfoPanel pan = p;
 		//panels.Remove(p);

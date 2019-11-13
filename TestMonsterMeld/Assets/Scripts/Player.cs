@@ -53,18 +53,18 @@ public class Player : MonoBehaviour
 
     public void AttackMonsters()
     {
-        Debug.Log("ATTACK");
+        //Debug.Log("ATTACK");
         Collider[] cols = Physics.OverlapSphere(transform.position, 10);
-        Debug.Log("Found Colliders: " + cols.Length.ToString());
+        //Debug.Log("Found Colliders: " + cols.Length.ToString());
         for(int i = 0; i < cols.Length; i++)
         {
-            Debug.Log("Name: " + cols[i].name);
+            //Debug.Log("Name: " + cols[i].name);
             Monster monst = cols[i].GetComponent<Monster>();
             if(monst != null)
             {
                 if(monst.GetGroup() != playerMonsters)
                 {
-                    Debug.Log("found enemy");
+                    //Debug.Log("found enemy");
                     //playerMonsters.Follow(cols[i].transform);
                     playerMonsters.Attack(monst);
                     break; // for now

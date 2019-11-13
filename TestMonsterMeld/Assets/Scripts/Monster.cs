@@ -57,7 +57,13 @@ public class Monster : MonoBehaviour
     private Transform followTarget; // owner
     private Transform enemyTarget; // attack target
 
+    private bool isDead = false;
+
     //public Transform target;
+
+    public bool IsDead {
+	get { return this.isDead; }
+    }
 
     public event MonsterConflictDelegate OnDeath;
     public event MonsterConflictDelegate OnKillTarget;
@@ -164,6 +170,13 @@ public class Monster : MonoBehaviour
 	OnAttacked += group.MonsterAttacked;
     }
 
+    public void LeaveGroup(){
+	OnDeath -= group.MonsterDeath;
+	OnKillTarget -= group.MonsterKill;
+	OnAttacked -= group.MonsterAttacked;
+	group = null;
+    }
+
     public bool HasGroup() {
         return group != null;
     }
@@ -193,45 +206,51 @@ public class Monster : MonoBehaviour
     public virtual Monster ChooseEnemy(ReadOnlyCollection<Monster> enemyGroup){
 	Monster bestEnemy = null; // best choice so far for an enemy;
 	float bestDist = 0;
-	Debug.Log(this.gameObject.name+" Choosing Enemy...");
+	Debug.Log(this.gameObject.name+" looking for enemy...");
 	foreach(Monster m in enemyGroup){
-
-	    if(bestEnemy != null){
-		float dist = Vector3.Distance(transform.position,m.transform.position);
-		if(bestEnemy.HasEnemy()){
-		    if(!m.HasEnemy()){
-			bestEnemy = m;
-			bestDist = dist;
+	    if(!m.IsDead){
+		if(bestEnemy != null){
+		    float dist = Vector3.Distance(transform.position,m.transform.position);
+		    if(bestEnemy.HasEnemy()){
+		    
+			if(!m.HasEnemy()){ // prioritize enemies that aren't alright fighting someone
+			    Debug.Log("\t"+name+" would rather fight "+ m.name + " instead of " + bestEnemy.name + " because they have no enemy");
+			    bestEnemy = m;
+			    bestDist = dist;
+			}else{
+			    if(dist < bestDist){ // next prioritize close enemies
+				Debug.Log("\t"+name+" would rather fight "+ m.name + " instead of " + bestEnemy.name + " because they are closer");
+				bestEnemy = m;
+				bestDist = dist;
+			    }
+			}
 		    }else{
-			if(dist < bestDist){
-			    bestEnemy = m;
-			    bestDist = dist;
+			if(!m.HasEnemy()){
+			    if(dist < bestDist){
+				Debug.Log("\t"+name+" would rather fight "+ m.name + " instead of " + bestEnemy.name + " because they are closer");
+				bestEnemy = m;
+				bestDist = dist;
+			    }
 			}
 		    }
+		    // if(!m.HasEnemy()){
+		    //     if(dist < bestDist){
+		    // 	bestEnemy = m;
+		    // 	bestDist = dist;
+		    //     }
+		    // }
 		}else{
-		    if(!m.HasEnemy()){
-			if(dist < bestDist){
-			    bestEnemy = m;
-			    bestDist = dist;
-			}
-		    }
+		    //if(!m.HasEnemy()){
+		    bestEnemy = m;
+		    bestDist = Vector3.Distance(transform.position,m.transform.position);
+		    Debug.Log("\t" +name + " first enemy choice is " + bestEnemy.name);
+		    //}
 		}
-		// if(!m.HasEnemy()){
-		//     if(dist < bestDist){
-		// 	bestEnemy = m;
-		// 	bestDist = dist;
-		//     }
-		// }
-	    }else{
-		//if(!m.HasEnemy()){
-		bestEnemy = m;
-		bestDist = Vector3.Distance(transform.position,m.transform.position);
-		//}
 	    }
 	}
-	Debug.Log(this.gameObject.name + " Found Enemy: " + bestEnemy);
+	Debug.Log("\t" +name + " Found Enemy: " + bestEnemy);
 	this.AttackMonster(bestEnemy);
-        Debug.Log(this.gameObject.name + " Checking Enemy: " + enemyTarget);
+        Debug.Log(name + " chose " + enemyTarget.name + " as their enemy");
         return bestEnemy;
     }
 
@@ -267,12 +286,13 @@ public class Monster : MonoBehaviour
 	
         if (monster.AskAttack(this) || monster.HasEnemy()) {
             this.enemyTarget = monster.transform;
-	    Debug.Log(this.name + " ATTACK APPROVED BY " + enemyTarget);
+	    //Debug.Log(this.name + " ATTACK APPROVED BY " + enemyTarget);
             state = MonsterState.ATTACK;
             combatState = MonsterCombatState.CHASE;
             enemyTarget.GetComponent<Monster>().OnDeath += TargetDeath;
         }else{
-	    Debug.LogError("ATTACK DENIED!");
+	    Debug.LogWarning(name+"'s attack request was denied by " + monster.name);
+	    //Debug.LogError("ATTACK DENIED!");
 	}
     }
 
@@ -288,10 +308,12 @@ public class Monster : MonoBehaviour
             if (enemyTarget != null)
             {
                 OnKillTarget(this, enemyTarget.GetComponent<Monster>());
+		//Debug.Log(name+" is setting their enemy to null");
+		//enemyTarget = null;
             }
             else
             {
-                Debug.LogError("ON TARGET KILL TO NULL TARGET!!!");
+                //Debug.LogError("ON TARGET KILL TO NULL TARGET!!!");
             }
         }
         //combatState = MonsterCombatState.CHASE;
@@ -323,7 +345,8 @@ public class Monster : MonoBehaviour
             //OnDeath += group.MonsterDeath;
             //OnDeath(this,enemyTarget.GetComponent<Monster>());  // send event to this monster group
             //OnDeath.
-            Die();
+	    Debug.Log("Alas poor " + name + " was killed by " +attackInfo.attacker.name);
+            Die(attackInfo);
         }
 
         if(state != MonsterState.ATTACK) {
@@ -361,9 +384,19 @@ public class Monster : MonoBehaviour
         //healthText.text = health.ToString() + "\n" + state.ToString() + ((state == MonsterState.ATTACK) ? " " + combatState.ToString() : "") + "\nFT: " + (followTarget != null) + " AT: " + (enemyTarget != false) + " ANGLE: " + (angle*Mathf.Rad2Deg).ToString();
     }
 
-    private void Die() {
-	OnDeath(this,enemyTarget.GetComponent<Monster>());  // send event to this monster group
+    private void Die(MonsterAttackInfo finalBlow) {
+	isDead = true;
+	Debug.Log(name + " Died");
+	/*
+	if(enemyTarget != null){
+	    OnDeath(this,enemyTarget.GetComponent<Monster>());  // send event to this monster group
+	}else{
+	    OnDeath(this,null);
+	}*/
+	OnDeath(this,finalBlow.attacker);
+	Debug.Log(name + " Getting Destroyed!");
         Destroy(this.gameObject);
+	Debug.Log(name + " Destroyed?!?");
     }
 
     private void LookAt(Vector3 targetPos){
@@ -427,7 +460,7 @@ public class Monster : MonoBehaviour
 		    }
 		    else
 		    {
-			Debug.Log(name + " GOING TO HIT " + enemyTarget.name);
+			//Debug.Log(name + " GOING TO HIT " + enemyTarget.name);
 			combatState = MonsterCombatState.HIT;
 		    }
 		    break;
@@ -442,7 +475,10 @@ public class Monster : MonoBehaviour
 		    break;
 	    }
 	}else{
-	    Debug.Log(name + " HAS NO ONE TO ATTACK");
+	    Debug.LogWarning(name + " HAS NO ONE TO ATTACK");
+	    // Follow(followTarget);
+	    // move to attack wait for new target
+	    // wait for MonsterGroup to assign enemy
 	}
     }
 

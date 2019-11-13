@@ -57,6 +57,7 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\Controller.cs" />
      <Compile Include="Assets\Scripts\GroupHUD.cs" />
+     <Compile Include="Assets\Scripts\Logger.cs" />
      <Compile Include="Assets\Scripts\Monster.cs" />
      <Compile Include="Assets\Scripts\MonsterGroup.cs" />
      <Compile Include="Assets\Scripts\MonsterInfoPanel.cs" />
@@ -64,6 +65,7 @@
      <Compile Include="Assets\Scripts\PlayerCamera.cs" />
      <Compile Include="Assets\Scripts\StatusEffect.cs" />
      <Compile Include="Assets\Scripts\TestScripts\MyStatusEffect.cs" />
+     <Compile Include="Assets\Scripts\TestScripts\MyTestEnemies.cs" />
      <Compile Include="Assets\Scripts\TestScripts\TestEnemies.cs" />
      <Compile Include="Assets\Scripts\WildMonsterGroup.cs" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />

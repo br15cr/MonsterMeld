@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class TestEnemies : MonoBehaviour
 {
-    private MonsterGroup group;
+    protected MonsterGroup group;
 
-    void Start()
-    {
+    protected virtual void Start() {
         group = GetComponent<MonsterGroup>();
+	//Debug.Log("GROUP IS NULL: " + (group == null) + " CHILD COUNT " + transform.childCount.ToString());
         if (group != null) {
             for (int i = 0; i < this.transform.childCount; i++) {
 		        GameObject child = transform.GetChild(i).gameObject;
@@ -21,9 +21,7 @@ public class TestEnemies : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
+    protected virtual void Update() {
         
     }
 }

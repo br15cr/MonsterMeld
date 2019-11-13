@@ -100,9 +100,26 @@ public class MonsterGroup : MonoBehaviour
 
     public void Attack(Monster enemyMonster) // attack MonsterGroup variant?
     {
-        if(enemyGroup == null)
-            enemyGroup = enemyMonster.GetGroup();
-        inCombat = true;
+	if(Count > 0){
+	    if(enemyGroup == null){
+		string team = "";
+		enemyGroup = enemyMonster.GetGroup();
+		foreach(Monster m in monsters){
+		    team += m.name + " ";
+		}
+		Debug.Log(name + " group join the fight! " + team + " enter the battlefield.");
+	    }
+	    inCombat = true;
+
+
+	    foreach(Monster m in monsters){
+		if(!m.HasEnemy()){
+		    m.ChooseEnemy(enemyGroup.GetMonsters());
+		}
+	    }
+	}
+
+	
         /*
         foreach(Monster m in monsters)
         {
@@ -114,11 +131,7 @@ public class MonsterGroup : MonoBehaviour
         }
         */
 
-	    foreach(Monster m in monsters){
-	        if(!m.HasEnemy()){
-		        m.ChooseEnemy(enemyGroup.GetMonsters());
-	        }
-	    }
+
 
 	    /*
         foreach (Monster e in enemyGroup.GetMonsters()) {
@@ -144,6 +157,7 @@ public class MonsterGroup : MonoBehaviour
     {
         monster.SetGroup(this);
         monster.SetColor(groupColor);
+	//Debug.Log("NameList Count: " + nameList.Count.ToString());
         monster.name = nameList[Random.Range(0, nameList.Count)];
 	    //Debug.Log("MonsterGroup: Monsters:" + monsters + " Monster: " + monster);
         monsters.Add(monster);
@@ -155,10 +169,12 @@ public class MonsterGroup : MonoBehaviour
 
     public void RemoveMonster(Monster monster)
     {
-	Debug.Log("REMOVING MONSTER FROM LIST");
+	//Debug.Log("REMOVING MONSTER FROM LIST");
+	// getting called a lot when broken
         // remove event subscriptions
 	if(OnRemoveMonster != null)
 	    OnRemoveMonster(monster);
+	monster.LeaveGroup();
         monsters.Remove(monster);
     }
 
@@ -168,7 +184,7 @@ public class MonsterGroup : MonoBehaviour
 
     public virtual void MonsterAttacked(Monster monster,Monster monsterEnemy) {
 	// this group begins attack on enemy group
-	Debug.Log(monster.name + " IS GETTING ATTACKED!");
+	//Debug.Log(monster.name + " IS GETTING ATTACKED!");
 	Attack(monsterEnemy);
     }
 
@@ -177,7 +193,7 @@ public class MonsterGroup : MonoBehaviour
     {
 	RemoveMonster(monster);
 	if(Count == 0){
-	    Debug.Log("NO MORE MONSTERS!");
+	    //Debug.Log("NO MORE MONSTERS!");
 	    inCombat = false;
 	    enemyGroup = null;
 	}
@@ -189,21 +205,21 @@ public class MonsterGroup : MonoBehaviour
         // find next monster to attack
         //monster.Follow(transform); // change this???
 	//Debug.Log("MONSTERKILL: IS IN MONSTER GROUP? " + (monster.GetGroup() == this));
-	Debug.Log("monster is null: " + (monster == null) + " monsterEnemy is null: " + (monsterEnemy == null));
+	//Debug.Log("monster is null: " + (monster == null) + " monsterEnemy is null: " + (monsterEnemy == null));
         //Debug.Log(monster.name + " KILLED ENEMY!!! NEXT TARGET...");
 
 	if (enemyGroup != null){
 	    if (enemyGroup.Count == 0) {
-		Debug.Log(monster.name + ": ENEMY COUNT AT 0!!!");
+		//Debug.Log(monster.name + ": ENEMY COUNT AT 0!!!");
 
 		inCombat = false;
 		enemyGroup = null;
 		//monster.Follow(transform);
 		Follow(transform);
 	    } else {
-		Debug.Log(monster.name + ": FINDING NEXT ENEMY");
+		//Debug.Log(monster.name + ": FINDING NEXT ENEMY");
 
-		monster.Follow(transform);
+		//will change states in monster script//monster.Follow(transform);
 
 		Monster enemyFound = monster.ChooseEnemy(enemyGroup.GetMonsters());
 		//if (enemyFound == null)
@@ -218,12 +234,12 @@ public class MonsterGroup : MonoBehaviour
     }
 
     void OnGUI() {
-	if(name.Equals("Player")){
-	    if(inCombat){
-	        GUI.color = Color.red;
-	        GUI.Box(new Rect(10,10,200,50), "In Combat with:\n" + enemyGroup.name + "\nCount: \t"+ Count);
-	    }
-	}
+	// if(name.Equals("Player")){
+	//     if(inCombat){
+	//         GUI.color = Color.red;
+	//         GUI.Box(new Rect(10,10,200,50), "In Combat with:\n" + enemyGroup.name + "\nCount: \t"+ Count);
+	//     }
+	// }
         /*
 	  GUI.color = Color.black;
 
@@ -235,5 +251,9 @@ public class MonsterGroup : MonoBehaviour
 	  i++;
 	  }
         */
+    }
+
+    public MonsterGroup GetEnemyGroup(){
+	return enemyGroup;
     }
 }
