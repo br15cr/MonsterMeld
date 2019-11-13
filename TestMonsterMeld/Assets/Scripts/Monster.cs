@@ -38,13 +38,14 @@ public class Monster : MonoBehaviour
 {
     private const float ATTACK_DISTANCE = 2.0f;
     private const float ATTACK_DELAY = 1.0f; // change to variable
-    private const bool SHOW_DEBUG_TEXT = false;
+    private const bool CAN_AUTO_HEAL = false;
+    //private const bool SHOW_DEBUG_TEXT = false;
 
     private float angle;
 
     private Color teamColor;
 
-    private TextMesh healthText; // Temporary
+    //private TextMesh healthText; // Temporary
     private NavMeshAgent body;
     private int health = 100;
 
@@ -73,9 +74,9 @@ public class Monster : MonoBehaviour
 
     void Start() {
         body = GetComponent<NavMeshAgent>();
-        healthText = GetComponentInChildren<TextMesh>();
-	healthText.gameObject.SetActive(SHOW_DEBUG_TEXT);
-        UpdateText(); //healthText.text = health.ToString();
+        //healthText = GetComponentInChildren<TextMesh>();
+	//healthText.gameObject.SetActive(SHOW_DEBUG_TEXT);
+        //UpdateText(); //healthText.text = health.ToString();
         state = MonsterState.IDLE;
         body.stoppingDistance = 2;
     }
@@ -86,11 +87,11 @@ public class Monster : MonoBehaviour
         Behaviour();
 	
 	// TODO: delete this if it gets out of hand
-	if(SHOW_DEBUG_TEXT)
-	    UpdateText(); // Display debuging information above monster
+	//if(SHOW_DEBUG_TEXT)
+	    //UpdateText(); // Display debuging information above monster
 
 	// Temporary Self-Healing
-	if(state != MonsterState.ATTACK){
+	if(CAN_AUTO_HEAL && state != MonsterState.ATTACK){
 	    if(health < 100){
 		health++;
 	    }else if(health > 100){
@@ -138,7 +139,7 @@ public class Monster : MonoBehaviour
 	    		   transform.rotation = Quaternion.Euler(0,angle,0);
 	    }
 
-        healthText.transform.rotation = Quaternion.LookRotation(Camera.main.transform.forward, Camera.main.transform.up);
+        //healthText.transform.rotation = Quaternion.LookRotation(Camera.main.transform.forward, Camera.main.transform.up);
     }
 
     /// <summary>
@@ -345,11 +346,16 @@ public class Monster : MonoBehaviour
             //OnDeath += group.MonsterDeath;
             //OnDeath(this,enemyTarget.GetComponent<Monster>());  // send event to this monster group
             //OnDeath.
-	    Debug.Log("Alas poor " + name + " was killed by " +attackInfo.attacker.name);
+	    if(attackInfo.attacker != null){
+		Debug.Log("Alas poor " + name + " was killed by " +attackInfo.attacker.name);
+		
+	    }else{
+		Debug.Log("Alas poor " + name + " was killed by natural causes (probably a status effect)");
+	    }
             Die(attackInfo);
         }
 
-        if(state != MonsterState.ATTACK) {
+        if(state != MonsterState.ATTACK && attackInfo.attacker != null) {
             AttackMonster(attackInfo.attacker);
             if(OnAttacked != null)
                 OnAttacked(this,attackInfo.attacker);
@@ -358,6 +364,7 @@ public class Monster : MonoBehaviour
         //Debug.Log(this.name + " Attacked! Health: " + this.health.ToString());
     }
 
+    /*
     private void UpdateText() {
         if(healthText != null){
 	        string text = gameObject.name + "\n";
@@ -383,6 +390,7 @@ public class Monster : MonoBehaviour
 	    }
         //healthText.text = health.ToString() + "\n" + state.ToString() + ((state == MonsterState.ATTACK) ? " " + combatState.ToString() : "") + "\nFT: " + (followTarget != null) + " AT: " + (enemyTarget != false) + " ANGLE: " + (angle*Mathf.Rad2Deg).ToString();
     }
+    */
 
     private void Die(MonsterAttackInfo finalBlow) {
 	isDead = true;

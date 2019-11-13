@@ -418,13 +418,14 @@ When monsters die, this should happen
 2. Look through list of enemies
    + Add monster to list *if it already has an enemy*
    + else, compare monster with bestEnemy based on Enemy Priority
-* Bugs [0/3]
-  + [ ] Sometimes dead monsters are still alive
+* Bugs [3/3]
+  + [X] Sometimes dead monsters are still alive
     + They're not in the group list anymore
     + They're still subscribed to the groups events
-  + [ ] Problem when [[file:TestMonsterMeld/Assets/Scripts/MonsterGroup.cs][MonsterGroup]] sends monster to attack after attacking already.
-  + [ ] MonsterGroup still remembers enemy monster group outside of combat, and when all members are dead.
+  + [X] Problem when [[file:TestMonsterMeld/Assets/Scripts/MonsterGroup.cs][MonsterGroup]] sends monster to attack after attacking already.
+  + [X] MonsterGroup still remembers enemy monster group outside of combat, and when all members are dead.
 * Sources and References:
   Blockable text shader for Text Mesh: [[http://wiki.unity3d.com/index.php?title=3DText][Link To Source]] [[file:TestMonsterMeld/Assets/Materials/Shaders/TextShader.shader][File using source]]
   Text Shader Background: [[https://answers.unity.com/questions/385447/text-mesh-with-background.html][Link To Source]] [[file:TestMonsterMeld/Assets/Materials/Shaders/TextShader.shader][File using source]]
+  Git Naming: https://stackoverflow.com/questions/273695/what-are-some-examples-of-commonly-used-practices-for-naming-git-branches
   https://forum.unity.com/threads/solution-for-git-commits-in-vs-while-unity-is-open.328380/

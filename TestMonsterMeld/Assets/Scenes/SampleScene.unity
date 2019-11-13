@@ -543,6 +543,28 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 469620694}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &549621243 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 456590611538437231, guid: 53ce0130dc9072140b7d40776af60e13,
+    type: 3}
+  m_PrefabInstance: {fileID: 60469022}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &549621247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 549621243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8996d9eb084bdcb47b9802893d7a2998, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectName: 
+  lifeTime: 0
+  effectDelay: 0
+  targetMonster: {fileID: 0}
 --- !u!1001 &627032038
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1348,7 +1370,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89fa262ac664bf64a99ddb4986fd3fc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monsterPrefab: {fileID: 456590611538437231, guid: 53ce0130dc9072140b7d40776af60e13,
+  monsterPrefab: {fileID: 352426132730451157, guid: a1160195f821e344c98021f98d55b18d,
     type: 3}
   spawnOffset: {x: 0, y: 0, z: 2}
   groupColor: {r: 1, g: 0, b: 0.6556754, a: 1}
