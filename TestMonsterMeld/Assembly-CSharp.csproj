@@ -68,7 +68,6 @@
      <Compile Include="Assets\Scripts\PlayerCamera.cs" />
      <Compile Include="Assets\Scripts\StatusEffect.cs" />
      <Compile Include="Assets\Scripts\StatusEffectGroup.cs" />
-     <Compile Include="Assets\Scripts\TestScripts\MyStatusEffect.cs" />
      <Compile Include="Assets\Scripts\TestScripts\MyTestEnemies.cs" />
      <Compile Include="Assets\Scripts\TestScripts\TestEnemies.cs" />
      <Compile Include="Assets\Scripts\WildMonsterGroup.cs" />

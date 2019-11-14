@@ -17,9 +17,10 @@ public class StatusEffect : MonoBehaviour
     public Monster targetMonster;
 
     public event StatusEffectDelegate OnEnd;
-    
-    protected virtual void Start()
-    {
+
+    void Start() {}
+
+    public void Begin(){ // a controlled way for the StatusEffectGroup to start the effect
 	startTime = Time.time;
 	StartEffect();
     }
@@ -57,6 +58,10 @@ public class StatusEffect : MonoBehaviour
     }
 
     protected virtual void EffectBehaviour(){
+    }
+
+    public void SetTarget(Monster monster){
+	targetMonster = monster;
     }
 
     

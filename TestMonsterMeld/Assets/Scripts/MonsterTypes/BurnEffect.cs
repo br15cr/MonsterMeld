@@ -8,7 +8,7 @@ public class BurnEffect : StatusEffect
     
     protected override void StartEffect(){
 	effectName = "Burn";
-	targetMonster = GetComponent<Monster>();
+	//targetMonster = GetComponent<Monster>();
 	effectDelay = 0.5f;
 	lifeTime = 10.0f;
     }

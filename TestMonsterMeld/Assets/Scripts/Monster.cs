@@ -328,10 +328,11 @@ public class Monster : MonoBehaviour
     /// </summary>
     /// <param name="monster">Monster to hit.</param>
     public void HitMonster() {
-
+	if(Vector3.Distance(transform.position,enemyTarget.position) <= ATTACK_DISTANCE){ // only apply the attack if they're close enough
 	    Monster monster = enemyTarget.GetComponent<Monster>();
 	    // send damage data to 'monster'
 	    monster.TakeDamage(new MonsterAttackInfo(this, 10));
+	}
     }
 
     /// <summary>
@@ -478,6 +479,8 @@ public class Monster : MonoBehaviour
 		    attackWait = Time.time;
 		    break;
 		case MonsterCombatState.CHARGE:
+		    if(Vector3.Distance(transform.position,enemyTarget.position) > ATTACK_DISTANCE) // if the enemy becomes too far away, chase it again
+			combatState = MonsterCombatState.CHASE;
 		    if (Time.time >= attackWait + ATTACK_DELAY)
 			combatState = MonsterCombatState.HIT;
 		    break;

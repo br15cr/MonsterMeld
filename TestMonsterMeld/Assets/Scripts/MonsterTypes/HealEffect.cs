@@ -6,7 +6,7 @@ public class HealEffect : StatusEffect
 {
     protected override void StartEffect(){
 	effectName = "Heal";
-	targetMonster = GetComponent<Monster>();
+	//targetMonster = GetComponent<Monster>();
 	effectDelay = 1.0f;
     }
 
