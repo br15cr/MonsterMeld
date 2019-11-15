@@ -5,6 +5,7 @@
 	_Color1 ("Color 1", Color) = (1,1,1,1)
 	_Color2 ("Color 2", Color) = (1,1,1,1)
 	_Offset ("Offset",Range(0,1)) = 0
+	_Length ("Length",Range(0,1)) = 1
         _MainTex ("Albedo (RGB)", 2D) = "white" {}
         _Glossiness ("Smoothness", Range(0,1)) = 0.5
         _Metallic ("Metallic", Range(0,1)) = 0.0
@@ -34,6 +35,7 @@
 	fixed4 _Color1;
 	fixed4 _Color2;
 	fixed _Offset;
+	fixed _Length;
 
         // Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader.
         // See https://docs.unity3d.com/Manual/GPUInstancing.html for more information about instancing.
@@ -49,7 +51,7 @@
             // Albedo comes from a texture tinted by color
             //fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
 	    //fixed4 c = lerp(_Color1,_Color2,x);
-	    float circ = 1-ceil((atan2(IN.uv_MainTex.y*2-1,IN.uv_MainTex.x*2-1)/pi)/2+0.5-_Offset);
+	    float circ = 1-ceil((atan2(IN.uv_MainTex.y*2-1,IN.uv_MainTex.x*2-1)/pi)/2+0.5-_Offset*_Length);
 	    fixed4 c = lerp(_Color1,_Color2,circ);
             //o.Albedo = c.rgb;
 	    o.Emission = c.rgb;

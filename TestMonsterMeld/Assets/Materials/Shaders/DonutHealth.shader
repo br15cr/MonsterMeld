@@ -2,27 +2,30 @@
 {
     Properties
     {
+	_Color ("Base Color",Color) = (1,1,1,1)
 	_Color1 ("Color 1", Color) = (1,1,1,1)
 	_Color2 ("Color 2", Color) = (1,1,1,1)
 	_Offset ("Offset",Range(0,1)) = 0
 	_Length ("Length",Range(0,1)) = 1
         _MainTex ("Albedo (RGB)", 2D) = "white" {}
+	_Mask ("Mask",2D) = "white" {}
         _Glossiness ("Smoothness", Range(0,1)) = 0.5
         _Metallic ("Metallic", Range(0,1)) = 0.0
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
+        Tags { "RenderType"="Opaque" "Queue"="Transparent" }
         LOD 200
 
         CGPROGRAM
         // Physically based Standard lighting model, and enable shadows on all light types
-        #pragma surface surf Standard fullforwardshadows
+        #pragma surface surf Standard fullforwardshadows alpha
 
         // Use shader model 3.0 target, to get nicer looking lighting
         #pragma target 3.0
 
         sampler2D _MainTex;
+	sampler2D _Mask;
 
         struct Input
         {
@@ -51,14 +54,23 @@
             // Albedo comes from a texture tinted by color
             //fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
 	    //fixed4 c = lerp(_Color1,_Color2,x);
-	    float circ = 1-ceil((atan2(IN.uv_MainTex.y*2-1,IN.uv_MainTex.x*2-1)/pi)/2+0.5-_Offset*_Length);
+	    
+	    float circ = (atan2(IN.uv_MainTex.y*2-1,IN.uv_MainTex.x*2-1)/pi)/2+0.5-_Offset*_Length;
+	    float circ2 = (atan2(IN.uv_MainTex.y*2-1,IN.uv_MainTex.x*2-1)/pi)/2+0.5-_Length;
+	    circ2 = ceil(circ2);
+	    circ = 1-ceil(circ);
 	    fixed4 c = lerp(_Color1,_Color2,circ);
+	    fixed4 al = tex2D(_Mask,IN.uv_MainTex);
+	    c = lerp(c,_Color,circ2);
+	    //c = al;
+	    //fixed4 c = circ;
+	    
             //o.Albedo = c.rgb;
 	    o.Emission = c.rgb;
             // Metallic and smoothness come from slider variables
             //o.Metallic = _Metallic;
             //o.Smoothness = _Glossiness;
-            //o.Alpha = c.a;
+            o.Alpha = al.r;
         }
         ENDCG
     }

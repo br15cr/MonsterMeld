@@ -149,7 +149,13 @@ public class Monster : MonoBehaviour
 	    }
 
         //healthText.transform.rotation = Quaternion.LookRotation(Camera.main.transform.forward, Camera.main.transform.up);
-	healthRing.transform.rotation = Quaternion.LookRotation(Vector3.forward,Vector3.up);
+	//healthRing.transform.rotation = Quaternion.LookRotation(Vector3.forward,Vector3.up);
+	{
+		Vector2 vec = Vector2.down;
+		float div = vec.x/vec.y;
+		float ang = Mathf.Atan(div)*Mathf.Rad2Deg;
+		healthRing.rotation = Quaternion.Euler(0,ang-35+(healthbarMat.GetFloat("_Length")*360)/2,0);
+	}
     }
 
     /// <summary>
