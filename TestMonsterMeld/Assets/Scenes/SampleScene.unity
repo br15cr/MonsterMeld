@@ -395,7 +395,7 @@ PrefabInstance:
     - target: {fileID: 3609134688164573721, guid: a22a184815c4ca244a3cb7cc200177fe,
         type: 3}
       propertyPath: showGroupPanel
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a22a184815c4ca244a3cb7cc200177fe, type: 3}
@@ -690,7 +690,7 @@ PrefabInstance:
     - target: {fileID: 3609134688164573721, guid: a22a184815c4ca244a3cb7cc200177fe,
         type: 3}
       propertyPath: showGroupPanel
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5162771180661380144, guid: a22a184815c4ca244a3cb7cc200177fe,
         type: 3}

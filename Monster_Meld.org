@@ -262,6 +262,15 @@ Used for attacks that come with buffs or debuffs that last longer than the origi
      + Manually?
    + Should we continue to use Player Controllers or use rigidbodies instead?
 
+* Ideas
+  + [-] Circle health bars [2/6]
+    + [X] Model
+    + [X] Radial Shader
+    + [ ] Always face the camera
+    + [ ] Scale health from center
+    + [ ] Clipping Issue
+    + [ ] Texture
+  + [ ] Low health enemies are less saturated
 * Todo List
 
 ** Monster Elements
@@ -429,3 +438,5 @@ When monsters die, this should happen
   Text Shader Background: [[https://answers.unity.com/questions/385447/text-mesh-with-background.html][Link To Source]] [[file:TestMonsterMeld/Assets/Materials/Shaders/TextShader.shader][File using source]]
   Git Naming: https://stackoverflow.com/questions/273695/what-are-some-examples-of-commonly-used-practices-for-naming-git-branches
   https://forum.unity.com/threads/solution-for-git-commits-in-vs-while-unity-is-open.328380/
+  Radial Shader Math: https://www.youtube.com/watch?v=VnBNBMfk9HM
+  Atan2 Shader: https://answers.unity.com/questions/1386737/atan2-precision-in-shader.html

@@ -60,6 +60,9 @@ public class Monster : MonoBehaviour
 
     private bool isDead = false;
 
+    private Material healthbarMat;
+    private Transform healthRing;
+
     //public Transform target;
 
     public bool IsDead {
@@ -74,6 +77,8 @@ public class Monster : MonoBehaviour
 
     void Start() {
         body = GetComponent<NavMeshAgent>();
+	healthRing = transform.Find("HEALTH_RING");
+	healthbarMat = healthRing.GetComponent<Renderer>().material;
         //healthText = GetComponentInChildren<TextMesh>();
 	//healthText.gameObject.SetActive(SHOW_DEBUG_TEXT);
         //UpdateText(); //healthText.text = health.ToString();
@@ -89,6 +94,10 @@ public class Monster : MonoBehaviour
 	// TODO: delete this if it gets out of hand
 	//if(SHOW_DEBUG_TEXT)
 	    //UpdateText(); // Display debuging information above monster
+
+
+	// HeathBar
+	healthbarMat.SetFloat("_Offset",health/100.0f);
 
 	// Temporary Self-Healing
 	if(CAN_AUTO_HEAL && state != MonsterState.ATTACK){
@@ -140,6 +149,7 @@ public class Monster : MonoBehaviour
 	    }
 
         //healthText.transform.rotation = Quaternion.LookRotation(Camera.main.transform.forward, Camera.main.transform.up);
+	healthRing.transform.rotation = Quaternion.LookRotation(Vector3.forward,Vector3.up);
     }
 
     /// <summary>
