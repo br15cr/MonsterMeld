@@ -1,0 +1,24 @@
+#+TITLE:StatusEffect
+[[file:../TestMonsterMeld/Assets/Scripts/StatusEffect.org][StatusEffect.cs]]
+Used for attacks that come with buffs or debuffs that last longer than the originating hit. Examples of uses would be for burning, frozen, shocked, and stunned effects. This serves as a base for future status effects to inherit.
+* Private Variables
+| Name           | Description                                                  |
+|----------------+--------------------------------------------------------------|
+| startTime      | The point in time this effect began                          |
+| lastEffectTime | The last point in time this effect was applied to its target |
+* Public Variables
+| Name          | Description                                                |
+|---------------+------------------------------------------------------------|
+| effectName    | The visual name of the effect                              |
+| lifeTime      | How long the effect lasts (in seconds)                     |
+| effectDelay   | How often the effect is applied to its target (in seconds) |
+| targetMonster | The monster the effect is applied to                       |
+* Public Events
+| Name  | Description                             | Arguments                                |
+|-------+-----------------------------------------+------------------------------------------|
+| OnEnd | Invoked when this StatusEffect finishes | effect: A reference to this StatusEffect |
+* Private Methods
+| Name            | Description                                                                 | Arguments |
+|-----------------+-----------------------------------------------------------------------------+-----------|
+| EndEffect       | Called when this effect's lifetime is over. Invokes OnEnd                   |           |
+| EffectBehaviour | Behaviour of what the effect will do. Overridable in children of this class |           |

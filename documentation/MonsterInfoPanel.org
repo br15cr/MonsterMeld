@@ -1,0 +1,25 @@
+#+TITLE:MonsterInfoPanel
+[[file:../TestMonsterMeld/Assets/Scripts/MonsterInfoPanel.org][MonsterInfoPanel.cs]]
+
+* Private Variables
+     | Name           | Description                                                  |
+     |----------------+--------------------------------------------------------------|
+     | nameText       | A reference to NAME_TEXT                                     |
+     | enemyText      | A reference to ENEMY_TARGET                                  |
+     | stateText      | A reference to STATE_TEXT                                    |
+     | rect           | unused                                                       |
+     | healthBar      | A reference to HEALTH_BAR                                    |
+     | healthBarWidth | The width of HEALTH_BACKGROUND (the max width of HEALTH_BAR) |
+     | monster        | The monster this is displaying info about                    |
+     | color          | The groupColor of the monster                                |
+
+* Public Variables
+     | Name          | Description                                             |
+     |---------------+---------------------------------------------------------|
+     | Monster       | Returns 'monster'                                       |
+     | followMonster | Should *this* info box display above the monster's head |
+
+* Public Methods
+     | Name       | Description    | Arguments                       |
+     |------------+----------------+---------------------------------|
+     | SetMonster | Sets 'monster' | monst: What to set 'monster' to |

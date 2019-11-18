@@ -1,0 +1,9 @@
+#+TITLE:MonsterState
+[[file:../TestMonsterMeld/Assets/Scripts/Monster.org][Monster.cs]]
+
+The states a Monster can be in (outside of combat).
+| Name   | Description                                                            |
+|--------+------------------------------------------------------------------------|
+| IDLE   | Do nothing. Just wait around and see what happens.                     |
+| FOLLOW | Used for player monsters to follow the player.                         |
+| ATTACK | When monsters are in ATTACK mode they begin checking their CombatState |

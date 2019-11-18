@@ -1,0 +1,10 @@
+#+TITLE:PlayerCamera
+[[file:../TestMonsterMeld/Assets/Scripts/PlayerCamera.org][PlayerCamera.cs]]
+A script that makes the camera follow a target from an offset.
+* Public Variables
+| Name         | Description                                           |
+|--------------+-------------------------------------------------------|
+| target       | The target the camera follows                         |
+| maxDistance  | unused                                                |
+| moveSpeed    | How fast the camera is at catching up to its 'target' |
+| targetOffset | The camera's relative position to the 'target'        |

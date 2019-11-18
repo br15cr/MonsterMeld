@@ -1,0 +1,19 @@
+#+TITLE:Player
+[[file:../TestMonsterMeld/Assets/Scripts/Player.cs][Player.cs]]
+This is essentially you. The Player script contains functions that sends commands like 'attack' or 'follow me' to your MonsterGroup.
+* Private Variables
+| Name           | Description                                                                                                                      |
+|----------------+----------------------------------------------------------------------------------------------------------------------------------|
+| body           | The CharacterController attached to the player, which handles movement and collisions (could be changed to a RigidBody later on) |
+| playerMonsters | The player's MonsterGroup                                                                                                        |
+* Public Variables
+| Name  | Description      |
+|-------+------------------|
+| speed | The player speed |
+* Public Methods
+| Name                     | Description                                  | Arguments                                      |
+|--------------------------+----------------------------------------------+------------------------------------------------|
+| Move                     | Moves the player towards a direction         | direction: The direction to move the player in |
+| CallMonsters             | Tell your monsters to follow you             |                                                |
+| SpawnMonster (TEMPORARY) | Spawns a test monster in front of you        |                                                |
+| AttackMonsters           | Tells your monsters to attack nearby enemies |                                                |

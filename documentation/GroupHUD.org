@@ -1,0 +1,27 @@
+#+TITLE:GroupHUD
+[[file:../TestMonsterMeld/Assets/Scripts/GroupHUD.org][GroupHUD.cs]]
+
+* Private Variables
+| Name         | Description                                                                                                         |
+|--------------+---------------------------------------------------------------------------------------------------------------------|
+| infoTemplate | A reference to the Info Panel prefab                                                                                |
+| panels       | An array of Info Panels                                                                                             |
+| groupPanel   | A (side) panel displaying info about the MonsterGroup                                                               |
+| countText    | A reference to GROUP_COUNT, which displays the amount of monsters in the group                                      |
+| combatPanel  | A reference to COMBAT_PANEL, which displays info on the group's combat status                                       |
+| membersPanel | A reference to MEMBERS_PANEL, which displays a list of monsters in the group                                        |
+| enemyText    | A reference to ENEMY_GROUP inside COMBAT_PANEL, which displays the name of the MonsterGroup in combat with this one |
+| baseHeight   | The starting height of GroupPanel                                                                                   |
+
+* Public Variables
+| Name           | Description                          |
+|----------------+--------------------------------------|
+| group          | A reference to the MonsterGroup      |
+| showGroupPanel | Whether to show or hide 'groupPanel' |
+
+* Private Methods
+| Name           | Description                                            | Arguments              |
+|----------------+--------------------------------------------------------+------------------------|
+| AddPanel       | Creates a panel from a monster and adds it to the list | m: Monster             |
+| MonsterAdded   | Called when a monster is added to 'group'              | m: The added monster   |
+| MonsterRemoved | Called when a monster is removed from 'group'          | m: The removed monster |

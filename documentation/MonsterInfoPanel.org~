@@ -1,0 +1,16 @@
+#+TITLE:MonsterInfoPanel
+[[file:../TestMonsterMeld/Assets/Scripts/MonsterInfoPanel.org][MonsterInfoPanel.cs]]
+
+* Private Variables
+| Name           | Description                          |
+|----------------+--------------------------------------|
+| nameText       | Displays the monster's name          |
+| rect           | Transform as a RectTransform         |
+| healthBar      | The green box part of the health bar |
+| healthBarWidth | The maximum size of the health bar   |
+| monster        | A reference to the monster           |
+| color          | The monster's group color            |
+* Public Methods
+| Name       | Description       | Arguments                                 |
+|------------+-------------------+-------------------------------------------|
+| SetMonster | Assigns 'monster' | monst: The monster to assign to 'monster' |

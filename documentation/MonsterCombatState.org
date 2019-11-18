@@ -1,0 +1,9 @@
+#+TITLE:MonsterCombatState
+[[file:../TestMonsterMeld/Assets/Scripts/Monster.org][Monster.cs]]
+
+The state of a monster within combat.
+| Name   | Description                                                                                    |
+|--------+------------------------------------------------------------------------------------------------|
+| CHASE  | Follow the enemy until close enough to attack                                                  |
+| HIT    | A brief state where the monster deals damage to the enemy and immediately goes to CHARGE state |
+| CHARGE | The attack delay for the monster                                                               |

@@ -1,0 +1,49 @@
+#+TITLE:MonsterGroup
+[[file:../TestMonsterMeld/Assets/Scripts/MonsterGroup.cs][MonsterGroup.cs]]
+
+MonsterGroups are containers for monsters, but also serve as a way to command all group members at once.
+
+* Private Variables
+| Name       | Description                                           |
+|------------+-------------------------------------------------------|
+| monsters   | An array of monsters inside this group                |
+| nameList   | A list of baby monster names                          |
+| enemyGroup | The MonsterGroup in combat with this one              |
+| inCombat   | True if any monsters in this group are fighting (WIP) |
+
+* Public Variables
+| Name          | Description                                                      |
+|---------------+------------------------------------------------------------------|
+| monsterPrefab | The monster prefab to spawn in CreateMonster                     |
+| spawnOffset   | The position to spawn monster relative to this object's position |
+| groupColor    | Team Color!                                                      |
+| InCombat      | Returns 'inCombat'                                               |
+| Count         | Returns the size of 'monsters' array                             |
+
+* Public Events
+| Name            | Description                                      | Arugments                    |
+|-----------------+--------------------------------------------------+------------------------------|
+| OnAddMonster    | Invoked when a monster is added to the group     | monster: The added monster   |
+| OnRemoveMonster | Invoked when a monster is removed from the group | monster: The removed monster |
+
+* Private Methods
+| Name            | Description                                                         | Arguments                                                |
+|-----------------+---------------------------------------------------------------------+----------------------------------------------------------|
+| LoadNames       | Loads a file containing a list of monster names                     |                                                          |
+| Behaviour       | Manages the monster's states                                        |                                                          |
+| IdleBehaviour   | Called when monster is in IDLE state                                |                                                          |
+| FollowBehaviour | Called when monster is in FOLLOW state                              |                                                          |
+| AttackBehaviour | Called when monster is in ATTACK state                              |                                                          |
+
+* Public Methods
+| Name            | Description                                                         | Arguments                                                |
+|-----------------+---------------------------------------------------------------------+----------------------------------------------------------|
+| CreateMonster   | Spawns a monster and adds it to this group                          |                                                          |
+| Follow          | Tells all monsters in the group to follow a target                  | target: Target to follow                                 |
+| Attack          | Sends all monsters to attack an enemy's group                       | enemyMonster: Enemy to attack                            |
+| AddMonster      | Add a monster to this group                                         | monster: Monster to add                                  |
+| RemoveMonster   | Removes the monster from this group                                 | monster: Monster to remove                               |
+| MonsterDeath    | Called when a monster from this group dies                          | monster: Killed monster, monsterEnemy: The Killer        |
+| MonsterAttacked | Called when a monster from this group is attacked outside of combat | monster:The attacked monster, monsterEnemy: The attacker |
+| MonsterKill     | Called when a monster from this group kills an enemy                | monster: ally, monsterEnemy: enemy                       |
+| GetEnemyGroup   | Returns 'enemyGroup'                                                |                                                          |

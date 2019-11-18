@@ -1,0 +1,10 @@
+#+TITLE:MonsterAttackInfo
+[[file:../TestMonsterMeld/Assets/Scripts/Monster.org][Monster.cs]]
+
+Information sent from an attacker to its enemy containing information about the attack.
+This will eventually contain information like attack type (range, melee, etc.), elemenal type, and
+if it should apply status effects, like freeze, burn, shock, stun, heal, etc.
+| Name       | Description                                     |
+|------------+-------------------------------------------------|
+| baseDamage | The initial damage of the attack                |
+| attacker   | A reference to the monster that made the attack |
