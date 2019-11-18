@@ -1,1 +1,62 @@
 #+TITLE:Monster
+[[file:../TestMonsterMeld/Assets/Scripts/Monster.cs][Monster.cs]]
+
+The base monster script. Will be the foundation for all monster types.
+
+* Private Variables
+| Name            | Description                                                     |
+|-----------------+-----------------------------------------------------------------|
+| ATTACK_DISTANCE | The minimum distance the monster must be to attack enemyTarget  |
+| ATTACK_DELAY    | The delay time between attacks                                  |
+| SHOW_DEBUG_TEXT | Displays debug information above monsters when set to true      |
+| angle           | The angle the monster should be on.                             |
+| teamColor       | The color of the monster's MonsterGroup.                        |
+| healthText      | The text object used for debugging the monster.                 |
+| body            | The NavMeshAgent used for moving the monster                    |
+| health          | The monsters health (default 100)                               |
+| group           | The group that the monster is in.                               |
+| state           | The current overall state of the monster (IDLE, FOLLOW, ATTACK) |
+| combatState     | The combat state of the monster used when state is ATTACK       |
+| attackWait      | The last point in time the monster attacked.                    |
+| followTarget    | The object the monster follows when its state is FOLLOW         |
+| enemyTarget     | The object the monster attacks when its state is ATTACK         |
+| isDead          | Has 'Die()' been called on this monster.                        |
+* Public Variables
+| Name        | Description                                                |
+|-------------+------------------------------------------------------------|
+| minDistance | The minimum distance the monster must be from followTarget |
+| IsDead      | Returns 'isDead'                                           |
+
+* Public Events
+| Name         | Description                                                  | Arguments                                            |
+|--------------+--------------------------------------------------------------+------------------------------------------------------|
+| OnDeath      | Called when this monster dies                                | monster: The dying monster                           |
+| OnKillTarget | Called when this monster kills enemyTarget                   | ally: killer, enemy: the killed                      |
+| OnAttacked   | Called when a monster attacks this monster outside of combat | victim: The attacked monster, attacker: The attacker |
+
+* Private Methods
+| Name       | Description                     | Arguments                                |
+|------------+---------------------------------+------------------------------------------|
+| UpdateText | Updates the monsters debug text |                                          |
+| Die        | Destroys this monster           |                                          |
+| LookAt     | Faces the monster at a position | targetPos: Position the monster looks at |
+
+* Public Methods
+| Name           | Description                                                                        | Arguments                                          |
+|----------------+------------------------------------------------------------------------------------+----------------------------------------------------|
+| SetColor       | Sets the monster's material color.                                                 | color: The color to set the monster to.            |
+| GetHealth      | Returns the monster's health                                                       |                                                    |
+| GetGroup       | Returns the MonsterGroup of this monster                                           |                                                    |
+| SetGroup       | Assigns the monster to a monsterGroup                                              |                                                    |
+| HasGroup       | Returns true if this monster has a group assigned                                  |                                                    |
+| HasEnemy       | Returns true if this monster has an enemy                                          |                                                    |
+| GetState       | Returns 'state'                                                                    |                                                    |
+| GetCombatState | Returns 'combatState'                                                              |                                                    |
+| Follow         | Start following target                                                             | target: Target to follow                           |
+| ChooseEnemy    | Pick the best enemy from a MonsterGroup to enemyTarget. Return it                  | enemyGroup : The list of enemies                   |
+| AskAttack      | If the monster doesn't have an enemy, set both monsters' enemyTarget to each other | attacker : The monster asking to attack            |
+| GetEnemy       | Return 'enemyTarget' as Monster                                                    |                                                    |
+| AttackMonster  | Start attacking a monster                                                          | monster : The Monster to attack                    |
+| TargetDeath    | Called by 'enemyTarget' when it dies                                               | monster : The monster that died, enemy: the killer |
+| HitMonster     | Deal damage to enemyTarget. Called by combat loop                                  |                                                    |
+| TakeDamage     | Deal damage to self                                                                | attackInfo: Damage information                     |

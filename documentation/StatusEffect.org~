@@ -1,9 +1,6 @@
 #+TITLE:StatusEffect
 [[file:../TestMonsterMeld/Assets/Scripts/StatusEffect.org][StatusEffect.cs]]
-
-*** Description
 Used for attacks that come with buffs or debuffs that last longer than the originating hit. Examples of uses would be for burning, frozen, shocked, and stunned effects. This serves as a base for future status effects to inherit.
-
 * Private Variables
 | Name           | Description                                                  |
 |----------------+--------------------------------------------------------------|

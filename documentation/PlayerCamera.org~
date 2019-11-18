@@ -1,7 +1,5 @@
 #+TITLE:PlayerCamera
 [[file:../TestMonsterMeld/Assets/Scripts/PlayerCamera.org][PlayerCamera.cs]]
-
-*** Description
 A script that makes the camera follow a target from an offset.
 * Public Variables
 | Name         | Description                                           |

@@ -1,10 +1,7 @@
 #+TITLE:MonsterCombatState
 [[file:../TestMonsterMeld/Assets/Scripts/Monster.org][Monster.cs]]
 
-*** Description
 The state of a monster within combat.
-
-* Properties
 | Name   | Description                                                                                    |
 |--------+------------------------------------------------------------------------------------------------|
 | CHASE  | Follow the enemy until close enough to attack                                                  |

@@ -1,9 +1,6 @@
 #+TITLE:Controller
 [[file:../TestMonsterMeld/Assets/Scripts/Controller.org][Controller.cs]]
-
-*** Description
 Handles input from the user and controls the player accordingly. This must be attached to 'Player' in order to control it.
-
 * Private Variables
 | Name      | Description                  |
 |-----------+------------------------------|

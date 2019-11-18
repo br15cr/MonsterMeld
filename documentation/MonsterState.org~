@@ -1,10 +1,7 @@
 #+TITLE:MonsterState
 [[file:../TestMonsterMeld/Assets/Scripts/Monster.org][Monster.cs]]
 
-*** Description
 The states a Monster can be in (outside of combat).
-
-* Properties
 | Name   | Description                                                            |
 |--------+------------------------------------------------------------------------|
 | IDLE   | Do nothing. Just wait around and see what happens.                     |

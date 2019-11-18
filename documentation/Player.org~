@@ -1,9 +1,6 @@
 #+TITLE:Player
 [[file:../TestMonsterMeld/Assets/Scripts/Player.cs][Player.cs]]
-
-*** Description
 This is essentially you. The Player script contains functions that sends commands like 'attack' or 'follow me' to your MonsterGroup.
-
 * Private Variables
 | Name           | Description                                                                                                                      |
 |----------------+----------------------------------------------------------------------------------------------------------------------------------|

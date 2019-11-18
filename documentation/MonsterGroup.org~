@@ -1,7 +1,6 @@
 #+TITLE:MonsterGroup
 [[file:../TestMonsterMeld/Assets/Scripts/MonsterGroup.cs][MonsterGroup.cs]]
 
-*** Description
 MonsterGroups are containers for monsters, but also serve as a way to command all group members at once.
 
 * Private Variables
