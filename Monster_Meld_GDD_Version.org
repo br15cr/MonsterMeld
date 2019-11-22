@@ -1,0 +1,442 @@
+#+TITLE: Monster Meld Design
+
+** Documentation
+*** Enums
+**** MonsterState [[file:TestMonsterMeld/Assets/Scripts/Monster.cs][Monster.cs]]
+ The states a Monster can be in (outside of combat).
+ | Name   | Description                                                            |
+ |--------+------------------------------------------------------------------------|
+ | IDLE   | Do nothing. Just wait around and see what happens.                     |
+ | FOLLOW | Used for player monsters to follow the player.                         |
+ | ATTACK | When monsters are in ATTACK mode they begin checking their CombatState |
+**** MonsterCombatState [[file:TestMonsterMeld/Assets/Scripts/Monster.cs][Monster.cs]]
+ The state of a monster within combat.
+ | Name   | Description                                                                                    |
+ |--------+------------------------------------------------------------------------------------------------|
+ | CHASE  | Follow the enemy until close enough to attack                                                  |
+ | HIT    | A brief state where the monster deals damage to the enemy and immediately goes to CHARGE state |
+ | CHARGE | The attack delay for the monster                                                               |
+
+*** Structs
+**** MonsterAttackInfo [[file:TestMonsterMeld/Assets/Scripts/Monster.cs][Monster.cs]]
+ Information sent from an attacker to its enemy containing information about the attack.
+ This will eventually contain information like attack type (range, melee, etc.), elemenal type, and
+ if it should apply status effects, like freeze, burn, shock, stun, heal, etc.
+ | Name       | Description                                     |
+ |------------+-------------------------------------------------|
+ | baseDamage | The initial damage of the attack                |
+ | attacker   | A reference to the monster that made the attack |
+
+*** Classes
+**** Monster [[file:TestMonsterMeld/Assets/Scripts/Monster.cs][Monster.cs]]
+ The base monster script. Will be the foundation for all monster types.
+***** Private Variables
+ | Name            | Description                                                     |
+ |-----------------+-----------------------------------------------------------------|
+ | ATTACK_DISTANCE | The minimum distance the monster must be to attack enemyTarget  |
+ | ATTACK_DELAY    | The delay time between attacks                                  |
+ | SHOW_DEBUG_TEXT | Displays debug information above monsters when set to true      |
+ | angle           | The angle the monster should be on.                             |
+ | teamColor       | The color of the monster's MonsterGroup.                        |
+ | healthText      | The text object used for debugging the monster.                 |
+ | body            | The NavMeshAgent used for moving the monster                    |
+ | health          | The monsters health (default 100)                               |
+ | group           | The group that the monster is in.                               |
+ | state           | The current overall state of the monster (IDLE, FOLLOW, ATTACK) |
+ | combatState     | The combat state of the monster used when state is ATTACK       |
+ | attackWait      | The last point in time the monster attacked.                    |
+ | followTarget    | The object the monster follows when its state is FOLLOW         |
+ | enemyTarget     | The object the monster attacks when its state is ATTACK         |
+ | isDead          | Has 'Die()' been called on this monster.                        |
+
+***** Public Variables
+ | Name        | Description                                                |
+ |-------------+------------------------------------------------------------|
+ | minDistance | The minimum distance the monster must be from followTarget |
+ | IsDead      | Returns 'isDead'                                           |
+
+***** Public Events
+ | Name         | Description                                                  | Arguments                                            |
+ |--------------+--------------------------------------------------------------+------------------------------------------------------|
+ | OnDeath      | Called when this monster dies                                | monster: The dying monster                           |
+ | OnKillTarget | Called when this monster kills enemyTarget                   | ally: killer, enemy: the killed                      |
+ | OnAttacked   | Called when a monster attacks this monster outside of combat | victim: The attacked monster, attacker: The attacker |
+
+***** Private Methods
+ | Name       | Description                     | Arguments                                |
+ |------------+---------------------------------+------------------------------------------|
+ | UpdateText | Updates the monsters debug text |                                          |
+ | Die        | Destroys this monster           |                                          |
+ | LookAt     | Faces the monster at a position | targetPos: Position the monster looks at |
+
+***** Public Methods
+ | Name           | Description                                                                        | Arguments                                          |
+ |----------------+------------------------------------------------------------------------------------+----------------------------------------------------|
+ | SetColor       | Sets the monster's material color.                                                 | color: The color to set the monster to.            |
+ | GetHealth      | Returns the monster's health                                                       |                                                    |
+ | GetGroup       | Returns the MonsterGroup of this monster                                           |                                                    |
+ | SetGroup       | Assigns the monster to a monsterGroup                                              |                                                    |
+ | HasGroup       | Returns true if this monster has a group assigned                                  |                                                    |
+ | HasEnemy       | Returns true if this monster has an enemy                                          |                                                    |
+ | GetState       | Returns 'state'                                                                    |                                                    |
+ | GetCombatState | Returns 'combatState'                                                              |                                                    |
+ | Follow         | Start following target                                                             | target: Target to follow                           |
+ | ChooseEnemy    | Pick the best enemy from a MonsterGroup to enemyTarget. Return it                  | enemyGroup : The list of enemies                   |
+ | AskAttack      | If the monster doesn't have an enemy, set both monsters' enemyTarget to each other | attacker : The monster asking to attack            |
+ | GetEnemy       | Return 'enemyTarget' as Monster                                                    |                                                    |
+ | AttackMonster  | Start attacking a monster                                                          | monster : The Monster to attack                    |
+ | TargetDeath    | Called by 'enemyTarget' when it dies                                               | monster : The monster that died, enemy: the killer |
+ | HitMonster     | Deal damage to enemyTarget. Called by combat loop                                  |                                                    |
+ | TakeDamage     | Deal damage to self                                                                | attackInfo: Damage information                     |
+**** MonsterGroup [[file:TestMonsterMeld/Assets/Scripts/MonsterGroup.cs][MonsterGroup.cs]]
+ MonsterGroups are containers for monsters, but also serve as a way to command all group members at once.
+***** Private Variables
+ | Name       | Description                                           |
+ |------------+-------------------------------------------------------|
+ | monsters   | An array of monsters inside this group                |
+ | nameList   | A list of baby monster names                          |
+ | enemyGroup | The MonsterGroup in combat with this one              |
+ | inCombat   | True if any monsters in this group are fighting (WIP) |
+
+***** Public Variables
+ | Name          | Description                                                      |
+ |---------------+------------------------------------------------------------------|
+ | monsterPrefab | The monster prefab to spawn in CreateMonster                     |
+ | spawnOffset   | The position to spawn monster relative to this object's position |
+ | groupColor    | Team Color!                                                      |
+ | InCombat      | Returns 'inCombat'                                               |
+ | Count         | Returns the size of 'monsters' array                             |
+
+***** Public Events
+ | Name            | Description                                      | Arugments                    |
+ |-----------------+--------------------------------------------------+------------------------------|
+ | OnAddMonster    | Invoked when a monster is added to the group     | monster: The added monster   |
+ | OnRemoveMonster | Invoked when a monster is removed from the group | monster: The removed monster |
+
+***** Private Methods
+ | Name            | Description                                                         | Arguments                                                |
+ |-----------------+---------------------------------------------------------------------+----------------------------------------------------------|
+ | LoadNames       | Loads a file containing a list of monster names                     |                                                          |
+ | Behaviour       | Manages the monster's states                                        |                                                          |
+ | IdleBehaviour   | Called when monster is in IDLE state                                |                                                          |
+ | FollowBehaviour | Called when monster is in FOLLOW state                              |                                                          |
+ | AttackBehaviour | Called when monster is in ATTACK state                              |                                                          |
+
+***** Public Methods
+ | Name            | Description                                                         | Arguments                                                |
+ |-----------------+---------------------------------------------------------------------+----------------------------------------------------------|
+ | CreateMonster   | Spawns a monster and adds it to this group                          |                                                          |
+ | Follow          | Tells all monsters in the group to follow a target                  | target: Target to follow                                 |
+ | Attack          | Sends all monsters to attack an enemy's group                       | enemyMonster: Enemy to attack                            |
+ | AddMonster      | Add a monster to this group                                         | monster: Monster to add                                  |
+ | RemoveMonster   | Removes the monster from this group                                 | monster: Monster to remove                               |
+ | MonsterDeath    | Called when a monster from this group dies                          | monster: Killed monster, monsterEnemy: The Killer        |
+ | MonsterAttacked | Called when a monster from this group is attacked outside of combat | monster:The attacked monster, monsterEnemy: The attacker |
+ | MonsterKill     | Called when a monster from this group kills an enemy                | monster: ally, monsterEnemy: enemy                       |
+ | GetEnemyGroup   | Returns 'enemyGroup'                                                |                                                          |
+**** Player [[file:TestMonsterMeld/Assets/Scripts/Player.cs][Player.cs]]
+ This is essentially you. The Player script contains functions that sends commands like 'attack' or 'follow me' to your MonsterGroup.
+***** Private Variables
+ | Name           | Description                                                                                                                      |
+ |----------------+----------------------------------------------------------------------------------------------------------------------------------|
+ | body           | The CharacterController attached to the player, which handles movement and collisions (could be changed to a RigidBody later on) |
+ | playerMonsters | The player's MonsterGroup                                                                                                        |
+***** Public Variables
+ | Name  | Description      |
+ |-------+------------------|
+ | speed | The player speed |
+***** Public Methods
+ | Name                     | Description                                  | Arguments                                      |
+ |--------------------------+----------------------------------------------+------------------------------------------------|
+ | Move                     | Moves the player towards a direction         | direction: The direction to move the player in |
+ | CallMonsters             | Tell your monsters to follow you             |                                                |
+ | SpawnMonster (TEMPORARY) | Spawns a test monster in front of you        |                                                |
+ | AttackMonsters           | Tells your monsters to attack nearby enemies |                                                |
+**** Controller [[file:TestMonsterMeld/Assets/Scripts/Controller.cs][Controller.cs]]
+ Handles input from the user and controls the player accordingly. This must be attached to 'Player' in order to control it.
+***** Private Variables
+ | Name      | Description                  |
+ |-----------+------------------------------|
+ | player    | A reference to the player    |
+ | leftStick | Holds the left joystick axis |
+**** PlayerCamera [[file:TestMonsterMeld/Assets/Scripts/PlayerCamera.cs][PlayerCamera.cs]]
+ A script that makes the camera follow a target from an offset.
+***** Public Variables
+ | Name         | Description                                           |
+ |--------------+-------------------------------------------------------|
+ | target       | The target the camera follows                         |
+ | maxDistance  | unused                                                |
+ | moveSpeed    | How fast the camera is at catching up to its 'target' |
+ | targetOffset | The camera's relative position to the 'target'        |
+**** MonsterInfoPanel [[file:TestMonsterMeld/Assets/Scripts/MonsterInfoPanel.cs][MonsterInfoPanel.cs]]
+***** Private Variables
+ | Name           | Description                          |
+ |----------------+--------------------------------------|
+ | nameText       | Displays the monster's name          |
+ | rect           | Transform as a RectTransform         |
+ | healthBar      | The green box part of the health bar |
+ | healthBarWidth | The maximum size of the health bar   |
+ | monster        | A reference to the monster           |
+ | color          | The monster's group color            |
+***** Public Methods
+ | Name       | Description       | Arguments                                 |
+ |------------+-------------------+-------------------------------------------|
+ | SetMonster | Assigns 'monster' | monst: The monster to assign to 'monster' |
+
+**** StatusEffect [[file:TestMonsterMeld/Assets/Scripts/StatusEffect.cs][StatusEffect.cs]]
+ Used for attacks that come with buffs or debuffs that last longer than the originating hit. Examples of uses would be for burning, frozen, shocked, and stunned effects. This serves as a base for future status effects to inherit.
+***** Private Variables
+ | Name           | Description                                                  |
+ |----------------+--------------------------------------------------------------|
+ | startTime      | The point in time this effect began                          |
+ | lastEffectTime | The last point in time this effect was applied to its target |
+***** Public Variables
+ | Name          | Description                                                |
+ |---------------+------------------------------------------------------------|
+ | effectName    | The visual name of the effect                              |
+ | lifeTime      | How long the effect lasts (in seconds)                     |
+ | effectDelay   | How often the effect is applied to its target (in seconds) |
+ | targetMonster | The monster the effect is applied to                       |
+***** Public Events
+ | Name  | Description                             | Arguments                                |
+ |-------+-----------------------------------------+------------------------------------------|
+ | OnEnd | Invoked when this StatusEffect finishes | effect: A reference to this StatusEffect |
+***** Private Methods
+ | Name            | Description                                                                 | Arguments |
+ |-----------------+-----------------------------------------------------------------------------+-----------|
+ | EndEffect       | Called when this effect's lifetime is over. Invokes OnEnd                   |           |
+ | EffectBehaviour | Behaviour of what the effect will do. Overridable in children of this class |           |
+**** GroupHUD [[file:TestMonsterMeld/Assets/Scripts/GroupHUD.cs][GroupHUD.cs]]
+***** Private Variables
+ | Name         | Description                                                                                                         |
+ |--------------+---------------------------------------------------------------------------------------------------------------------|
+ | infoTemplate | A reference to the Info Panel prefab                                                                                |
+ | panels       | An array of Info Panels                                                                                             |
+ | groupPanel   | A (side) panel displaying info about the MonsterGroup                                                               |
+ | countText    | A reference to GROUP_COUNT, which displays the amount of monsters in the group                                      |
+ | combatPanel  | A reference to COMBAT_PANEL, which displays info on the group's combat status                                       |
+ | membersPanel | A reference to MEMBERS_PANEL, which displays a list of monsters in the group                                        |
+ | enemyText    | A reference to ENEMY_GROUP inside COMBAT_PANEL, which displays the name of the MonsterGroup in combat with this one |
+ | baseHeight   | The starting height of GroupPanel                                                                                   |
+
+***** Public Variables
+ | Name           | Description                          |
+ |----------------+--------------------------------------|
+ | group          | A reference to the MonsterGroup      |
+ | showGroupPanel | Whether to show or hide 'groupPanel' |
+
+***** Private Methods
+ | Name           | Description                                            | Arguments              |
+ |----------------+--------------------------------------------------------+------------------------|
+ | AddPanel       | Creates a panel from a monster and adds it to the list | m: Monster             |
+ | MonsterAdded   | Called when a monster is added to 'group'              | m: The added monster   |
+ | MonsterRemoved | Called when a monster is removed from 'group'          | m: The removed monster |
+
+**** MonsterInfoPanel [[file:TestMonsterMeld/Assets/Scripts/MonsterInfoPanel.cs][MonsterInfoPanel.cs]]
+
+***** Private Variables
+      | Name           | Description                                                  |
+      |----------------+--------------------------------------------------------------|
+      | nameText       | A reference to NAME_TEXT                                     |
+      | enemyText      | A reference to ENEMY_TARGET                                  |
+      | stateText      | A reference to STATE_TEXT                                    |
+      | rect           | unused                                                       |
+      | healthBar      | A reference to HEALTH_BAR                                    |
+      | healthBarWidth | The width of HEALTH_BACKGROUND (the max width of HEALTH_BAR) |
+      | monster        | The monster this is displaying info about                    |
+      | color          | The groupColor of the monster                                |
+
+***** Public Variables
+      | Name          | Description                                             |
+      |---------------+---------------------------------------------------------|
+      | Monster       | Returns 'monster'                                       |
+      | followMonster | Should *this* info box display above the monster's head |
+
+***** Public Methods
+      | Name       | Description    | Arguments                       |
+      |------------+----------------+---------------------------------|
+      | SetMonster | Sets 'monster' | monst: What to set 'monster' to |
+** Questions
+    + How do (your) Monsters heal themselves
+      + Automatically overtime?
+      + Manually?
+    + Should we continue to use Player Controllers or use rigidbodies instead?
+
+** Ideas
+   + [-] Circle health bars [2/6]
+     + [X] Model
+     + [X] Radial Shader
+     + [ ] Always face the camera
+     + [ ] Scale health from center
+     + [ ] Clipping Issue
+     + [ ] Texture
+   + [ ] Low health enemies are less saturated
+** Todo List
+
+*** Monster Elements
+
+**** Types
+     + Fire (Red)
+     + Ice (Blue)
+     + Grass (Green)
+     + Electric (Yellow)
+
+**** Abilities
+     + Ice Freezing
+     + Fire Burning
+     + Electric Arcing
+      
+**** Behaviours
+
+*** Monster Rank
+
+**** Rank 1
+
+**** Rank 2
+
+**** Rank 3?
+
+*** Monster Behaviour
+
+**** TODO Attack Behaviour
+     1. Monsters find an enmy based on the 'priority matrix'
+	1. If all enemies have attackers, it will start attacking the closest enemy.
+     2. The monster attacks its enemy until one of them dies.
+     3. If the monster survives, it finds the next available enemy (Based on the priority list) and repeats
+     4. Starts following the player once there's no more enemies left in the enemy MonsterGroup.
+
+**** Priority Matrix
+     Questions the monster asks itself before deciding to attack an enemy.
+     + Health
+       + Does my enemy have low health?
+       + Do 'I' have low health?
+     + Distance
+       + How far is my enemy.
+       + What is my range? How far do I need to be from my enemy to attack?
+       + What is my enemy's range?
+       + Flee Mode
+     + Type
+       + What special moves does my enemy have? Should I care?
+       + Is my special move the best course of action against this enemy?
+
+**** Monster Group
+    
+
+*** Close/Mid/Long Range attacking
+
+*** Player
+
+*** Wild Monsters
+
+**** Leashing
+** Pseudo Code
+
+*** Effects
+
+**** Description
+ Effects are buffs/debuffs added to monsters to enhance or impare their abilities or damage them overtime, etc.
+ Examples would include:
+
+ + Frozen
+   + Monster cannot move or attack for the duration of the effect, and is frozen in place.
+ + Burning
+   + Monster continuously recieves damage for the duration of the effect
+ + Stunned
+   + Monster cannot move or attack for the duration of the effect.
+ + Being Healed
+   + Monster continuously recieves health for the duration of the effect
+
+**** Behaviour
+
+**** Code
+
+ #+BEGIN_SRC csharp
+
+ public delegate void StatusEffectDelegate(StatusEffect effect);
+
+ public class StatusEffect : Monobehaviour {
+
+
+     private float lifetime; // lifetime of the effect
+     private float startTime;
+
+     private float lastEffectTime; // The last time 'EffectBehaviour' was called
+     private float effectDelay; // how often 'EffectBehaviour' is called
+
+     private Monster targetMonster; // The monster that this effect is targeting
+    
+
+     public event StatusEffectDelegate OnEnd; // Invoked when the lifetime has ended
+
+
+     void Start(){
+	 startTime = Time.time;
+     }
+
+
+     void Update(){
+	 if(Time.time >= startTime + lifeTime){
+	     EndEffect();
+	 }
+     }
+
+     /// <summary>
+     ///   what happens when the effect 'dies'
+     /// </summary>
+     protected virtual void EndEffect(){
+	 OnEnd(this);
+     }
+
+     /// <summary>
+     ///   The behaviour of the effect. What does the effect do?
+     /// </summary>
+     protected virtual void EffectBehaviour(){
+	 //eg: Fire damage
+	 // Damage targetMonster 5 Hit Points 
+     }
+    
+
+ }
+
+ #+END_SRC
+
+*** Monster Create/Add
+ When monsters are created/added to the group, this should happen
+ + MonsterGroup adds this monster to its list
+ + MonsterGroup subscribes to this monster's events
+   + OnDeath
+   + OnKilledTarget
+*** Monster Death
+ When monsters die, this should happen
+ + [X] Tell MonsterGroup that this monster died [2/2]
+   + [X] Remove this monster from the list
+   + [X] If there are no more other monsters in this group [2/2]
+     + [X] inCombat becomes false
+     + [X] enemyGroup becomes null
+ + [ ] Tell enemy monster that this monster died/it killed this monster [0/2]
+   + [ ] Remove references to this monster
+   + [ ] Find a new target if possible
+ + [X] Destroy Monster Object
+*** Monster Choose Enemy
+**** Enemy Priority
+      1. monster has *no enemy*
+      2. monster is *closest*
+
+**** Operation
+ 1. Make local list of best choices
+ 2. Look through list of enemies
+    + Add monster to list *if it already has an enemy*
+    + else, compare monster with bestEnemy based on Enemy Priority
+** Bugs [3/3]
+   + [X] Sometimes dead monsters are still alive
+     + They're not in the group list anymore
+     + They're still subscribed to the groups events
+   + [X] Problem when [[file:TestMonsterMeld/Assets/Scripts/MonsterGroup.cs][MonsterGroup]] sends monster to attack after attacking already.
+   + [X] MonsterGroup still remembers enemy monster group outside of combat, and when all members are dead.
+** Sources and References:
+   Blockable text shader for Text Mesh: [[http://wiki.unity3d.com/index.php?title=3DText][Link To Source]] [[file:TestMonsterMeld/Assets/Materials/Shaders/TextShader.shader][File using source]]
+   Text Shader Background: [[https://answers.unity.com/questions/385447/text-mesh-with-background.html][Link To Source]] [[file:TestMonsterMeld/Assets/Materials/Shaders/TextShader.shader][File using source]]
+   Git Naming: https://stackoverflow.com/questions/273695/what-are-some-examples-of-commonly-used-practices-for-naming-git-branches
+   https://forum.unity.com/threads/solution-for-git-commits-in-vs-while-unity-is-open.328380/
+   Radial Shader Math: https://www.youtube.com/watch?v=VnBNBMfk9HM
+   Atan2 Shader: https://answers.unity.com/questions/1386737/atan2-precision-in-shader.html
