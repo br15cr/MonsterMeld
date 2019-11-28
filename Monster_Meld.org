@@ -263,14 +263,26 @@ Used for attacks that come with buffs or debuffs that last longer than the origi
    + Should we continue to use Player Controllers or use rigidbodies instead?
 
 * Ideas
-  + [-] Circle health bars [2/6]
+
+** Enemies
+  + [-] Circle health bars [3/6]
     + [X] Model
     + [X] Radial Shader
-    + [ ] Always face the camera
+    + [X] Always face the camera
     + [ ] Scale health from center
     + [ ] Clipping Issue
     + [ ] Texture
   + [ ] Low health enemies are less saturated
+  + [ ] Battle Camera
+  + [ ] Crafted with the boi box when you put it down
+    + Fusion box as respawn point
+  + ? Monsters get crafted during battle?
+    + Fixes overcrowding
+
+** Player
+  + [ ] Player Sprinting
+  + [ ] Player Health System
+    + 3-5 Hits?
 * Todo List
 
 ** Monster Elements
