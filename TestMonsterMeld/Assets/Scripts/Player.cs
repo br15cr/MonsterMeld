@@ -7,11 +7,19 @@ public class Player : MonoBehaviour
     private CharacterController body;
     private MonsterGroup playerMonsters;
     private OrbPouch orbs;
+    private FusionBox fusionBox;
+
+    private FusionBox box;
+
+    public Transform backbox;
 
     public float speed = 1;
+
+    public GameObject fusionBoxPrefab;
     // Start is called before the first frame update
     void Start()
     {
+	//backbox = transform.Find("tuffHDModel/metarig/spin/spine.001/Cube");
         body = GetComponent<CharacterController>();
         playerMonsters = GetComponent<MonsterGroup>();
 	orbs = GetComponent<OrbPouch>();
@@ -100,6 +108,45 @@ public class Player : MonoBehaviour
     public void TakeIngredient(RecipeIngredient ing){
 	if(ing.item == RecipeItem.ORB){
 	    orbs.TakeOrbs(ing.amount);
+	}
+    }
+
+    public void GrabDropBox(){
+	if(fusionBox == null){
+	    // Drop (Spawn) FusionBox
+	    // hide backbox
+	    // assign box to fusionBox;
+	    RaycastHit hit;
+	    if(Physics.Raycast(transform.position + -transform.forward*2,-transform.up,out hit,100)){
+		fusionBox = GameObject.Instantiate(fusionBoxPrefab,hit.point,Quaternion.identity).GetComponent<FusionBox>();
+		fusionBox.player = this;
+		backbox.gameObject.SetActive(false);
+	    }
+	}else{
+	    // Grab FusionBox if close enough and facing it
+	    // if you grabbed it, show backbox
+	    // fusionBox become null
+	    /*
+	    Collider[] cols = Physics.OverlapSphere(transform.position,3);
+	    Debug.Log("Found "+ cols.Length.ToString() + " things");
+	    for(int i = 0; i < cols.Length;i++){
+		Debug.Log("\t"+cols[i].gameObject.name+" == "+fusionBox.gameObject.name);
+		if(cols[i].transform.parent == null)
+		    continue;
+		if(cols[i].transform.parent.gameObject == fusionBox.gameObject){
+		    Debug.Log("ITS IT!");
+		    Destroy(fusionBox.gameObject);
+		    fusionBox = null;
+		    backbox.gameObject.SetActive(true);
+		    break;
+		}
+	    }
+	    */
+	    if(Vector3.Distance(transform.position,fusionBox.transform.position) <= 3){
+		Destroy(fusionBox.gameObject);
+		fusionBox = null;
+		backbox.gameObject.SetActive(true);
+	    }
 	}
     }
 

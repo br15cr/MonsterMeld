@@ -136,3 +136,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d1b96d0f2828d04da7534dc6c8656fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useRadius: 3
+  player: {fileID: 0}
+  monsterPrefab: {fileID: 456590611538437231, guid: 53ce0130dc9072140b7d40776af60e13,
+    type: 3}
+  spawnOffset: {x: 1, y: 0, z: 0}
