@@ -256,6 +256,20 @@ Used for attacks that come with buffs or debuffs that last longer than the origi
      | Name       | Description    | Arguments                       |
      |------------+----------------+---------------------------------|
      | SetMonster | Sets 'monster' | monst: What to set 'monster' to |
+
+*** Orb [[file:TestMonsterMeld/Assets/Scripts/Orb.cs][Orb.cs]]
+
+**** Private Variables
+     | Name     | Description                                            |
+     |----------+--------------------------------------------------------|
+     | target   | The Monster or Player the orb follows to be collected. |
+     | velocity | The orb's velocity                                     |
+
+**** Private Constants
+     | Name   | Description                                      |
+     |--------+--------------------------------------------------|
+     | SPEED  | The speed at which the orb follows its target at |
+     | RADIUS | How close the orb needs to be to be 'Collected'  |
 * Questions
    + How do (your) Monsters heal themselves
      + Automatically overtime?

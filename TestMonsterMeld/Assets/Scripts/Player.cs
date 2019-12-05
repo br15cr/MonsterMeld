@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
 {
     private CharacterController body;
     private MonsterGroup playerMonsters;
+    private OrbPouch orbs;
 
     public float speed = 1;
     // Start is called before the first frame update
@@ -13,6 +14,7 @@ public class Player : MonoBehaviour
     {
         body = GetComponent<CharacterController>();
         playerMonsters = GetComponent<MonsterGroup>();
+	orbs = GetComponent<OrbPouch>();
     }
 
     // Update is called once per frame
@@ -71,5 +73,9 @@ public class Player : MonoBehaviour
                 }
             }
         }
+    }
+
+    void OnGUI(){
+	GUI.Label(new Rect(10,10,100,100),"Orbs: " + orbs.Count.ToString());
     }
 }
