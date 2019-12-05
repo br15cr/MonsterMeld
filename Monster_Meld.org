@@ -274,10 +274,12 @@ Used for attacks that come with buffs or debuffs that last longer than the origi
     + [ ] Texture
   + [ ] Low health enemies are less saturated
   + [ ] Battle Camera
-  + [ ] Crafted with the boi box when you put it down
+  + [ ] Crafted with the fusion box when you put it down
     + Fusion box as respawn point
   + ? Monsters get crafted during battle?
     + Fixes overcrowding
+  + Monsters absorb matching element orbs to get health back
+    + All monsters eat berries to heal (regardless of type)?
 
 ** Player
   + [ ] Player Sprinting
