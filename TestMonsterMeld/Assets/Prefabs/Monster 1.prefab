@@ -49,6 +49,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minDistance: 5
+  orbPrefab: {fileID: 3529501776409808087, guid: 9637de023023ecf44a5c342a4d4fd151,
+    type: 3}
 --- !u!195 &5646721663330001954
 NavMeshAgent:
   m_ObjectHideFlags: 0

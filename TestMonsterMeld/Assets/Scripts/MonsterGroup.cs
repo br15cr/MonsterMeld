@@ -89,7 +89,7 @@ public class MonsterGroup : MonoBehaviour
         AddMonster(monster);
         // set monster to status quo
     }
-
+    
     public void Follow(Transform target)
     {
         foreach (Monster m in monsters)

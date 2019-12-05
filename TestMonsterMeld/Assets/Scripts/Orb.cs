@@ -9,10 +9,14 @@ public enum ElementalType {
 
 public class Orb : MonoBehaviour
 {
-    private Transform target;
-    private Vector3 velocity;
     private const float SPEED = 0.1f;
     private const float RADIUS = 0.5f;
+    private const float DAMP = 0.8f;
+    private const float GRAVITY = 0.1f;
+    
+    private Transform target;
+    private Vector3 velocity;
+    private bool onGround = false;
     
     void Start(){
         
@@ -26,7 +30,12 @@ public class Orb : MonoBehaviour
 	if(target != null){
 	    velocity = (target.position - transform.position)*SPEED;
 	}
+	UpdateGround();
+	if(!onGround){
+	    velocity += GRAVITY * Vector3.down;
+	}
 	transform.position += velocity;
+	velocity*=DAMP;
 	if(target != null){
 	    if(Vector3.Distance(transform.position,target.position) <= RADIUS){
 		// Get Collected
@@ -34,6 +43,19 @@ public class Orb : MonoBehaviour
 		Destroy(gameObject);
 	    }
 	}
+    }
+
+    private void UpdateGround(){
+	if(!onGround){
+	    RaycastHit hit;
+	    onGround = Physics.Raycast(transform.position,-transform.up,out hit,RADIUS);
+	    velocity = new Vector3(velocity.x,0,velocity.z);
+	}
+    }
+
+    public void Jump(){
+	float strength = 1;
+	velocity = new Vector3(Random.Range(-strength,strength),Random.Range(0,strength),Random.Range(-strength,strength));
     }
 
     void OnTriggerEnter(Collider c){

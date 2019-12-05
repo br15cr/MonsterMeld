@@ -21,4 +21,12 @@ public class OrbPouch : MonoBehaviour
     public void AddOrb(){ // also just a test
 	orbs++;
     }
+
+    public void AddOrbs(int amount){
+	orbs+=amount;
+    }
+
+    public void TakeOrbs(int amount){
+	orbs-=amount;
+    }
 }

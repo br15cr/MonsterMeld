@@ -23,10 +23,11 @@ public class Controller : MonoBehaviour
             Debug.Log("Calling Monsters");
             player.CallMonsters();
         }
-        if (Input.GetButtonDown("debug_spawn"))
-        {
-            player.SpawnMonster();
-        }
+	
+        // if (Input.GetButtonDown("debug_spawn"))
+        // {
+        //     player.SpawnMonster();
+        // }
         if (Input.GetButtonDown("Attack"))
         {
             player.AttackMonsters();

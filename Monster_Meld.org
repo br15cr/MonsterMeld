@@ -357,6 +357,11 @@ Used for attacks that come with buffs or debuffs that last longer than the origi
 ** Wild Monsters
 
 *** Leashing
+
+** FusionBox
+   + [X] Monsters spawn from fusion box
+   + [ ] Monsters drop orbs on death
+   + [ ] orbs required to 'craft' Monsters
 * Pseudo Code
 
 ** Effects

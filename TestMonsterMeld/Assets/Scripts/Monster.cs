@@ -75,6 +75,8 @@ public class Monster : MonoBehaviour
 
     public float minDistance = 0;
 
+    public GameObject orbPrefab; // drops on death
+
     void Start() {
         body = GetComponent<NavMeshAgent>();
 	healthRing = transform.Find("HEALTH_RING");
@@ -420,8 +422,16 @@ public class Monster : MonoBehaviour
 	}*/
 	OnDeath(this,finalBlow.attacker);
 	Debug.Log(name + " Getting Destroyed!");
+	DropLoot();
         Destroy(this.gameObject);
 	Debug.Log(name + " Destroyed?!?");
+    }
+
+    private void DropLoot(){
+	for(int i = 0; i < 5; i++){
+	    Orb o = GameObject.Instantiate(orbPrefab,transform.position,Quaternion.identity).GetComponent<Orb>();
+	    o.Jump();
+	}
     }
 
     private void LookAt(Vector3 targetPos){

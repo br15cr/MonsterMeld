@@ -75,6 +75,34 @@ public class Player : MonoBehaviour
         }
     }
 
+    public bool CanMakeRecipe(Recipe rec){
+	foreach(RecipeIngredient i in rec.ingredients){
+	    if(!HasIngredient(i)){
+		return false;
+	    }
+	}
+	return true;
+    }
+
+    public void TakeRecipe(Recipe rec){
+	foreach(RecipeIngredient i in rec.ingredients){
+	    TakeIngredient(i);
+	}
+    }
+
+    public bool HasIngredient(RecipeIngredient ing){
+	if(ing.item == RecipeItem.ORB){
+	    return orbs.Count >= ing.amount;
+	}
+	return false;
+    }
+
+    public void TakeIngredient(RecipeIngredient ing){
+	if(ing.item == RecipeItem.ORB){
+	    orbs.TakeOrbs(ing.amount);
+	}
+    }
+
     void OnGUI(){
 	GUI.Label(new Rect(10,10,100,100),"Orbs: " + orbs.Count.ToString());
     }
