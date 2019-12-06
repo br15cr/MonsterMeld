@@ -270,6 +270,33 @@ Used for attacks that come with buffs or debuffs that last longer than the origi
      |--------+--------------------------------------------------|
      | SPEED  | The speed at which the orb follows its target at |
      | RADIUS | How close the orb needs to be to be 'Collected'  |
+
+*** OrbPouch [[file:TestMonsterMeld/Assets/Scripts/OrbPouch.cs][OrbPouch.cs]]
+
+**** Private Variables
+     | Name | Description                                    |
+     |------+------------------------------------------------|
+     | orbs | The amount of orbs this OrbPouch has collected |
+
+**** Public Variables
+     | Name  | Description    |
+     |-------+----------------|
+     | Count | Returns 'orbs' |
+
+**** Public Methods
+     | Name     | Description                   | Arguments                         |
+     |----------+-------------------------------+-----------------------------------|
+     | AddOrb   | Increments 'orbs' by 1        |                                   |
+     | AddOrbs  | Increases 'orbs' by an amount | amount: the amount to increase by |
+     | TakeOrbs | Removes an amount from 'orbs' | amount: the amount to remove      |
+
+*** OrbFeeder [[file:TestMonsterMeld/Assets/Scripts/OrbFeeder.cs][OrbFeeder.cs]] : OrbPouch [[file:TestMonsterMeld/Assets/Scripts/OrbPouch.cs][OrbPouch.cs]]
+
+**** Public Methods
+     | Name   | Description                                              | Arguments |
+     |--------+----------------------------------------------------------+-----------|
+     | AddOrb | Heals the attached monster instead of collecting the orb |           |
+    
 * Questions
    + How do (your) Monsters heal themselves
      + Automatically overtime?

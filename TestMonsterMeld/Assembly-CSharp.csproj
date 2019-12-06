@@ -66,6 +66,7 @@
      <Compile Include="Assets\Scripts\MonsterTypes\FireMonster.cs" />
      <Compile Include="Assets\Scripts\MonsterTypes\HealEffect.cs" />
      <Compile Include="Assets\Scripts\Orb.cs" />
+     <Compile Include="Assets\Scripts\OrbFeeder.cs" />
      <Compile Include="Assets\Scripts\OrbPouch.cs" />
      <Compile Include="Assets\Scripts\Player.cs" />
      <Compile Include="Assets\Scripts\PlayerCamera.cs" />

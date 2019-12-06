@@ -18,7 +18,7 @@ public class OrbPouch : MonoBehaviour
         
     }
 
-    public void AddOrb(){ // also just a test
+    public virtual void AddOrb(){ // also just a test
 	orbs++;
     }
 

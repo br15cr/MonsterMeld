@@ -1,0 +1,21 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class OrbFeeder : OrbPouch
+{
+    private Monster monster;
+    
+    void Start(){
+        monster = GetComponent<Monster>();
+    }
+
+    void Update(){
+        
+    }
+
+    public override void AddOrb(){
+	MonsterAttackInfo info = new MonsterAttackInfo(null,-5);
+	monster.TakeDamage(info);
+    }
+}

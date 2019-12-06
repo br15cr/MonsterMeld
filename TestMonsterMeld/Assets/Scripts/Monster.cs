@@ -428,8 +428,8 @@ public class Monster : MonoBehaviour
     }
 
     private void DropLoot(){
-	for(int i = 0; i < 5; i++){
-	    Orb o = GameObject.Instantiate(orbPrefab,transform.position,Quaternion.identity).GetComponent<Orb>();
+	for(int i = 0; i < 8; i++){
+	    Orb o = GameObject.Instantiate(orbPrefab,transform.position + transform.up*1,Quaternion.identity).GetComponent<Orb>();
 	    o.Jump();
 	}
     }
