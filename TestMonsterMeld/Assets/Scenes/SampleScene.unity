@@ -3284,6 +3284,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 3545417189347253233, guid: 41c94b8e7cdf25945ad89d30b7680ba6,
+        type: 3}
+      propertyPath: speed
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3545417189347253233, guid: 41c94b8e7cdf25945ad89d30b7680ba6,
+        type: 3}
+      propertyPath: fusionBoxPrefab
+      value: 
+      objectReference: {fileID: 2569448353475566079, guid: b58d0b47e521cae44bf748135982155c,
+        type: 3}
+    - target: {fileID: 3545417189347253233, guid: 41c94b8e7cdf25945ad89d30b7680ba6,
+        type: 3}
+      propertyPath: backbox
+      value: 
+      objectReference: {fileID: 1015949066}
     - target: {fileID: 2082431368954971091, guid: 41c94b8e7cdf25945ad89d30b7680ba6,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3339,22 +3355,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3545417189347253233, guid: 41c94b8e7cdf25945ad89d30b7680ba6,
-        type: 3}
-      propertyPath: speed
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3545417189347253233, guid: 41c94b8e7cdf25945ad89d30b7680ba6,
-        type: 3}
-      propertyPath: fusionBoxPrefab
-      value: 
-      objectReference: {fileID: 2569448353475566079, guid: b58d0b47e521cae44bf748135982155c,
-        type: 3}
-    - target: {fileID: 3545417189347253233, guid: 41c94b8e7cdf25945ad89d30b7680ba6,
-        type: 3}
-      propertyPath: backbox
-      value: 
-      objectReference: {fileID: 1015949066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 41c94b8e7cdf25945ad89d30b7680ba6, type: 3}
 --- !u!1001 &3609134686993186061

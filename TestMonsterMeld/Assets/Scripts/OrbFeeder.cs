@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class OrbFeeder : OrbPouch
 {
-    private const int HEAL_AMOUNT = 10;
+    private const int HEAL_AMOUNT = 25;
     private Monster monster;
     
     void Start(){

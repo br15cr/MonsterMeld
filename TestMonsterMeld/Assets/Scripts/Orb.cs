@@ -53,11 +53,17 @@ public class Orb : MonoBehaviour
 	    }
 	}
 	*/
-	float dist = Vector3.Distance(transform.position,target.position);
-	if( dist <= RADIUS){
-	    // Get Collected
-	    target.GetComponent<OrbPouch>().AddOrb();
-	    Destroy(gameObject);
+	if(target != null){
+	    float dist = Vector3.Distance(transform.position,target.position);
+	    if( dist <= RADIUS){
+		// Get Collected
+		if(!(target.GetComponent<Monster>() != null && target.GetComponent<Monster>().GetHealth() == 100)){
+		    target.GetComponent<OrbPouch>().AddOrb();
+		    Destroy(gameObject);
+		}else{
+		    target = null;
+		}
+	    }
 	}
     }
 
