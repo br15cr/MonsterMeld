@@ -220,6 +220,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1261317609}
+  - component: {fileID: 1261317611}
+  - component: {fileID: 1261317610}
   m_Layer: 0
   m_Name: HealthObject
   m_TagString: Untagged
@@ -241,6 +243,31 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1261317610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1261317608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b9c8a90f32e3f94aa287779520d6c68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1261317611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1261317608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24007a385d5dccd48b5660fea4f2174f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startHealth: 100
 --- !u!1 &1301456638
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,6 +8,12 @@ public struct AttackInfo {
     public AttackInfo(float BaseDamage){
 	baseDamage = BaseDamage;
     }
+
+    public HealthData Damage(HealthData health){
+	// Apply damage formula (eg: baseDamage*weight)...etc
+	HealthData hd = new HealthData(health.GetHealth()-baseDamage,health.GetMaxHealth());
+	return hd;
+    }
 }
 
 public struct HealthData {
@@ -48,9 +54,17 @@ public struct HealthData {
 	return hd;
     }
 
+    public static bool operator ==(HealthData a,float b){
+	return a.GetHealth() == b;
+    }
+
+    public static bool operator !=(HealthData a,float b){
+	return a.GetHealth() != b;
+    }
+
     public static HealthData operator -(HealthData a,AttackInfo b){
-	HealthData hd = new HealthData(a.GetHealth()-b.baseDamage,a.GetMaxHealth());
-	return hd;
+	//HealthData hd = new HealthData(a.GetHealth()-b.baseDamage,a.GetMaxHealth());
+	return b.Damage(a);
     }
 }
 
@@ -62,6 +76,7 @@ public class Health : MonoBehaviour
     //private float health;
     //public float maxHealth = 100;
     private HealthData health;
+    private bool isDead = false;
 
     public event AttackInfoDelegate OnDeath;
 
@@ -69,6 +84,10 @@ public class Health : MonoBehaviour
     
     public float Amount {
 	get { return this.health.GetHealth(); }
+    }
+
+    public bool IsDead {
+	get { return this.isDead; }
     }
     
     void Start(){
@@ -96,6 +115,22 @@ public class Health : MonoBehaviour
     public void Damage(AttackInfo attackInfo){
 	//SubHealth(attackInfo.baseDamage);
 	health -= attackInfo;
+	CheckDeath();
+    }
+
+    public void Damage(float amount){
+	health -= amount;
+	CheckDeath();
+    }
+
+    private void CheckDeath(){
+	if(health == 0){
+	    if(!isDead){
+		isDead = true;
+		if(OnDeath != null)
+		    OnDeath();
+	    }
+	}
     }
 
     /*
