@@ -14,7 +14,7 @@ public class Orb : MonoBehaviour
     private const float GRAVITY = 0.1f;
     
     private float speed = 3;
-    private Transform target;
+    public Transform target;
     private Vector3 velocity;
     private bool onGround = false;
     private SphereCollider col;

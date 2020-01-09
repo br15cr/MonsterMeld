@@ -321,6 +321,7 @@ Used for attacks that come with buffs or debuffs that last longer than the origi
     + Fixes overcrowding
   + Monsters absorb matching element orbs to get health back
     + All monsters eat berries to heal (regardless of type)?
+  + Monsters take time to chew orbs
 
 ** General
    + Health Component
