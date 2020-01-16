@@ -9,6 +9,8 @@ public class Player : MonoBehaviour
     private OrbPouch orbs;
     private FusionBox fusionBox;
 
+    private Vector3 velocity;
+
     private FusionBox box;
 
     public Transform backbox;
@@ -40,6 +42,7 @@ public class Player : MonoBehaviour
         }
         moveDirection *= speed;
         body.Move(moveDirection);
+	transform.rotation = Quaternion.LookRotation(moveDirection*-1);
 	/*
         float div = moveDirection.x / moveDirection.y;
         float angle = Mathf.Atan(div) * Mathf.Rad2Deg;
@@ -49,6 +52,15 @@ public class Player : MonoBehaviour
         }
         transform.rotation = Quaternion.Euler(0, angle, 0);
 	*/
+    }
+
+    void FixedUpdate(){
+	if(!body.isGrounded){
+	    velocity += Vector3.down*0.01f;
+	}else{
+	    velocity = Vector3.zero;
+	}
+	body.Move(velocity);
     }
 
     public void CallMonsters()
