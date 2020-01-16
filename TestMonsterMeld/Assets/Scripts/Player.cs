@@ -54,12 +54,17 @@ public class Player : MonoBehaviour
 	*/
     }
 
+  // bool OnGround(){
+  //   return Physics.Raycast(transform.position + body.height/2
+  // }
+
     void FixedUpdate(){
-	if(!body.isGrounded){
-	    velocity += Vector3.down*0.01f;
-	}else{
-	    velocity = Vector3.zero;
-	}
+      //if(!body.isGrounded){
+      //velocity += Vector3.down*0.01f;
+      velocity = Vector3.down*0.25f;
+	// }else{
+	//     velocity = Vector3.zero;
+	// }
 	body.Move(velocity);
     }
 
@@ -164,5 +169,11 @@ public class Player : MonoBehaviour
 
     void OnGUI(){
 	GUI.Label(new Rect(10,10,100,100),"Orbs: " + orbs.Count.ToString());
+	// Player Info
+	GUI.Label(new Rect(10,50,100,100),"Velocity: " + velocity.ToString());
     }
+
+  void OnDrawGizmos(){
+    Gizmos.DrawRay(transform.position + -Vector3.up,Vector3.down);
+  }
 }
