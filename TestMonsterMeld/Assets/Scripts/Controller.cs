@@ -24,6 +24,11 @@ public class Controller : MonoBehaviour
             player.CallMonsters();
         }
 
+	if(Input.GetButtonDown("Jump")){
+		Debug.Log("JUMPING");
+		player.Jump();
+	}
+
 	if(Input.GetButtonDown("Box")){
 	    player.GrabDropBox();
 	}

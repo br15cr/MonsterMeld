@@ -18,6 +18,7 @@ public class Player : MonoBehaviour
     public float speed = 1;
 
     public GameObject fusionBoxPrefab;
+    private bool jumped = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -59,13 +60,22 @@ public class Player : MonoBehaviour
   // }
 
     void FixedUpdate(){
-      //if(!body.isGrounded){
-      //velocity += Vector3.down*0.01f;
-      velocity = Vector3.down*0.25f;
-	// }else{
-	//     velocity = Vector3.zero;
-	// }
+	if(!OnGround() || jumped){
+	  velocity += Vector3.down*0.01f;
+	  if(jumped)
+	      jumped = false;
+      //velocity = Vector3.down*0.25f;
+	}else{
+	    velocity = Vector3.zero;
+	}
 	body.Move(velocity);
+    }
+
+    public void Jump(){
+	if(OnGround()){
+	    velocity = Vector3.up*0.25f;
+	    jumped = true;
+	}
     }
 
     public void CallMonsters()
@@ -98,6 +108,14 @@ public class Player : MonoBehaviour
                 }
             }
         }
+    }
+
+    private bool OnGround(){
+	RaycastHit hit;
+	if(Physics.Raycast(transform.position + -Vector3.up,Vector3.down,out hit,0.1f)){
+	    return true;
+	}
+	return false;
     }
 
     public bool CanMakeRecipe(Recipe rec){
@@ -174,6 +192,6 @@ public class Player : MonoBehaviour
     }
 
   void OnDrawGizmos(){
-    Gizmos.DrawRay(transform.position + -Vector3.up,Vector3.down);
+    Gizmos.DrawRay(transform.position + -Vector3.up,Vector3.down*0.1f);
   }
 }
