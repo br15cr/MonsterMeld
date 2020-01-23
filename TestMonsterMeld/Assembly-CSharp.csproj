@@ -57,6 +57,7 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\AttackBox.cs" />
      <Compile Include="Assets\Scripts\Controller.cs" />
+     <Compile Include="Assets\Scripts\DisplayState.cs" />
      <Compile Include="Assets\Scripts\FusionBox.cs" />
      <Compile Include="Assets\Scripts\GroupHUD.cs" />
      <Compile Include="Assets\Scripts\Logger.cs" />

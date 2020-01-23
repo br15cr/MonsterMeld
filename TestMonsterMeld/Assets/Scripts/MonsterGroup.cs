@@ -33,6 +33,9 @@ public class MonsterGroup : MonoBehaviour
     private List<Monster> monsters = new List<Monster>();
     private MonsterGroup enemyGroup; // group to fight against
 
+    private bool playerGroup; // is the players group
+    
+
     // Protected Vars //
     protected bool inCombat = false;
 
@@ -57,11 +60,19 @@ public class MonsterGroup : MonoBehaviour
 	get { return monsters.Count; }
     }
 
+    public bool IsPlayerGroup {
+	get { return this.playerGroup; }
+    }
+
     protected virtual void Start()
     {
         //monsters = new List<Monster>();
         //groupColor = Color.blue;
         LoadNames();
+	if(this.GetComponent<Player>() != null){
+	    Debug.Log("IS PLAYER!!!");
+	    playerGroup = true;
+	}
 
     }
 

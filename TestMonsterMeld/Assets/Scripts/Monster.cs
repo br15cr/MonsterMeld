@@ -358,7 +358,8 @@ public class Monster : MonoBehaviour
 	    //monster.TakeDamage(new MonsterAttackInfo(this, 10));
 	    // spawn attack box instead of directly sending damage
 	    AttackBox attack = Instantiate(attackPrefab,transform.position + transform.forward*(ATTACK_DISTANCE/2),Quaternion.identity).GetComponent<AttackBox>();
-	    attack.SetAttacker(this);
+	    //attack.SetAttacker(this);
+	    attack.SetInfo(new MonsterAttackInfo(this,10));
 	}
     }
 
@@ -383,7 +384,7 @@ public class Monster : MonoBehaviour
             Die(attackInfo);
         }
 
-        if(state != MonsterState.ATTACK && attackInfo.attacker != null) {
+        if(state != MonsterState.ATTACK && attackInfo.attacker != null && !attackInfo.attacker.IsDead) {
             AttackMonster(attackInfo.attacker);
             if(OnAttacked != null)
                 OnAttacked(this,attackInfo.attacker);
@@ -480,14 +481,14 @@ public class Monster : MonoBehaviour
 
     protected virtual void FollowBehaviour(){
 	if(followTarget != null){ //if (target != null) {
-	    // if (Vector3.Distance(transform.position, followTarget.position) > minDistance)
-	    // {
+	    if (Vector3.Distance(transform.position, followTarget.position) > minDistance)
+	    {
 		if (body.isStopped)
 		    body.isStopped = false;
 		body.SetDestination(followTarget.position); //body.SetDestination(target.position);
-	    // }else if (!body.isStopped) {
-            //             body.isStopped = true;
-	    // }
+	    }else if (!body.isStopped) {
+                        body.isStopped = true;
+	    }
 	}
     }
 
