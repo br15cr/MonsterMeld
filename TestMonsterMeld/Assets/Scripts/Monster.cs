@@ -17,7 +17,8 @@ public enum MonsterCombatState
     CHASE,      // run after the enemy
     HIT,        // deal the damage
     CHARGE,     // attack recoil (go back go hit after done)
-    RECOVER     // stun if hit?
+    RECOVER,     // stun if hit?
+    FLEE
 }
 
 public struct MonsterAttackInfo
@@ -63,6 +64,8 @@ public class Monster : MonoBehaviour
     private Material healthbarMat;
     private Transform healthRing;
 
+    private GameObject attackPrefab; // attackbox
+
     //public Transform target;
 
     public bool IsDead {
@@ -86,6 +89,9 @@ public class Monster : MonoBehaviour
         //UpdateText(); //healthText.text = health.ToString();
         state = MonsterState.IDLE;
         body.stoppingDistance = 2;
+
+	// load attack box
+	attackPrefab = Resources.Load<GameObject>("Prefabs/DamageBox");
     }
 
     // Update is called once per frame
@@ -349,7 +355,10 @@ public class Monster : MonoBehaviour
 	if(Vector3.Distance(transform.position,enemyTarget.position) <= ATTACK_DISTANCE){ // only apply the attack if they're close enough
 	    Monster monster = enemyTarget.GetComponent<Monster>();
 	    // send damage data to 'monster'
-	    monster.TakeDamage(new MonsterAttackInfo(this, 10));
+	    //monster.TakeDamage(new MonsterAttackInfo(this, 10));
+	    // spawn attack box instead of directly sending damage
+	    AttackBox attack = Instantiate(attackPrefab,transform.position + transform.forward*(ATTACK_DISTANCE/2),Quaternion.identity).GetComponent<AttackBox>();
+	    attack.SetAttacker(this);
 	}
     }
 
@@ -471,14 +480,14 @@ public class Monster : MonoBehaviour
 
     protected virtual void FollowBehaviour(){
 	if(followTarget != null){ //if (target != null) {
-	    if (Vector3.Distance(transform.position, followTarget.position) > minDistance)
-	    {
+	    // if (Vector3.Distance(transform.position, followTarget.position) > minDistance)
+	    // {
 		if (body.isStopped)
 		    body.isStopped = false;
 		body.SetDestination(followTarget.position); //body.SetDestination(target.position);
-	    }else if (!body.isStopped) {
-                        body.isStopped = true;
-	    }
+	    // }else if (!body.isStopped) {
+            //             body.isStopped = true;
+	    // }
 	}
     }
 
@@ -509,6 +518,12 @@ public class Monster : MonoBehaviour
 			combatState = MonsterCombatState.CHASE;
 		    if (Time.time >= attackWait + ATTACK_DELAY)
 			combatState = MonsterCombatState.HIT;
+		    if(health <= 25)
+			combatState = MonsterCombatState.FLEE;
+		    break;
+		case MonsterCombatState.FLEE:
+		    Debug.Log(name + " IS FLEEING!");
+		    FollowBehaviour();
 		    break;
 	    }
 	}else{

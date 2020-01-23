@@ -9,6 +9,8 @@ public class Player : MonoBehaviour
     private OrbPouch orbs;
     private FusionBox fusionBox;
 
+    private Vector3 lookDirection;
+
     private Vector3 velocity;
 
     private FusionBox box;
@@ -36,39 +38,45 @@ public class Player : MonoBehaviour
 
     public void Move(Vector2 direction)
     {
+	// Move player / Player Direction rotation
         Vector3 moveDirection = new Vector3(direction.x, 0, direction.y);
         if (moveDirection.magnitude > 1)
         {
             moveDirection = moveDirection.normalized;
         }
-        moveDirection *= speed;
-        body.Move(moveDirection);
-	transform.rotation = Quaternion.LookRotation(moveDirection*-1);
+        //moveDirection *= speed;
+	//lookDirection = moveDirection;
+	//lookDirection = Vector3.Lerp(lookDirection,moveDirection,Time.deltaTime*moveDirection.magnitude);
+	lookDirection = moveDirection;
+        body.SimpleMove(lookDirection*speed*100);
+	if(lookDirection != Vector3.zero)
+	    transform.rotation = Quaternion.LookRotation(lookDirection*-1);
 	/*
-        float div = moveDirection.x / moveDirection.y;
-        float angle = Mathf.Atan(div) * Mathf.Rad2Deg;
-        if (moveDirection.y < 0)
-        {
-            angle -= 180;
-        }
-        transform.rotation = Quaternion.Euler(0, angle, 0);
+	  float div = moveDirection.x / moveDirection.y;
+	  float angle = Mathf.Atan(div) * Mathf.Rad2Deg;
+	  if (moveDirection.y < 0)
+	  {
+	  angle -= 180;
+	  }
+	  transform.rotation = Quaternion.Euler(0, angle, 0);
 	*/
     }
 
-  // bool OnGround(){
-  //   return Physics.Raycast(transform.position + body.height/2
-  // }
+    // bool OnGround(){
+    //   return Physics.Raycast(transform.position + body.height/2
+    // }
 
     void FixedUpdate(){
-	if(!OnGround() || jumped){
-	  velocity += Vector3.down*0.01f;
-	  if(jumped)
-	      jumped = false;
-      //velocity = Vector3.down*0.25f;
-	}else{
-	    velocity = Vector3.zero;
-	}
-	body.Move(velocity);
+	// Jumping/Gravity
+	// if(!OnGround() || jumped){
+	//     velocity += Vector3.down*0.01f;
+	//     if(jumped)
+	// 	jumped = false;
+	//     //velocity = Vector3.down*0.25f;
+	// }else{
+	//     velocity = Vector3.zero;
+	// }
+	// body.Move(velocity);
     }
 
     public void Jump(){
@@ -111,6 +119,7 @@ public class Player : MonoBehaviour
     }
 
     private bool OnGround(){
+	// Check if Player is on the ground
 	RaycastHit hit;
 	if(Physics.Raycast(transform.position + -Vector3.up,Vector3.down,out hit,0.1f)){
 	    return true;
@@ -162,20 +171,20 @@ public class Player : MonoBehaviour
 	    // if you grabbed it, show backbox
 	    // fusionBox become null
 	    /*
-	    Collider[] cols = Physics.OverlapSphere(transform.position,3);
-	    Debug.Log("Found "+ cols.Length.ToString() + " things");
-	    for(int i = 0; i < cols.Length;i++){
-		Debug.Log("\t"+cols[i].gameObject.name+" == "+fusionBox.gameObject.name);
-		if(cols[i].transform.parent == null)
-		    continue;
-		if(cols[i].transform.parent.gameObject == fusionBox.gameObject){
-		    Debug.Log("ITS IT!");
-		    Destroy(fusionBox.gameObject);
-		    fusionBox = null;
-		    backbox.gameObject.SetActive(true);
-		    break;
-		}
-	    }
+	      Collider[] cols = Physics.OverlapSphere(transform.position,3);
+	      Debug.Log("Found "+ cols.Length.ToString() + " things");
+	      for(int i = 0; i < cols.Length;i++){
+	      Debug.Log("\t"+cols[i].gameObject.name+" == "+fusionBox.gameObject.name);
+	      if(cols[i].transform.parent == null)
+	      continue;
+	      if(cols[i].transform.parent.gameObject == fusionBox.gameObject){
+	      Debug.Log("ITS IT!");
+	      Destroy(fusionBox.gameObject);
+	      fusionBox = null;
+	      backbox.gameObject.SetActive(true);
+	      break;
+	      }
+	      }
 	    */
 	    if(Vector3.Distance(transform.position,fusionBox.transform.position) <= 3){
 		Destroy(fusionBox.gameObject);
@@ -191,7 +200,7 @@ public class Player : MonoBehaviour
 	GUI.Label(new Rect(10,50,100,100),"Velocity: " + velocity.ToString());
     }
 
-  void OnDrawGizmos(){
-    Gizmos.DrawRay(transform.position + -Vector3.up,Vector3.down*0.1f);
-  }
+    void OnDrawGizmos(){
+	Gizmos.DrawRay(transform.position + -Vector3.up,Vector3.down*0.1f);
+    }
 }

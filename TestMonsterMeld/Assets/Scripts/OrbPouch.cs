@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class OrbPouch : MonoBehaviour
 {
+    public int StartingOrbs = 0;
     private int orbs; // just a test
 
     public int Count {
@@ -11,7 +12,7 @@ public class OrbPouch : MonoBehaviour
     }
     
     void Start(){
-        
+        orbs += StartingOrbs;
     }
 
     void Update(){
