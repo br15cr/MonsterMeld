@@ -12,20 +12,29 @@ public class DisplayState : MonoBehaviour
     
     void Start() {
 	sprite = GetComponent<SpriteRenderer>();
-	sprite.flipX = !(monster.GetGroup().IsPlayerGroup);
-	if(monster.GetGroup().IsPlayerGroup){
-	    Debug.Log("SPRITE FOR PLAYER GROUP!!!! " + sprite.flipX.ToString());
+	if(monster.GetGroup()!= null){
+	    sprite.flipX = !(monster.GetGroup().IsPlayerGroup);
+	}else{
+	    sprite.flipX = true;
 	}
+
+	monster.OnStatesChanged += StateChanged;
     }
 
     void Update() {
+	transform.LookAt(Camera.main.transform,Camera.main.transform.up);
+    }
+
+    void StateChanged(Monster m,MonsterState state,MonsterCombatState combatState){
+	int st = (int)state;
+	int cst = (int)combatState;
+	int stateNum = st == 2 ? st+cst : st;
 	int currentState = GetMonsterState();
 	if(stateIndex != currentState){
 	    //Debug.Log("State change from " + stateIndex.ToString() + " to " + currentState.ToString());
 	    stateIndex = currentState;
 	    sprite.sprite = icons[stateIndex];
 	}
-	transform.LookAt(Camera.main.transform,Camera.main.transform.up);
     }
 
     private int GetMonsterState(){

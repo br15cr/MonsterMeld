@@ -95,8 +95,10 @@ public class Orb : MonoBehaviour
 	if(target == null){
 	    //Player ply = c.GetComponent<Player>();
 	    OrbPouch pouch = c.GetComponent<OrbPouch>();
-	    if(pouch == null)
+	    if(pouch == null){
 		pouch = c.GetComponent<OrbFeeder>();
+		return;
+	    }
 	    if(pouch != null){
 		if(!(c.GetComponent<Monster>() != null && c.GetComponent<Monster>().GetHealth() == 100)){
 		    target = c.transform;//pouch.transform;

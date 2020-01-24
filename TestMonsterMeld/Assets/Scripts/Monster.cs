@@ -35,6 +35,8 @@ public struct MonsterAttackInfo
 public delegate void MonsterInfoDelegate(Monster monster);
 public delegate void MonsterConflictDelegate(Monster ally, Monster enemy);
 
+public delegate void MonsterStatesDelegate(Monster monster,MonsterState state,MonsterCombatState combatState);
+
 public class Monster : MonoBehaviour
 {
     private const float ATTACK_DISTANCE = 2.0f;
@@ -75,6 +77,7 @@ public class Monster : MonoBehaviour
     public event MonsterConflictDelegate OnDeath;
     public event MonsterConflictDelegate OnKillTarget;
     public event MonsterConflictDelegate OnAttacked;    // this monster was attacked when it was in FOLLOW or IDLE mode
+    public event MonsterStatesDelegate OnStatesChanged;
 
     public float minDistance = 0;
 
@@ -87,7 +90,7 @@ public class Monster : MonoBehaviour
         //healthText = GetComponentInChildren<TextMesh>();
 	//healthText.gameObject.SetActive(SHOW_DEBUG_TEXT);
         //UpdateText(); //healthText.text = health.ToString();
-        state = MonsterState.IDLE;
+        SetState(MonsterState.IDLE); //state = MonsterState.IDLE;
         body.stoppingDistance = 2;
 
 	// load attack box
@@ -214,6 +217,19 @@ public class Monster : MonoBehaviour
         return state;
     }
 
+    private void SetState(MonsterState newState){
+	state = newState;
+	if(OnStatesChanged != null)
+	    OnStatesChanged(this,state,combatState);
+    }
+
+    private void SetState(MonsterCombatState newCombatState){
+	state = MonsterState.ATTACK;
+	combatState = newCombatState;
+	if(OnStatesChanged != null)
+	    OnStatesChanged(this,state,combatState);
+    }
+
     public MonsterCombatState GetCombatState() {
         return combatState;
     }
@@ -222,7 +238,7 @@ public class Monster : MonoBehaviour
     public void Follow(Transform target) {
         //this.target = target;
         followTarget = target;
-        state = MonsterState.FOLLOW;
+        SetState(MonsterState.FOLLOW); //state = MonsterState.FOLLOW;
     }
 
     /// <summary>
@@ -312,8 +328,9 @@ public class Monster : MonoBehaviour
         if (monster.AskAttack(this) || monster.HasEnemy()) {
             this.enemyTarget = monster.transform;
 	    //Debug.Log(this.name + " ATTACK APPROVED BY " + enemyTarget);
-            state = MonsterState.ATTACK;
-            combatState = MonsterCombatState.CHASE;
+            //state = MonsterState.ATTACK;
+            //combatState = MonsterCombatState.CHASE;
+	    SetState(MonsterCombatState.CHASE);
             enemyTarget.GetComponent<Monster>().OnDeath += TargetDeath;
         }else{
 	    Debug.LogWarning(name+"'s attack request was denied by " + monster.name);
@@ -432,7 +449,7 @@ public class Monster : MonoBehaviour
 	}*/
 	OnDeath(this,finalBlow.attacker);
 	Debug.Log(name + " Getting Destroyed!");
-	DropLoot();
+	//DropLoot();
         Destroy(this.gameObject);
 	Debug.Log(name + " Destroyed?!?");
     }
@@ -506,21 +523,26 @@ public class Monster : MonoBehaviour
 		    else
 		    {
 			//Debug.Log(name + " GOING TO HIT " + enemyTarget.name);
-			combatState = MonsterCombatState.HIT;
+			//combatState = MonsterCombatState.HIT;
+			SetState(MonsterCombatState.HIT);
 		    }
 		    break;
 		case MonsterCombatState.HIT:
 		    HitMonster();
-		    combatState = MonsterCombatState.CHARGE;
+		    //combatState = MonsterCombatState.CHARGE;
+		    SetState(MonsterCombatState.CHARGE);
 		    attackWait = Time.time;
 		    break;
 		case MonsterCombatState.CHARGE:
 		    if(Vector3.Distance(transform.position,enemyTarget.position) > ATTACK_DISTANCE) // if the enemy becomes too far away, chase it again
-			combatState = MonsterCombatState.CHASE;
+			//combatState = MonsterCombatState.CHASE;
+			SetState(MonsterCombatState.CHASE);
 		    if (Time.time >= attackWait + ATTACK_DELAY)
-			combatState = MonsterCombatState.HIT;
+			//combatState = MonsterCombatState.HIT;
+			SetState(MonsterCombatState.HIT);
 		    if(health <= 25)
-			combatState = MonsterCombatState.FLEE;
+			//combatState = MonsterCombatState.FLEE;
+			SetState(MonsterCombatState.FLEE);
 		    break;
 		case MonsterCombatState.FLEE:
 		    Debug.Log(name + " IS FLEEING!");

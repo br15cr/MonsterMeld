@@ -29,6 +29,11 @@ public class Controller : MonoBehaviour
 		player.Jump();
 	}
 
+	if(Input.GetButtonDown("PlayerAttack")){
+	    Debug.Log("Attack Pressed");
+	    player.Attack();
+	}
+
 	if(Input.GetButtonDown("Box")){
 	    player.GrabDropBox();
 	}

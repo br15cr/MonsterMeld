@@ -8,6 +8,10 @@ public class Player : MonoBehaviour
     private MonsterGroup playerMonsters;
     private OrbPouch orbs;
     private FusionBox fusionBox;
+    private bool jumped = false;
+
+    private GameObject attackPrefab;
+
 
     private Vector3 lookDirection;
 
@@ -20,17 +24,17 @@ public class Player : MonoBehaviour
     public float speed = 1;
 
     public GameObject fusionBoxPrefab;
-    private bool jumped = false;
-    // Start is called before the first frame update
+    
+    
     void Start()
     {
 	//backbox = transform.Find("tuffHDModel/metarig/spin/spine.001/Cube");
         body = GetComponent<CharacterController>();
         playerMonsters = GetComponent<MonsterGroup>();
 	orbs = GetComponent<OrbPouch>();
+	attackPrefab = Resources.Load<GameObject>("Prefabs/DamageBox");
     }
 
-    // Update is called once per frame
     void Update()
     {
         
@@ -84,6 +88,13 @@ public class Player : MonoBehaviour
 	    velocity = Vector3.up*0.25f;
 	    jumped = true;
 	}
+    }
+
+    public void Attack(){
+	Debug.Log("Player Attacking");
+	AttackBox attack = Instantiate(attackPrefab,transform.position + transform.forward*-1,Quaternion.identity).GetComponent<AttackBox>();
+	attack.transform.parent = this.transform;
+	attack.SetInfo(new MonsterAttackInfo(null,10));
     }
 
     public void CallMonsters()
