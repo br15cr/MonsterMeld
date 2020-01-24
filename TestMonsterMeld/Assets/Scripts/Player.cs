@@ -24,6 +24,8 @@ public class Player : MonoBehaviour
     public float speed = 1;
 
     public GameObject fusionBoxPrefab;
+
+    public bool playerFacesMouse = false;
     
     
     void Start()
@@ -40,21 +42,33 @@ public class Player : MonoBehaviour
         
     }
 
-    public void Move(Vector2 direction)
+    public void Move(Vector2 direction,Vector2 lookDir)
     {
 	// Move player / Player Direction rotation
         Vector3 moveDirection = new Vector3(direction.x, 0, direction.y);
+	Vector3 lookingDirection = new Vector3(lookDir.x,0,lookDir.y);
         if (moveDirection.magnitude > 1)
         {
             moveDirection = moveDirection.normalized;
         }
         //moveDirection *= speed;
-	//lookDirection = moveDirection;
+
+	if(!playerFacesMouse)
+	    lookDirection = moveDirection;
+	else
+	    lookDirection = lookingDirection;
 	//lookDirection = Vector3.Lerp(lookDirection,moveDirection,Time.deltaTime*moveDirection.magnitude);
-	lookDirection = moveDirection;
-        body.SimpleMove(lookDirection*speed*100);
+	
+	//lookDirection = moveDirection;
+	//lookDirection = lookingDirection;
+        //body.SimpleMove(lookDirection*speed*100);
+	body.SimpleMove(moveDirection*speed*100);
+	//body.Move(velocity);
+
 	if(lookDirection != Vector3.zero)
 	    transform.rotation = Quaternion.LookRotation(lookDirection*-1);
+	// if(lookDirection != Vector3.zero)
+	//     transform.rotation = Quaternion.LookRotation(lookDirection*-1);
 	/*
 	  float div = moveDirection.x / moveDirection.y;
 	  float angle = Mathf.Atan(div) * Mathf.Rad2Deg;
@@ -64,6 +78,10 @@ public class Player : MonoBehaviour
 	  }
 	  transform.rotation = Quaternion.Euler(0, angle, 0);
 	*/
+    }
+
+    public void Move(Vector2 direction){
+	Move(direction,direction);
     }
 
     // bool OnGround(){
@@ -84,8 +102,8 @@ public class Player : MonoBehaviour
     }
 
     public void Jump(){
-	if(OnGround()){
-	    velocity = Vector3.up*0.25f;
+	if(!jumped){//if(OnGround()){
+	    velocity = Vector3.up*2f;
 	    jumped = true;
 	}
     }
@@ -94,7 +112,7 @@ public class Player : MonoBehaviour
 	Debug.Log("Player Attacking");
 	AttackBox attack = Instantiate(attackPrefab,transform.position + transform.forward*-1,Quaternion.identity).GetComponent<AttackBox>();
 	attack.transform.parent = this.transform;
-	attack.SetInfo(new MonsterAttackInfo(null,10));
+	attack.SetInfo(new MonsterAttackInfo(null,20));
     }
 
     public void CallMonsters()

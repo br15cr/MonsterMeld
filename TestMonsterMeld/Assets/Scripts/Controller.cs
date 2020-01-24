@@ -15,8 +15,10 @@ public class Controller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+	Vector2 mouse = Input.mousePosition;
         leftStick = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-        player.Move(leftStick);
+        //player.Move(leftStick);
+	player.Move(leftStick,new Vector2(mouse.x-Screen.width/2,mouse.y-Screen.height/2).normalized);
 
         if (Input.GetButtonDown("Call"))
         {

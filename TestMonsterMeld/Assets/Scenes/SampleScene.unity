@@ -4602,7 +4602,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89fa262ac664bf64a99ddb4986fd3fc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monsterPrefab: {fileID: 352426132730451157, guid: a1160195f821e344c98021f98d55b18d,
+  monsterPrefab: {fileID: 456590611538437231, guid: 53ce0130dc9072140b7d40776af60e13,
     type: 3}
   spawnOffset: {x: 0, y: 0, z: 2}
   groupColor: {r: 1, g: 0, b: 0.6556754, a: 1}
@@ -7601,6 +7601,11 @@ PrefabInstance:
       propertyPath: backbox
       value: 
       objectReference: {fileID: 1015949066}
+    - target: {fileID: 3545417189347253233, guid: 41c94b8e7cdf25945ad89d30b7680ba6,
+        type: 3}
+      propertyPath: playerFacesMouse
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2082431368954971091, guid: 41c94b8e7cdf25945ad89d30b7680ba6,
         type: 3}
       propertyPath: m_LocalPosition.x

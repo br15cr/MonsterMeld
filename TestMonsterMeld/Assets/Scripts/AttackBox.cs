@@ -39,6 +39,7 @@ public class AttackBox : MonoBehaviour
     // disable this collision until enabled by user?
     void OnTriggerEnter(Collider c){
 	// don't attempt to attack without knowing the attack info
+	if(attacking) return;
 	attacking = true;
 	if(!hasInfo){
 	    attacking = false;
