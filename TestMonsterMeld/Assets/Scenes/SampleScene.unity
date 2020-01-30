@@ -7588,7 +7588,7 @@ PrefabInstance:
     - target: {fileID: 3545417189347253233, guid: 41c94b8e7cdf25945ad89d30b7680ba6,
         type: 3}
       propertyPath: speed
-      value: 0.1
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 3545417189347253233, guid: 41c94b8e7cdf25945ad89d30b7680ba6,
         type: 3}
@@ -7604,7 +7604,7 @@ PrefabInstance:
     - target: {fileID: 3545417189347253233, guid: 41c94b8e7cdf25945ad89d30b7680ba6,
         type: 3}
       propertyPath: playerFacesMouse
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2082431368954971091, guid: 41c94b8e7cdf25945ad89d30b7680ba6,
         type: 3}

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    private const float GRAVITY = 20.0f;
+    private const float JUMP_SPEED = 8.0f;
+    
     private CharacterController body;
     private MonsterGroup playerMonsters;
     private OrbPouch orbs;
@@ -21,7 +24,7 @@ public class Player : MonoBehaviour
 
     public Transform backbox;
 
-    public float speed = 1;
+    public float speed = 6.0f;
 
     public GameObject fusionBoxPrefab;
 
@@ -42,16 +45,26 @@ public class Player : MonoBehaviour
         
     }
 
+    // https://docs.unity3d.com/ScriptReference/CharacterController.Move.html
+
     public void Move(Vector2 direction,Vector2 lookDir)
     {
 	// Move player / Player Direction rotation
         Vector3 moveDirection = new Vector3(direction.x, 0, direction.y);
 	Vector3 lookingDirection = new Vector3(lookDir.x,0,lookDir.y);
+	
         if (moveDirection.magnitude > 1)
         {
             moveDirection = moveDirection.normalized;
         }
-        //moveDirection *= speed;
+
+	float yVel = velocity.y;
+
+	velocity = moveDirection;
+	velocity *= speed;
+	//velocity += yVel*Vector3.up;
+
+	//moveDirection *= speed;
 
 	if(!playerFacesMouse)
 	    lookDirection = moveDirection;
@@ -62,8 +75,11 @@ public class Player : MonoBehaviour
 	//lookDirection = moveDirection;
 	//lookDirection = lookingDirection;
         //body.SimpleMove(lookDirection*speed*100);
-	body.SimpleMove(moveDirection*speed*100);
+	//body.SimpleMove(moveDirection*speed*100);
 	//body.Move(velocity);
+
+	velocity += (yVel-GRAVITY*Time.deltaTime)*Vector3.up;
+	body.Move(velocity*Time.deltaTime);
 
 	if(lookDirection != Vector3.zero)
 	    transform.rotation = Quaternion.LookRotation(lookDirection*-1);
@@ -102,9 +118,12 @@ public class Player : MonoBehaviour
     }
 
     public void Jump(){
-	if(!jumped){//if(OnGround()){
-	    velocity = Vector3.up*2f;
-	    jumped = true;
+	// if(!jumped){//if(OnGround()){
+	//     velocity = Vector3.up*2f;
+	//     jumped = true;
+	// }
+	if(body.isGrounded){
+	    velocity = new Vector3(velocity.x,JUMP_SPEED,velocity.z);
 	}
     }
 
