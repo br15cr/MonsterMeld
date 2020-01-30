@@ -8,7 +8,7 @@ public class DisplayState : MonoBehaviour
     private SpriteRenderer sprite;
     public Monster monster;
 
-    public Sprite[] icons = new Sprite[7];
+    public Sprite[] icons = new Sprite[8];
     
     void Start() {
 	sprite = GetComponent<SpriteRenderer>();
@@ -18,6 +18,9 @@ public class DisplayState : MonoBehaviour
 	    sprite.flipX = true;
 	}
 
+	if(monster.agro){
+	    StateChanged(monster,monster.GetState(),monster.GetCombatState());
+	}
 	monster.OnStatesChanged += StateChanged;
     }
 
@@ -40,6 +43,8 @@ public class DisplayState : MonoBehaviour
     private int GetMonsterState(){
 	int state = (int)monster.GetState();
 	int cstate = (int)monster.GetCombatState();
+	if(state == 3)
+	    return 7;
 	return state == 2 ? state+cstate : state;
     }
 }
