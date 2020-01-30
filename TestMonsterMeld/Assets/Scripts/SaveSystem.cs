@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System;
 
 public static class SaveSystem
 {
 
-/*	public static void SavePlayer (Player player)
+	public static void SavePlayer (Player player)
 	{
+	    Debug.Log("Is Player Null? " + (player == null).ToString());
 		BinaryFormatter formatter = new BinaryFormatter();
 		string path = Application.persistentDataPath + "/player_test.sav";
 		FileStream stream = new FileStream(path, FileMode.Create);
@@ -36,6 +38,6 @@ public static class SaveSystem
 		}
 
 
-	}*/
+	}
 
 }

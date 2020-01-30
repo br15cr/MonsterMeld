@@ -910,6 +910,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a22a184815c4ca244a3cb7cc200177fe, type: 3}
+--- !u!1 &371618246 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 256142202830385623, guid: bf7501110cb2586409b1dd842da8aa1f,
+    type: 3}
+  m_PrefabInstance: {fileID: 1106236810}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &373365459 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 256142202750795729, guid: bf7501110cb2586409b1dd842da8aa1f,
@@ -6290,18 +6296,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc2f9f2732e56f245bfe97eeb76d50f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Button_continue_Hover: {fileID: 0}
+  Button_continue_Hover: {fileID: 21300000, guid: bdbce264bbc34c84bb1fc26d93228742,
+    type: 3}
   Button_continue_Desel: {fileID: 21300000, guid: 1435ea5f50107ad42b7e717b26a9ebd8,
     type: 3}
-  Button_reload_Hover: {fileID: 0}
+  Button_reload_Hover: {fileID: 21300000, guid: 6280d3c8ddb432e4ca0d6d78e4dc12bf,
+    type: 3}
   Button_reload_Desel: {fileID: 21300000, guid: 6280d3c8ddb432e4ca0d6d78e4dc12bf,
     type: 3}
-  Button_exit_Hover: {fileID: 0}
+  Button_exit_Hover: {fileID: 21300000, guid: 90434d13da73b8847b0259be8b07d0f7, type: 3}
   Button_exit_Desel: {fileID: 21300000, guid: 4f12975fb50f87449935d630f0793f13, type: 3}
+  player: {fileID: 639254682}
   button_continue: {fileID: 1591281259}
   button_reload: {fileID: 1041233660}
   button_exit: {fileID: 373365459}
-  pauseMenuUI: {fileID: 0}
+  pauseMenuUI: {fileID: 371618246}
   pauseMenu_Pos: 0
 --- !u!1001 &1826256944
 PrefabInstance:

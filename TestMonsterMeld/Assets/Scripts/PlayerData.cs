@@ -10,15 +10,15 @@ public class PlayerData : MonoBehaviour
 	public int health;
 	public float[] position;
 
-	/*public PlayerData (Player player)
+	public PlayerData (Player player)
 	{
 		// health = player.health;
 		position = new float[3];
-		position[0] = player.transform.x;
-		position[1] = player.transform.y;
-		position[2] = player.transform.z;
+		position[0] = player.transform.position.x;
+		position[1] = player.transform.position.y;
+		position[2] = player.transform.position.z;
 
-	}*/
+	}
 
     // Start is called before the first frame update
     void Start()

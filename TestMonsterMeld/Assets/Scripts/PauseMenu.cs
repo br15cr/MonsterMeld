@@ -14,6 +14,8 @@ public class PauseMenu : MonoBehaviour
     public Sprite Button_exit_Hover;
     public Sprite Button_exit_Desel;
 
+    public Player player;
+
    	public GameObject button_continue;
    	public GameObject button_reload;
    	public GameObject button_exit;
@@ -152,18 +154,20 @@ public class PauseMenu : MonoBehaviour
     public void QuitGame ()
     {
     	resetStats();
-    	//SaveGame();
+	
+    	SaveGame(player);
     	Debug.Log("Quitting to menu");
     	SceneManager.LoadScene("MainMenu");
     }
 
-   // public void SaveGame (Player player)
-  //  {
-    	// player.GetComponent<player>().SavePlayer();
-    //	Debug.Log("Saving..");
-    	//saveSystem.SavePlayer(this);
+   public void SaveGame (Player player)
+   {
+       //player.GetComponent<player>().SavePlayer();
+       Debug.Log("PauseMenu: Is Player Null? " + (player == null).ToString());
+    	Debug.Log("Saving..");
+    	//SaveSystem.SavePlayer(player);
 
-  //  }
+   }
 
 
 }
