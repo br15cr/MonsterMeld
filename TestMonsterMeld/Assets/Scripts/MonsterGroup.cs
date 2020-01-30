@@ -34,6 +34,8 @@ public class MonsterGroup : MonoBehaviour
     private MonsterGroup enemyGroup; // group to fight against
 
     private bool playerGroup; // is the players group
+
+    public Transform followTarget;
     
 
     // Protected Vars //
@@ -69,6 +71,10 @@ public class MonsterGroup : MonoBehaviour
         //monsters = new List<Monster>();
         //groupColor = Color.blue;
         LoadNames();
+
+	if(followTarget == null){
+	    followTarget = transform;
+	}
 	if(this.GetComponent<Player>() != null){
 	    Debug.Log("IS PLAYER!!!");
 	    playerGroup = true;
@@ -226,7 +232,9 @@ public class MonsterGroup : MonoBehaviour
 		inCombat = false;
 		enemyGroup = null;
 		//monster.Follow(transform);
-		Follow(transform);
+		//Follow(transform);
+		Follow(followTarget);
+
 	    } else {
 		//Debug.Log(monster.name + ": FINDING NEXT ENEMY");
 
@@ -240,7 +248,7 @@ public class MonsterGroup : MonoBehaviour
 		//}
 	    }
 	}else{
-	    Follow(transform); // temp solution, pls fix
+	    Follow(followTarget); // temp solution, pls fix
 	}
     }
 
@@ -266,5 +274,13 @@ public class MonsterGroup : MonoBehaviour
 
     public MonsterGroup GetEnemyGroup(){
 	return enemyGroup;
+    }
+
+    public void SetFollowTarget(Transform t){
+	followTarget = t;
+    }
+
+    public void ClearFollowTarget(){
+	followTarget = transform;
     }
 }

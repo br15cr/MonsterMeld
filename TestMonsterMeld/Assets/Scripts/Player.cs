@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
 {
     private const float GRAVITY = 20.0f;
     private const float JUMP_SPEED = 8.0f;
+    private const int ATTACK_AMOUNT = 10;
     
     private CharacterController body;
     private MonsterGroup playerMonsters;
@@ -131,7 +132,7 @@ public class Player : MonoBehaviour
 	Debug.Log("Player Attacking");
 	AttackBox attack = Instantiate(attackPrefab,transform.position + transform.forward*-1,Quaternion.identity).GetComponent<AttackBox>();
 	attack.transform.parent = this.transform;
-	attack.SetInfo(new MonsterAttackInfo(null,20));
+	attack.SetInfo(new MonsterAttackInfo(null,ATTACK_AMOUNT));
     }
 
     public void CallMonsters()
@@ -212,6 +213,7 @@ public class Player : MonoBehaviour
 	    if(Physics.Raycast(transform.position + -transform.forward*2,-transform.up,out hit,100)){
 		fusionBox = GameObject.Instantiate(fusionBoxPrefab,hit.point,Quaternion.identity).GetComponent<FusionBox>();
 		fusionBox.player = this;
+		playerMonsters.SetFollowTarget(fusionBox.transform);
 		backbox.gameObject.SetActive(false);
 	    }
 	}else{
@@ -236,6 +238,7 @@ public class Player : MonoBehaviour
 	    */
 	    if(Vector3.Distance(transform.position,fusionBox.transform.position) <= 3){
 		Destroy(fusionBox.gameObject);
+		playerMonsters.ClearFollowTarget();
 		fusionBox = null;
 		backbox.gameObject.SetActive(true);
 	    }
