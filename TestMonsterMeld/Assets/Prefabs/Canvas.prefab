@@ -130,7 +130,7 @@ MonoBehaviour:
   button_option: {fileID: 1166898498037684894}
   button_continue: {fileID: 1166898497811477243}
   button_exit: {fileID: 1166898496866864740}
-  newGameScene: SampleScene
+  newGameScene: World
   menu_Pos: 0
 --- !u!1 &1166898496676246969
 GameObject:
@@ -808,7 +808,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 21300000, guid: 70901bc3a2542d244ad76b1a92e4ca20, type: 3}
   m_Type: 0
-  m_PreserveAspect: 1
+  m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1

@@ -43,7 +43,7 @@ public class MonsterGroup : MonoBehaviour
 
     // Public Vars //
     public GameObject monsterPrefab;
-    public Vector3 spawnOffset = new Vector3(0,0,2);
+    public Vector3 spawnOffset = new Vector3(0,0.25f,2);
     public Color groupColor;
 
     // Events //
@@ -99,11 +99,12 @@ public class MonsterGroup : MonoBehaviour
         reader.Close();
     }
 
-    public void CreateMonster()
+    public Monster CreateMonster()
     {
         Monster monster = GameObject.Instantiate(monsterPrefab).GetComponent<Monster>();
         monster.transform.position = transform.position + spawnOffset;
         AddMonster(monster);
+	return monster;
         // set monster to status quo
     }
     
@@ -174,7 +175,7 @@ public class MonsterGroup : MonoBehaviour
     {
         monster.SetGroup(this);
         monster.SetColor(groupColor);
-	//Debug.Log("NameList Count: " + nameList.Count.ToString());
+	Debug.Log("NameList Count: " + nameList.Count.ToString());
         monster.name = nameList[Random.Range(0, nameList.Count)];
 	    //Debug.Log("MonsterGroup: Monsters:" + monsters + " Monster: " + monster);
         monsters.Add(monster);
