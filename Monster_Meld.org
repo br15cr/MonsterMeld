@@ -256,6 +256,47 @@ Used for attacks that come with buffs or debuffs that last longer than the origi
      | Name       | Description    | Arguments                       |
      |------------+----------------+---------------------------------|
      | SetMonster | Sets 'monster' | monst: What to set 'monster' to |
+
+*** Orb [[file:TestMonsterMeld/Assets/Scripts/Orb.cs][Orb.cs]]
+
+**** Private Variables
+     | Name     | Description                                            |
+     |----------+--------------------------------------------------------|
+     | target   | The Monster or Player the orb follows to be collected. |
+     | velocity | The orb's velocity                                     |
+
+**** Private Constants
+     | Name   | Description                                      |
+     |--------+--------------------------------------------------|
+     | SPEED  | The speed at which the orb follows its target at |
+     | RADIUS | How close the orb needs to be to be 'Collected'  |
+
+*** OrbPouch [[file:TestMonsterMeld/Assets/Scripts/OrbPouch.cs][OrbPouch.cs]]
+
+**** Private Variables
+     | Name | Description                                    |
+     |------+------------------------------------------------|
+     | orbs | The amount of orbs this OrbPouch has collected |
+
+**** Public Variables
+     | Name  | Description    |
+     |-------+----------------|
+     | Count | Returns 'orbs' |
+
+**** Public Methods
+     | Name     | Description                   | Arguments                         |
+     |----------+-------------------------------+-----------------------------------|
+     | AddOrb   | Increments 'orbs' by 1        |                                   |
+     | AddOrbs  | Increases 'orbs' by an amount | amount: the amount to increase by |
+     | TakeOrbs | Removes an amount from 'orbs' | amount: the amount to remove      |
+
+*** OrbFeeder [[file:TestMonsterMeld/Assets/Scripts/OrbFeeder.cs][OrbFeeder.cs]] : OrbPouch [[file:TestMonsterMeld/Assets/Scripts/OrbPouch.cs][OrbPouch.cs]]
+
+**** Public Methods
+     | Name   | Description                                              | Arguments |
+     |--------+----------------------------------------------------------+-----------|
+     | AddOrb | Heals the attached monster instead of collecting the orb |           |
+    
 * Questions
    + How do (your) Monsters heal themselves
      + Automatically overtime?
@@ -281,6 +322,8 @@ Used for attacks that come with buffs or debuffs that last longer than the origi
   + Monsters absorb matching element orbs to get health back
     + All monsters eat berries to heal (regardless of type)?
 
+** General
+   + Health Component
 ** Player
   + [ ] Player Sprinting
   + [ ] Player Health System
@@ -343,6 +386,11 @@ Used for attacks that come with buffs or debuffs that last longer than the origi
 ** Wild Monsters
 
 *** Leashing
+
+** FusionBox
+   + [X] Monsters spawn from fusion box
+   + [ ] Monsters drop orbs on death
+   + [ ] orbs required to 'craft' Monsters
 * Pseudo Code
 
 ** Effects

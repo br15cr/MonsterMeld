@@ -11,6 +11,8 @@ public class MyTestEnemies : TestEnemies
     protected override void Update() {
 	if(Input.GetKeyDown("p")){
 	    group.CreateMonster();
+	    //m.agro = true;
+	    
 	}
         base.Update();
     }

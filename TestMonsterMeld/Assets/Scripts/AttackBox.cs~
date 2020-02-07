@@ -1,0 +1,28 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class AttackBox : MonoBehaviour
+{
+    private MonsterAttackInfo info;
+    
+    void Start() {
+        info = new MonsterAttackInfo(null,20);
+    }
+
+    void Update() {
+        
+    }
+
+    void OnTriggerEnter(Collider c){
+	Monster monster = c.GetComponent<Monster>();
+	Debug.Log(c.transform.name + " ENTERED TRIGGER!");
+	if(monster != null){
+	    // damage monster
+	    // destroy self
+	    Debug.Log("MONSTER ENTERED TRIGGER");
+	    monster.TakeDamage(info);
+	    Destroy(this.gameObject);
+	}
+    }
+}

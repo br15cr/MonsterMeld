@@ -33,12 +33,17 @@ public class MonsterGroup : MonoBehaviour
     private List<Monster> monsters = new List<Monster>();
     private MonsterGroup enemyGroup; // group to fight against
 
+    private bool playerGroup; // is the players group
+
+    public Transform followTarget;
+    
+
     // Protected Vars //
     protected bool inCombat = false;
 
     // Public Vars //
     public GameObject monsterPrefab;
-    public Vector3 spawnOffset = new Vector3(0,0,2);
+    public Vector3 spawnOffset = new Vector3(0,0.25f,2);
     public Color groupColor;
 
     // Events //
@@ -57,11 +62,23 @@ public class MonsterGroup : MonoBehaviour
 	get { return monsters.Count; }
     }
 
+    public bool IsPlayerGroup {
+	get { return this.playerGroup; }
+    }
+
     protected virtual void Start()
     {
         //monsters = new List<Monster>();
         //groupColor = Color.blue;
         LoadNames();
+
+	if(followTarget == null){
+	    followTarget = transform;
+	}
+	if(this.GetComponent<Player>() != null){
+	    Debug.Log("IS PLAYER!!!");
+	    playerGroup = true;
+	}
 
     }
 
@@ -82,14 +99,16 @@ public class MonsterGroup : MonoBehaviour
         reader.Close();
     }
 
-    public void CreateMonster()
+    public Monster CreateMonster()
     {
         Monster monster = GameObject.Instantiate(monsterPrefab).GetComponent<Monster>();
         monster.transform.position = transform.position + spawnOffset;
+	monster.DebugPosition();
         AddMonster(monster);
+	return monster;
         // set monster to status quo
     }
-
+    
     public void Follow(Transform target)
     {
         foreach (Monster m in monsters)
@@ -157,7 +176,7 @@ public class MonsterGroup : MonoBehaviour
     {
         monster.SetGroup(this);
         monster.SetColor(groupColor);
-	//Debug.Log("NameList Count: " + nameList.Count.ToString());
+	Debug.Log("NameList Count: " + nameList.Count.ToString());
         monster.name = nameList[Random.Range(0, nameList.Count)];
 	    //Debug.Log("MonsterGroup: Monsters:" + monsters + " Monster: " + monster);
         monsters.Add(monster);
@@ -215,7 +234,9 @@ public class MonsterGroup : MonoBehaviour
 		inCombat = false;
 		enemyGroup = null;
 		//monster.Follow(transform);
-		Follow(transform);
+		//Follow(transform);
+		Follow(followTarget);
+
 	    } else {
 		//Debug.Log(monster.name + ": FINDING NEXT ENEMY");
 
@@ -229,7 +250,7 @@ public class MonsterGroup : MonoBehaviour
 		//}
 	    }
 	}else{
-	    Follow(transform); // temp solution, pls fix
+	    Follow(followTarget); // temp solution, pls fix
 	}
     }
 
@@ -255,5 +276,13 @@ public class MonsterGroup : MonoBehaviour
 
     public MonsterGroup GetEnemyGroup(){
 	return enemyGroup;
+    }
+
+    public void SetFollowTarget(Transform t){
+	followTarget = t;
+    }
+
+    public void ClearFollowTarget(){
+	followTarget = transform;
     }
 }

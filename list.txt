@@ -1,0 +1,6 @@
+Demo state control system
+Dialogue systerm with placeholder
+UI for indicators:  specifically "can craft or not"
+
+Fix Camera
+Change Controls

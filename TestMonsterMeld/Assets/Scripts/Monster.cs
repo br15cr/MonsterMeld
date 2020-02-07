@@ -10,6 +10,7 @@ public enum MonsterState
     IDLE,
     FOLLOW,
     ATTACK,
+    AGRO,
 }
 
 public enum MonsterCombatState
@@ -17,7 +18,8 @@ public enum MonsterCombatState
     CHASE,      // run after the enemy
     HIT,        // deal the damage
     CHARGE,     // attack recoil (go back go hit after done)
-    RECOVER     // stun if hit?
+    RECOVER,     // stun if hit?
+    FLEE
 }
 
 public struct MonsterAttackInfo
@@ -33,6 +35,8 @@ public struct MonsterAttackInfo
 
 public delegate void MonsterInfoDelegate(Monster monster);
 public delegate void MonsterConflictDelegate(Monster ally, Monster enemy);
+
+public delegate void MonsterStatesDelegate(Monster monster,MonsterState state,MonsterCombatState combatState);
 
 public class Monster : MonoBehaviour
 {
@@ -63,17 +67,28 @@ public class Monster : MonoBehaviour
     private Material healthbarMat;
     private Transform healthRing;
 
+    private GameObject attackPrefab; // attackbox
+
     //public Transform target;
 
     public bool IsDead {
 	get { return this.isDead; }
     }
 
+    private SphereCollider agroSphere;
+
+    public bool agro;
+
     public event MonsterConflictDelegate OnDeath;
     public event MonsterConflictDelegate OnKillTarget;
     public event MonsterConflictDelegate OnAttacked;    // this monster was attacked when it was in FOLLOW or IDLE mode
+    public event MonsterStatesDelegate OnStatesChanged;
 
     public float minDistance = 0;
+
+    public GameObject orbPrefab; // drops on death
+
+    private Vector3 teleportOffset = new Vector3(5,5,0);
 
     void Start() {
         body = GetComponent<NavMeshAgent>();
@@ -82,8 +97,21 @@ public class Monster : MonoBehaviour
         //healthText = GetComponentInChildren<TextMesh>();
 	//healthText.gameObject.SetActive(SHOW_DEBUG_TEXT);
         //UpdateText(); //healthText.text = health.ToString();
-        state = MonsterState.IDLE;
+        SetState(MonsterState.IDLE); //state = MonsterState.IDLE;
         body.stoppingDistance = 2;
+
+	agroSphere = this.gameObject.AddComponent(typeof(SphereCollider)) as SphereCollider;
+	agroSphere.radius = 2.5f;
+	agroSphere.isTrigger = true;
+
+	if(agro)
+	    SetState(MonsterState.AGRO); //state = MonsterState.AGRO;
+
+	// load attack box
+	attackPrefab = Resources.Load<GameObject>("Prefabs/DamageBox");
+	
+	//body.enabled = false;
+
     }
 
     // Update is called once per frame
@@ -106,6 +134,10 @@ public class Monster : MonoBehaviour
 	    }else if(health > 100){
 		health = 100;
 	    }
+	}
+
+	if(Vector3.Distance(this.transform.position,group.transform.position) > 30.0f){
+	    transform.position = group.transform.position + teleportOffset;
 	}
     }
 
@@ -206,6 +238,19 @@ public class Monster : MonoBehaviour
         return state;
     }
 
+    private void SetState(MonsterState newState){
+	state = newState;
+	if(OnStatesChanged != null)
+	    OnStatesChanged(this,state,combatState);
+    }
+
+    private void SetState(MonsterCombatState newCombatState){
+	state = MonsterState.ATTACK;
+	combatState = newCombatState;
+	if(OnStatesChanged != null)
+	    OnStatesChanged(this,state,combatState);
+    }
+
     public MonsterCombatState GetCombatState() {
         return combatState;
     }
@@ -214,7 +259,11 @@ public class Monster : MonoBehaviour
     public void Follow(Transform target) {
         //this.target = target;
         followTarget = target;
-        state = MonsterState.FOLLOW;
+	if(agro){
+	    SetState(MonsterState.AGRO);
+	}else{
+	    SetState(MonsterState.FOLLOW); //state = MonsterState.FOLLOW;
+	}
     }
 
     /// <summary>
@@ -304,8 +353,9 @@ public class Monster : MonoBehaviour
         if (monster.AskAttack(this) || monster.HasEnemy()) {
             this.enemyTarget = monster.transform;
 	    //Debug.Log(this.name + " ATTACK APPROVED BY " + enemyTarget);
-            state = MonsterState.ATTACK;
-            combatState = MonsterCombatState.CHASE;
+            //state = MonsterState.ATTACK;
+            //combatState = MonsterCombatState.CHASE;
+	    SetState(MonsterCombatState.CHASE);
             enemyTarget.GetComponent<Monster>().OnDeath += TargetDeath;
         }else{
 	    Debug.LogWarning(name+"'s attack request was denied by " + monster.name);
@@ -347,7 +397,11 @@ public class Monster : MonoBehaviour
 	if(Vector3.Distance(transform.position,enemyTarget.position) <= ATTACK_DISTANCE){ // only apply the attack if they're close enough
 	    Monster monster = enemyTarget.GetComponent<Monster>();
 	    // send damage data to 'monster'
-	    monster.TakeDamage(new MonsterAttackInfo(this, 10));
+	    //monster.TakeDamage(new MonsterAttackInfo(this, 10));
+	    // spawn attack box instead of directly sending damage
+	    AttackBox attack = Instantiate(attackPrefab,transform.position + transform.forward*(ATTACK_DISTANCE/2),Quaternion.identity).GetComponent<AttackBox>();
+	    //attack.SetAttacker(this);
+	    attack.SetInfo(new MonsterAttackInfo(this,10));
 	}
     }
 
@@ -372,7 +426,7 @@ public class Monster : MonoBehaviour
             Die(attackInfo);
         }
 
-        if(state != MonsterState.ATTACK && attackInfo.attacker != null) {
+        if(state != MonsterState.ATTACK && attackInfo.attacker != null && !attackInfo.attacker.IsDead) {
             AttackMonster(attackInfo.attacker);
             if(OnAttacked != null)
                 OnAttacked(this,attackInfo.attacker);
@@ -420,8 +474,16 @@ public class Monster : MonoBehaviour
 	}*/
 	OnDeath(this,finalBlow.attacker);
 	Debug.Log(name + " Getting Destroyed!");
+	//DropLoot();
         Destroy(this.gameObject);
 	Debug.Log(name + " Destroyed?!?");
+    }
+
+    private void DropLoot(){
+	for(int i = 0; i < 8; i++){
+	    Orb o = GameObject.Instantiate(orbPrefab,transform.position + transform.up*1,Quaternion.identity).GetComponent<Orb>();
+	    o.Jump();
+	}
     }
 
     private void LookAt(Vector3 targetPos){
@@ -448,10 +510,17 @@ public class Monster : MonoBehaviour
 	    case MonsterState.FOLLOW:
 		FollowBehaviour();
 		break;
+	case MonsterState.AGRO:
+	    TenseBehaviour();
+	    break;
             case MonsterState.ATTACK:
                 AttackBehaviour();
 		break;
         }
+    }
+
+    protected virtual void TenseBehaviour(){
+	
     }
 
 
@@ -472,33 +541,61 @@ public class Monster : MonoBehaviour
 	}
     }
 
+    protected virtual void ChaseBehaviour(){
+	// Get close enough to enemy
+	if (Vector3.Distance(transform.position, enemyTarget.transform.position) > ATTACK_DISTANCE) { //if (Vector3.Distance(transform.position, target.transform.position) > ATTACK_DISTANCE) {
+			
+	    if (body.isStopped)
+		body.isStopped = false;
+			
+	    body.SetDestination(enemyTarget.position);
+	    //Debug.Log(enemyTarget);
+	}
+	else
+	    {
+		// when close enough to the enemy
+		SetState(MonsterCombatState.HIT);
+	    }
+    }
+
+    protected virtual void HitBehaviour(){
+	HitMonster();
+	SetState(MonsterCombatState.CHARGE);
+	// update the last time attacked
+	attackWait = Time.time;
+    }
+
+    protected virtual void ChargeBehaviour(){
+	if(Vector3.Distance(transform.position,enemyTarget.position) > ATTACK_DISTANCE) // if the enemy becomes too far away, chase it again
+	    SetState(MonsterCombatState.CHASE);
+	if (Time.time >= attackWait + ATTACK_DELAY)
+	    SetState(MonsterCombatState.HIT);
+	if(health <= 25)
+	    SetState(MonsterCombatState.FLEE);
+    }
+
+    protected virtual void FleeBehaviour(){
+	FollowBehaviour();
+    }
+
     protected virtual void AttackBehaviour(){
 	if(enemyTarget != null){ //if (target != null) {
 	    switch (combatState) {
-		case MonsterCombatState.CHASE:
-		    //Debug.Log(name + " CHASING " + enemyTarget.name);
-		    if (Vector3.Distance(transform.position, enemyTarget.transform.position) > ATTACK_DISTANCE) { //if (Vector3.Distance(transform.position, target.transform.position) > ATTACK_DISTANCE) {
-			if (body.isStopped)
-			    body.isStopped = false;
-			body.SetDestination(enemyTarget.position);
-			//Debug.Log(enemyTarget);
-		    }
-		    else
-		    {
-			//Debug.Log(name + " GOING TO HIT " + enemyTarget.name);
-			combatState = MonsterCombatState.HIT;
-		    }
+		// CHASE //
+	    case MonsterCombatState.CHASE:
+		ChaseBehaviour();
 		    break;
+		    // HIT //
 		case MonsterCombatState.HIT:
-		    HitMonster();
-		    combatState = MonsterCombatState.CHARGE;
-		    attackWait = Time.time;
+		    HitBehaviour();
 		    break;
+		    // RECHARGE
 		case MonsterCombatState.CHARGE:
-		    if(Vector3.Distance(transform.position,enemyTarget.position) > ATTACK_DISTANCE) // if the enemy becomes too far away, chase it again
-			combatState = MonsterCombatState.CHASE;
-		    if (Time.time >= attackWait + ATTACK_DELAY)
-			combatState = MonsterCombatState.HIT;
+		    ChargeBehaviour();
+		    break;
+		case MonsterCombatState.FLEE:
+		    FleeBehaviour();
+		    //FollowBehaviour();
 		    break;
 	    }
 	}else{
@@ -517,5 +614,22 @@ public class Monster : MonoBehaviour
         }
     }
 
+    void OnTriggerEnter(Collider c){
+	if(state == MonsterState.AGRO){
+	    // attack enemy
+	    Monster m = c.gameObject.GetComponent<Monster>();
+	    if(m != null){
+		if(m.GetGroup() != this.group){
+		    Debug.Log("AGROED MONSTER");
+		    //group.Attack(m);
+		    AttackMonster(m);
+		    Debug.Log(group.InCombat);
+		}
+	    }
+	}
+    }
 
+    public void DebugPosition(){
+	Debug.Log(this.gameObject.name+" Spawned at " + transform.position.ToString());
+    }
 }
