@@ -135,10 +135,10 @@ public class Monster : MonoBehaviour
 		health = 100;
 	    }
 	}
-
-	if(Vector3.Distance(this.transform.position,group.transform.position) > 30.0f){
+//TEMPCOMMENTED OUT FOR A NULL REFERNECE ERROR 
+/*	if(Vector3.Distance(this.transform.position,group.transform.position) > 30.0f){
 	    transform.position = group.transform.position + teleportOffset;
-	}
+	}*/
     }
 
     void LateUpdate() {
@@ -499,7 +499,9 @@ public class Monster : MonoBehaviour
 	    angle -= 180;
 	}
 	//Debug.Log("Angle: "+(angle*Mathf.Rad2Deg()))
-	transform.rotation = Quaternion.Euler(0,angle,0); //transform.rotation = Quaternion.Euler(0,angle*Mathf.Rad2Deg -90,0);
+
+	//transform.rotation = Quaternion.Euler(0,angle,0); 
+	//transform.rotation = Quaternion.Euler(0,angle*Mathf.Rad2Deg -90,0);
     }
 
     protected virtual void Behaviour(){
