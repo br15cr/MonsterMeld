@@ -127,12 +127,12 @@ public class PlayerCamera : MonoBehaviour
             if(target != null)
             {
                 transform.LookAt(target);
-                Debug.Log("Cam: Looking at Target;");
+                //Debug.Log("Cam: Looking at Target;");
             }
 
 
                 transform.position = Vector3.MoveTowards(transform.position, target.position + targetOffset, Time.deltaTime * moveSpeed);
-                Debug.Log("Cam: Moving toward Target;");
+                //Debug.Log("Cam: Moving toward Target;");
 
           
 

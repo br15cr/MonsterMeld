@@ -111,7 +111,7 @@ public class Monster : MonoBehaviour
 	attackPrefab = Resources.Load<GameObject>("Prefabs/DamageBox");
 	
 	//body.enabled = false;
-
+	body.Warp(transform.position);
     }
 
     // Update is called once per frame
@@ -577,6 +577,9 @@ public class Monster : MonoBehaviour
     }
 
     protected virtual void FleeBehaviour(){
+	if(!group.InCombat){
+	    group.Attack(enemyTarget.GetComponent<Monster>());
+	}
 	FollowBehaviour();
     }
 
@@ -623,7 +626,7 @@ public class Monster : MonoBehaviour
 	    if(m != null){
 		if(m.GetGroup() != this.group){
 		    Debug.Log("AGROED MONSTER");
-		    //group.Attack(m);
+		    group.Attack(m);
 		    AttackMonster(m);
 		    Debug.Log(group.InCombat);
 		}
@@ -633,5 +636,9 @@ public class Monster : MonoBehaviour
 
     public void DebugPosition(){
 	Debug.Log(this.gameObject.name+" Spawned at " + transform.position.ToString());
+    }
+
+    public void Warp(Vector3 pos){
+	body.Warp(pos);
     }
 }

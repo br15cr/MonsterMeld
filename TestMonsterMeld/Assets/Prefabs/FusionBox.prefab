@@ -140,4 +140,4 @@ MonoBehaviour:
   player: {fileID: 0}
   monsterPrefab: {fileID: 456590611538437231, guid: 53ce0130dc9072140b7d40776af60e13,
     type: 3}
-  spawnOffset: {x: 1, y: 2, z: 0}
+  spawnOffset: {x: 1, y: 4, z: 0}

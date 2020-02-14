@@ -177,7 +177,8 @@ public class MonsterGroup : MonoBehaviour
         monster.SetGroup(this);
         monster.SetColor(groupColor);
 	Debug.Log("NameList Count: " + nameList.Count.ToString());
-        monster.name = nameList[Random.Range(0, nameList.Count)];
+        //monster.name = nameList[Random.Range(0, nameList.Count)];
+	monster.name = "Unnamed Monster";
 	    //Debug.Log("MonsterGroup: Monsters:" + monsters + " Monster: " + monster);
         monsters.Add(monster);
 	if(OnAddMonster != null)

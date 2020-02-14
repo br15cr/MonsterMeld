@@ -60,6 +60,8 @@ public class FusionBox : MonoBehaviour
     void CreateMonster(){
 	Monster monster = GameObject.Instantiate(monsterPrefab).GetComponent<Monster>();
 	monster.transform.position = transform.position+spawnOffset;
+	Debug.Log(spawnOffset);
 	group.AddMonster(monster);
+	//monster.Warp(transform.position+spawnOffset);
     }
 }
