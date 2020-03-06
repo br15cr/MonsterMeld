@@ -94,6 +94,7 @@
     <Compile Include="Assets\Scripts\TestProgressBox.cs" />
     <Compile Include="Assets\Scripts\TestScripts\MyTestEnemies.cs" />
     <Compile Include="Assets\Scripts\TestScripts\TestEnemies.cs" />
+    <Compile Include="Assets\Scripts\ThirdPersonCamera.cs" />
     <Compile Include="Assets\Scripts\waterTexture.cs" />
     <Compile Include="Assets\Scripts\WildMonsterGroup.cs" />
     <Compile Include="Assets\Scripts\WorldPlayerClips.cs" />

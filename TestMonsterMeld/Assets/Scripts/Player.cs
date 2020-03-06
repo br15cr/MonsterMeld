@@ -40,6 +40,8 @@ public class Player : MonoBehaviour
 
     public float dashLength;
     private float dashStart;
+
+    public bool thirdPerson = false;
     
     
     void Start()
@@ -74,7 +76,8 @@ public class Player : MonoBehaviour
 
 	float yVel = velocity.y;
 
-	moveDirection = RotateWithView(moveDirection);
+	if(!thirdPerson)
+	    moveDirection = RotateWithView(moveDirection);
 
 	speed = dashing ? dashSpeed : DefaultSpeed;
 
