@@ -51,6 +51,7 @@ public class Monster : MonoBehaviour
 
     //private TextMesh healthText; // Temporary
     private NavMeshAgent body;
+    public int maxHealth = 100;
     private int health = 100;
 
     private MonsterGroup group = null;
@@ -91,6 +92,7 @@ public class Monster : MonoBehaviour
     private Vector3 teleportOffset = new Vector3(5,5,0);
 
     void Start() {
+	health = maxHealth;
         body = GetComponent<NavMeshAgent>();
 	healthRing = transform.Find("HEALTH_RING");
 	healthbarMat = healthRing.GetComponent<Renderer>().material;
@@ -125,14 +127,14 @@ public class Monster : MonoBehaviour
 
 
 	// HeathBar
-	healthbarMat.SetFloat("_Offset",health/100.0f);
+	healthbarMat.SetFloat("_Offset",health/((float)maxHealth));
 
 	// Temporary Self-Healing
 	if(CAN_AUTO_HEAL && state != MonsterState.ATTACK){
-	    if(health < 100){
+	    if(health < maxHealth){
 		health++;
-	    }else if(health > 100){
-		health = 100;
+	    }else if(health > maxHealth){
+		health = maxHealth;
 	    }
 	}
 //TEMPCOMMENTED OUT FOR A NULL REFERNECE ERROR 

@@ -7,7 +7,7 @@ public class Controller : MonoBehaviour
     private Player player;
     private Vector2 leftStick;
     private PlayerCamera cam;
-    public GameState gameState;
+    //public GameState gameState;
     private bool gameplay = false;
     // Start is called before the first frame update
     void Start()
@@ -21,55 +21,55 @@ public class Controller : MonoBehaviour
     void Update()
     {
     	//gameState = cam.GetComponent<GameState>();
-    	gameplay = gameState.gameplayBegun;
+    	//gameplay = gameState.gameplayBegun;
 
-    	if(gameplay){
-			Vector2 mouse = Input.mousePosition;
-		        leftStick = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-		        //player.Move(leftStick);
-			//player.Move(leftStick,new Vector2(mouse.x-Screen.width/2,mouse.y-Screen.height/2).normalized);
-			Vector2 plyPos = cam.GetPlayerScreenPosition();
-			player.Move(leftStick,new Vector2(mouse.x-plyPos.x,mouse.y-plyPos.y).normalized);
+    	//if(gameplay){
+	Vector2 mouse = Input.mousePosition;
+	leftStick = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+	//player.Move(leftStick);
+	//player.Move(leftStick,new Vector2(mouse.x-Screen.width/2,mouse.y-Screen.height/2).normalized);
+	Vector2 plyPos = cam.GetPlayerScreenPosition();
+	player.Move(leftStick,new Vector2(mouse.x-plyPos.x,mouse.y-plyPos.y).normalized);
 			
-	        if (Input.GetButtonDown("Call"))
-	        {
-	            Debug.Log("Calling Monsters");
-	            player.CallMonsters();
-	        }
+	if (Input.GetButtonDown("Call"))
+	    {
+		Debug.Log("Calling Monsters");
+		player.CallMonsters();
+	    }
 
-			if(Input.GetButtonDown("Jump")){
-				Debug.Log("JUMPING");
-				player.Jump();
-			}
+	if(Input.GetButtonDown("Jump")){
+	    Debug.Log("JUMPING");
+	    player.Jump();
+	}
 
-			if(Input.GetButtonDown("PlayerAttack")){
-			    Debug.Log("Attack Pressed");
-			    player.Attack();
-			}
+	if(Input.GetButtonDown("PlayerAttack")){
+	    Debug.Log("Attack Pressed");
+	    player.Attack();
+	}
 
-			if(Input.GetButtonDown("Box")){
-			    player.GrabDropBox();
-			}
+	if(Input.GetButtonDown("Box")){
+	    player.GrabDropBox();
+	}
 
-			if(Input.GetButtonDown("Dash")){
-			    //Debug.Log("DASHING");
-			    player.Dash();
-			}
+	if(Input.GetButtonDown("Dash")){
+	    //Debug.Log("DASHING");
+	    player.Dash();
+	}
 			
-			// if(Input.GetButtonDown("RunWalkToggle")){
-			//     player.WalkToggle();
-			//     Debug.Log("Run-Walk Toggled");
-			// }
+	// if(Input.GetButtonDown("RunWalkToggle")){
+	//     player.WalkToggle();
+	//     Debug.Log("Run-Walk Toggled");
+	// }
 		
-	        // if (Input.GetButtonDown("debug_spawn"))
-	        // {
-	        //     player.SpawnMonster();
-	        // }
+	// if (Input.GetButtonDown("debug_spawn"))
+	// {
+	//     player.SpawnMonster();
+	// }
 
-	        if (Input.GetButtonDown("Attack"))
-	        {
-	            player.AttackMonsters();
-	        }
-        }
+	if (Input.GetButtonDown("Attack"))
+	    {
+		player.AttackMonsters();
+	    }
+	//}
     }
 }
