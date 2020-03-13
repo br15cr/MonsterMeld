@@ -1,0 +1,26 @@
+#+TITLE:Monster Meld 2019-2020
+
+* Installation Requirements
+  + Unity 2019.2.2f1 - download [[https://unity3d.com/get-unity/download?thank-you=update&download_nid=62923&os=Win][here]]
+  + Git or GitHub Client
+
+* Installation
+Once you have git and the correct version of Unity installed, here's how to install the project via commandline.
+Make sure you are in the directory you want to install the project to.
+
+Type:
+#+BEGIN_SRC
+git clone https://github.com/br15cr/MonsterMeld.git
+#+END_SRC
+and press enter.
+
+The project will start in the *master* branch by default.
+
+To change the current branch, we must first have the project as our current directory.
+
+:
+#+BEGIN_SRC
+cd MonsterMeld
+#+END_SRC
+
+This tells git to clone the project to your computer. The project will start on the *master* branch.
