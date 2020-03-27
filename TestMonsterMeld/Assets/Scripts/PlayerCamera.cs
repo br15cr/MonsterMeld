@@ -32,6 +32,8 @@ public class PlayerCamera : MonoBehaviour
     private bool cutsceneEnd;
 
     public Vector3 targetOffset = new Vector3(0, 1, 1);
+    public Vector3 zoomOffset = new Vector3(-3,2,-2);
+    private Vector3 defaultOffset;
     private Vector3 initialPlaycamPos;
     private Vector3 initialPlaycamRot;
 
@@ -41,7 +43,16 @@ public class PlayerCamera : MonoBehaviour
         camScript = GetComponent<CamScript>();
         playerTarget = target;
         moveSpeedDefault = moveSpeed;
-	    cam = Camera.main;
+	cam = Camera.main;
+	defaultOffset = targetOffset;
+    }
+
+    public void ZoomIn(){
+	targetOffset = zoomOffset;
+    }
+
+    public void ZoomOut(){
+	targetOffset = defaultOffset;
     }
 
     // Update is called once per frame

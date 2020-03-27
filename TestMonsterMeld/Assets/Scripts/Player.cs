@@ -42,7 +42,9 @@ public class Player : MonoBehaviour
     private float dashStart;
 
     public bool thirdPerson = false;
-    
+
+
+    public PlayerCamera plyCam;
     
     void Start()
     {
@@ -237,6 +239,7 @@ public class Player : MonoBehaviour
 	    playerMonsters.ClearFollowTarget();
 	    fusionBox = null;
 	    backbox.gameObject.SetActive(true);
+	    plyCam.ZoomOut();
 	}
 	
     }
@@ -252,6 +255,7 @@ public class Player : MonoBehaviour
 		fusionBox.player = this;
 		playerMonsters.SetFollowTarget(fusionBox.transform);
 		backbox.gameObject.SetActive(false);
+		plyCam.ZoomIn();
 	    }
 	}else{
 	    // Grab FusionBox if close enough and facing it

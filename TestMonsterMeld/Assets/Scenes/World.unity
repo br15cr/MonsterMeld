@@ -8109,6 +8109,7 @@ MonoBehaviour:
   zoomSpeed: 0.05
   panSpeed: 0.05
   targetOffset: {x: 0, y: 6, z: -6}
+  zoomOffset: {x: -3, y: 2, z: -2}
 --- !u!114 &963194230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36362,6 +36363,11 @@ PrefabInstance:
       propertyPath: thirdPerson
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5547046430679969654, guid: ade55c56e3d9bd84db77970ca7bba4ea,
+        type: 3}
+      propertyPath: plyCam
+      value: 
+      objectReference: {fileID: 963194229}
     - target: {fileID: 7002678760527722324, guid: ade55c56e3d9bd84db77970ca7bba4ea,
         type: 3}
       propertyPath: m_LocalPosition.x
