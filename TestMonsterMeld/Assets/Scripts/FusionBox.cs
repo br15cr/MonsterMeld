@@ -36,8 +36,7 @@ public class FusionBox : MonoBehaviour
     public Player player;
     public GameObject monsterPrefab;
     public Vector3 spawnOffset;
-    
-    
+
     void Start(){
         group = player.GetComponent<MonsterGroup>();
 	monsterRecipe = new Recipe(new RecipeIngredient(RecipeItem.ORB,10));

@@ -115,6 +115,10 @@ public class Player : MonoBehaviour
 	  }
 	  transform.rotation = Quaternion.Euler(0, angle, 0);
 	*/
+	if(fusionBox != null){
+	    if(direction.magnitude > 0.5f)
+		TakeDropBox(); // auto-take the fusion box
+	}
     }
 
     public void Move(Vector2 direction){
@@ -225,6 +229,18 @@ public class Player : MonoBehaviour
 	}
     }
 
+    // just takes the drop box without raycasting or caring about proximity
+    public void TakeDropBox() {
+	
+	if(fusionBox != null) {
+	    Destroy(fusionBox.gameObject);
+	    playerMonsters.ClearFollowTarget();
+	    fusionBox = null;
+	    backbox.gameObject.SetActive(true);
+	}
+	
+    }
+
     public void GrabDropBox(){
 	if(fusionBox == null){
 	    // Drop (Spawn) FusionBox
@@ -258,10 +274,11 @@ public class Player : MonoBehaviour
 	      }
 	    */
 	    if(Vector3.Distance(transform.position,fusionBox.transform.position) <= 3){
-		Destroy(fusionBox.gameObject);
-		playerMonsters.ClearFollowTarget();
-		fusionBox = null;
-		backbox.gameObject.SetActive(true);
+		TakeDropBox();
+		// Destroy(fusionBox.gameObject);
+		// playerMonsters.ClearFollowTarget();
+		// fusionBox = null;
+		// backbox.gameObject.SetActive(true);
 	    }
 	}
     }

@@ -36,7 +36,11 @@ public class DisplayState : MonoBehaviour
 	if(stateIndex != currentState){
 	    //Debug.Log("State change from " + stateIndex.ToString() + " to " + currentState.ToString());
 	    stateIndex = currentState;
-	    sprite.sprite = icons[stateIndex];
+	    try {
+		sprite.sprite = icons[stateIndex];
+	    } catch (System.IndexOutOfRangeException e){
+		Debug.LogError("stateIndex out of Sprite array range ("+icons.Length.ToString()+"). stateIndex is " + stateIndex.ToString()+".\nMonster State: " + state.ToString() + "\nCombat State: " + combatState.ToString(),this);
+	    }
 	}
     }
 

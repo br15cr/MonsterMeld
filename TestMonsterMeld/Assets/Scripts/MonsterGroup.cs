@@ -120,19 +120,19 @@ public class MonsterGroup : MonoBehaviour
     public void Attack(Monster enemyMonster) // attack MonsterGroup variant?
     {
 	if(Count > 0){
-	    if(enemyGroup == null){
+	    // if(enemyGroup == null){
 		string team = "";
 		enemyGroup = enemyMonster.GetGroup();
 		foreach(Monster m in monsters){
 		    team += m.name + " ";
 		}
 		Debug.Log(name + " group join the fight! " + team + " enter the battlefield.");
-	    }
+	    //}
 	    inCombat = true;
 
 
 	    foreach(Monster m in monsters){
-		if(!m.HasEnemy()){
+		if(!(m.HasEnemy() && m.GetState() == MonsterState.ATTACK)){
 		    m.ChooseEnemy(enemyGroup.GetMonsters());
 		}
 	    }

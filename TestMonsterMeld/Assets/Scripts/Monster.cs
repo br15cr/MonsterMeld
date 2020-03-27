@@ -276,7 +276,9 @@ public class Monster : MonoBehaviour
 	float bestDist = 0;
 	Debug.Log(this.gameObject.name+" looking for enemy...");
 	foreach(Monster m in enemyGroup){
-	    if(!m.IsDead){
+	    
+	    if(!m.IsDead){ // don't fight dead monsters
+		
 		if(bestEnemy != null){
 		    float dist = Vector3.Distance(transform.position,m.transform.position);
 		    if(bestEnemy.HasEnemy()){
@@ -512,7 +514,7 @@ public class Monster : MonoBehaviour
 		IdleBehaviour();
                 break;
 	    case MonsterState.FOLLOW:
-		FollowBehaviour();
+		FollowBehaviour(minDistance);
 		break;
 	case MonsterState.AGRO:
 	    TenseBehaviour();
@@ -532,9 +534,9 @@ public class Monster : MonoBehaviour
 	
     }
 
-    protected virtual void FollowBehaviour(){
+    protected virtual void FollowBehaviour(float minimumDistance){
 	if(followTarget != null){ //if (target != null) {
-	    if (Vector3.Distance(transform.position, followTarget.position) > minDistance)
+	    if (Vector3.Distance(transform.position, followTarget.position) > minimumDistance)
 	    {
 		if (body.isStopped)
 		    body.isStopped = false;
@@ -582,7 +584,7 @@ public class Monster : MonoBehaviour
 	if(!group.InCombat){
 	    group.Attack(enemyTarget.GetComponent<Monster>());
 	}
-	FollowBehaviour();
+	FollowBehaviour(0); // follow the target with no regards for personal space.
     }
 
     protected virtual void AttackBehaviour(){
