@@ -1,6 +1,7 @@
 ﻿// Transparency - https://answers.unity.com/questions/272749/how-to-write-unlit-surface-shader.html
 // Fresnel Effect - https://www.ronja-tutorials.com/2018/05/26/fresnel.html
 // Screenspace Texture - https://docs.unity3d.com/Manual/SL-SurfaceShaderExamples.html
+// Overlapping Fix - https://answers.unity.com/questions/418008/render-transparent-material-without-double-occlusi.html
 Shader "Custom/Hologram"
 {
     Properties
@@ -15,6 +16,11 @@ Shader "Custom/Hologram"
     }
     SubShader
     {
+
+	Pass {
+	    ColorMask 0
+	}
+	
         Tags {
 	    "Queue"="Transparent"
 	    "RenderType"="Transparent"
