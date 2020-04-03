@@ -268,6 +268,11 @@ public class Monster : MonoBehaviour
 	}
     }
 
+    public void Follow(){
+	// shift to follow state
+	SetState(MonsterState.FOLLOW);
+    }
+
     /// <summary>
     ///   Picks an available enemy from enemyGroup to fight and returns it.
     /// </summary>
@@ -531,7 +536,9 @@ public class Monster : MonoBehaviour
 
 
     protected virtual void IdleBehaviour(){
-	
+	if(group != null){
+	    Follow();
+	}
     }
 
     protected virtual void FollowBehaviour(float minimumDistance){
