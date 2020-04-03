@@ -16,97 +16,94 @@ public class PauseMenu : MonoBehaviour
 
     public Player player;
 
-   	public GameObject button_continue;
-   	public GameObject button_reload;
-   	public GameObject button_exit;
+    public GameObject button_continue;
+    public GameObject button_reload;
+    public GameObject button_exit;
 
-	public static bool GameIsPaused = false;
-	public GameObject pauseMenuUI;
+    public static bool GameIsPaused = false;
+    public GameObject pauseMenuUI;
 
-	public int pauseMenu_Pos;
+    public int pauseMenu_Pos;
 
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start(){
         
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-        	if (GameIsPaused)
-        	{
-        		Resume();
-        	} else 
-        	{
-        		Pause();
-        	}
+    void Update(){
+        if (Input.GetKeyDown(KeyCode.Escape)){
+	    if (GameIsPaused)
+	    {
+		Resume();
+	    } else 
+	    {
+		Pause();
+	    }
         }
 
 
 
-		if (Input.GetKeyDown("down"))
-		{
-			if(pauseMenu_Pos < 2)
-			{
-				pauseMenu_Pos += 1;
-			}
-			else
-			{
-				pauseMenu_Pos = 0;
-			}
-		}
-		if (Input.GetKeyDown("up"))
-		{
-			if(pauseMenu_Pos > 0)
-			{
-				pauseMenu_Pos -= 1;
-			}
-			else
-			{
-				pauseMenu_Pos = 2;
-			}
+	// if (Input.GetKeyDown("down"))
+	// {
+	//     if(pauseMenu_Pos < 2)
+	//     {
+	// 	pauseMenu_Pos += 1;
+	//     }
+	//     else
+	//     {
+	// 	pauseMenu_Pos = 0;
+	//     }
+	// }
+	// if (Input.GetKeyDown("up"))
+	// {
+	//     if(pauseMenu_Pos > 0)
+	//     {
+	// 	pauseMenu_Pos -= 1;
+	//     }
+	//     else
+	//     {
+	// 	pauseMenu_Pos = 2;
+	//     }
 
-		}
+	// }
 
 
-    	if (pauseMenu_Pos == 0)
-    	{
-    		    if (Input.GetKeyDown("space") || Input.GetKeyDown("return") ) 
-        		{
-           			Resume ();
-        		}
+    	// if (pauseMenu_Pos == 0)
+    	// {
+	//     if (Input.GetKeyDown("space") || Input.GetKeyDown("return") ) 
+	//     {
+	// 	Resume ();
+	//     }
     		
-    		button_continue.GetComponent<Image> ().sprite = Button_continue_Hover;
-    		button_exit.GetComponent<Image> ().sprite = Button_exit_Desel;
-        	button_reload.GetComponent<Image> ().sprite = Button_reload_Desel;
+	//     button_continue.GetComponent<Image> ().sprite = Button_continue_Hover;
+	//     button_exit.GetComponent<Image> ().sprite = Button_exit_Desel;
+	//     button_reload.GetComponent<Image> ().sprite = Button_reload_Desel;
 
-			clearSel();
-    	}
-    	else if (pauseMenu_Pos == 1) 
-    	{
-    		    if (Input.GetKeyDown("space") || Input.GetKeyDown("return") ) 
-        		{
-           			LoadMenu ();
-        		}
-			button_reload.GetComponent<Image> ().sprite = Button_reload_Hover;
-			button_exit.GetComponent<Image> ().sprite = Button_exit_Desel;
-         	button_continue.GetComponent<Image> ().sprite = Button_continue_Desel;
-			clearSel();
-    	}
-    	else if (pauseMenu_Pos == 2) 
-    	{
-    		    if (Input.GetKeyDown("space") || Input.GetKeyDown("return") ) 
-        		{
-           			QuitGame ();
-        		}
-			button_exit.GetComponent<Image> ().sprite = Button_exit_Hover;
-        	button_reload.GetComponent<Image> ().sprite = Button_reload_Desel;
-         	button_continue.GetComponent<Image> ().sprite = Button_continue_Desel;
-			clearSel();
-    	}
+	//     clearSel();
+    	// }
+    	// else if (pauseMenu_Pos == 1) 
+    	// {
+	//     if (Input.GetKeyDown("space") || Input.GetKeyDown("return") ) 
+	//     {
+	// 	LoadMenu ();
+	//     }
+	//     button_reload.GetComponent<Image> ().sprite = Button_reload_Hover;
+	//     button_exit.GetComponent<Image> ().sprite = Button_exit_Desel;
+	//     button_continue.GetComponent<Image> ().sprite = Button_continue_Desel;
+	//     clearSel();
+    	// }
+    	// else if (pauseMenu_Pos == 2) 
+    	// {
+	//     if (Input.GetKeyDown("space") || Input.GetKeyDown("return") ) 
+	//     {
+	// 	QuitGame ();
+	//     }
+	//     button_exit.GetComponent<Image> ().sprite = Button_exit_Hover;
+	//     button_reload.GetComponent<Image> ().sprite = Button_reload_Desel;
+	//     button_continue.GetComponent<Image> ().sprite = Button_continue_Desel;
+	//     clearSel();
+    	// }
 
 
 
@@ -115,27 +112,23 @@ public class PauseMenu : MonoBehaviour
 
     }
 
-    void clearSel ()
-    {
+    void clearSel (){
     	//button_exit.GetComponent<Image> ().sprite = Button_exit_Desel;
        	//button_reload.GetComponent<Image> ().sprite = Button_reload_Desel;
         //button_continue.GetComponent<Image> ().sprite = Button_continue_Desel;
     }
-    public void Resume ()
-    {
+    public void Resume (){
     	pauseMenuUI.SetActive(false);
     	Time.timeScale = 1f;
     	GameIsPaused = false;
     }
 
-    public void resetStats ()
-    {
+    public void resetStats (){
     	Time.timeScale = 1f;
     	GameIsPaused = false;
     }
 
-    void Pause ()
-    {
+    void Pause (){
     	pauseMenuUI.SetActive(true);
     	Time.timeScale = 0f;
     	GameIsPaused = true;
@@ -144,15 +137,13 @@ public class PauseMenu : MonoBehaviour
     	// Reset time scale and is paused when reloading
     }
     
-    public void LoadMenu ()
-    {
+    public void LoadMenu (){
     	//Loading Menu could be added here. 
     	Debug.Log("Loading Menu");
 
     }
 
-    public void QuitGame ()
-    {
+    public void QuitGame (){
     	resetStats();
 	
     	SaveGame(player);
@@ -160,14 +151,13 @@ public class PauseMenu : MonoBehaviour
     	SceneManager.LoadScene("MainMenu");
     }
 
-   public void SaveGame (Player player)
-   {
-       //player.GetComponent<player>().SavePlayer();
-       Debug.Log("PauseMenu: Is Player Null? " + (player == null).ToString());
+    public void SaveGame (Player player){
+	//player.GetComponent<player>().SavePlayer();
+	Debug.Log("PauseMenu: Is Player Null? " + (player == null).ToString());
     	Debug.Log("Saving..");
     	//SaveSystem.SavePlayer(player);
 
-   }
+    }
 
 
 }
