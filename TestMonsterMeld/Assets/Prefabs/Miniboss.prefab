@@ -169,6 +169,7 @@ GameObject:
   - component: {fileID: 3189220245738353365}
   - component: {fileID: 4818640764326813480}
   - component: {fileID: 6888821925309598205}
+  - component: {fileID: 6345627649440211339}
   m_Layer: 10
   m_Name: Miniboss
   m_TagString: Untagged
@@ -263,6 +264,25 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
+--- !u!95 &6345627649440211339
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7226429363426210456}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 5f2336e6037b92642b093492ddb60184, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &2369485343406986240
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -76,6 +76,8 @@ public class Monster : MonoBehaviour
 
     private GameObject attackPrefab; // attackbox
 
+    private Animator anim;
+
     //public Transform target;
 
     public bool IsDead {
@@ -111,6 +113,8 @@ public class Monster : MonoBehaviour
 	agroSphere = this.gameObject.AddComponent(typeof(SphereCollider)) as SphereCollider;
 	agroSphere.radius = 2.5f;
 	agroSphere.isTrigger = true;
+
+	anim = this.GetComponent<Animator>();
 
 	if(agro)
 	    SetState(MonsterState.AGRO); //state = MonsterState.AGRO;
@@ -247,16 +251,34 @@ public class Monster : MonoBehaviour
     }
 
     private void SetState(MonsterState newState){
+	if(state == newState)
+	    return;
+	
 	state = newState;
 	if(OnStatesChanged != null)
 	    OnStatesChanged(this,state,combatState);
+	// update animation state
+	if(anim != null){
+	    anim.SetInteger("state", ((int)state));
+	    anim.SetTrigger("stateChange");
+	}
     }
 
     private void SetState(MonsterCombatState newCombatState){
+	if(state == MonsterState.ATTACK){
+	    if(combatState == newCombatState)
+		return;
+	}
 	state = MonsterState.ATTACK;
 	combatState = newCombatState;
 	if(OnStatesChanged != null)
 	    OnStatesChanged(this,state,combatState);
+
+	// update animation state
+	if(anim != null){
+	    anim.SetInteger("state",((int)state)+((int)combatState));
+	    anim.SetTrigger("stateChange");
+	}
     }
 
     public MonsterCombatState GetCombatState() {
