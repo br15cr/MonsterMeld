@@ -42,8 +42,10 @@ public delegate void MonsterStatesDelegate(Monster monster,MonsterState state,Mo
 
 public class Monster : MonoBehaviour
 {
+    public bool showWalkingSpeed = false;
+    
     protected float attackDistance = 2.0f;
-    protected float attackDelay = 1.0f; // change to variable
+    protected float attackDelay = 2.0f; // change to variable
     protected int attackDamage = 10;
     private const bool CAN_AUTO_HEAL = false;
     
@@ -99,6 +101,10 @@ public class Monster : MonoBehaviour
 
     private Vector3 teleportOffset = new Vector3(5,5,0);
 
+    private Vector3 prevPos = Vector3.zero;
+
+    protected float currentSpeed = 0;
+
     protected virtual void Start() {
 	health = maxHealth;
         body = GetComponent<NavMeshAgent>();
@@ -139,6 +145,14 @@ public class Monster : MonoBehaviour
 	// HeathBar
 	healthbarMat.SetFloat("_Offset",health/((float)maxHealth));
 
+	// https://answers.unity.com/questions/252292/is-there-a-way-to-check-agent-velocity-for-navmesh.html
+	if(anim != null){
+	    Vector3 curMove = transform.position - prevPos;
+	    currentSpeed = curMove.magnitude / Time.deltaTime;
+	    anim.SetLayerWeight(1,currentSpeed/body.speed);
+	    prevPos = transform.position;
+	}
+
 	// Temporary Self-Healing
 	if(CAN_AUTO_HEAL && state != MonsterState.ATTACK){
 	    if(health < maxHealth){
@@ -152,6 +166,9 @@ public class Monster : MonoBehaviour
 	    transform.position = group.transform.position + teleportOffset;
 	}*/
     }
+
+    // https://answers.unity.com/questions/252292/is-there-a-way-to-check-agent-velocity-for-navmesh.html
+
 
     void LateUpdate() {
         if(state == MonsterState.ATTACK && combatState != MonsterCombatState.CHASE){
@@ -440,15 +457,24 @@ public class Monster : MonoBehaviour
     /// </summary>
     /// <param name="monster">Monster to hit.</param>
     public void HitMonster() {
-	if(Vector3.Distance(transform.position,enemyTarget.position) <= attackDistance){ // only apply the attack if they're close enough
-	    Monster monster = enemyTarget.GetComponent<Monster>();
+	if(anim != null){
+	    anim.SetTrigger("attack");
+	}else{
+	    MakeAttack();
+	}
+    }
+
+    
+    public void MakeAttack(){
+	//if(Vector3.Distance(transform.position,enemyTarget.position) <= attackDistance){ // only apply the attack if they're close enough
+	    //Monster monster = enemyTarget.GetComponent<Monster>();
 	    // send damage data to 'monster'
 	    //monster.TakeDamage(new MonsterAttackInfo(this, 10));
 	    // spawn attack box instead of directly sending damage
 	    AttackBox attack = Instantiate(attackPrefab,transform.position + transform.forward*(attackDistance/2),Quaternion.identity).GetComponent<AttackBox>();
 	    //attack.SetAttacker(this);
 	    attack.SetInfo(new MonsterAttackInfo(this,attackDamage));
-	}
+	//}
     }
 
     /// <summary>
@@ -699,5 +725,11 @@ public class Monster : MonoBehaviour
 
     public void Warp(Vector3 pos){
 	body.Warp(pos);
+    }
+
+    void OnGUI(){
+	if(showWalkingSpeed){
+	    GUI.Label(new Rect(200,200,200,200),"Walking Speed: " + currentSpeed.ToString());
+	}
     }
 }

@@ -42762,6 +42762,11 @@ PrefabInstance:
       propertyPath: plyCam
       value: 
       objectReference: {fileID: 963194229}
+    - target: {fileID: 5547046430679969654, guid: ade55c56e3d9bd84db77970ca7bba4ea,
+        type: 3}
+      propertyPath: DefaultSpeed
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 7002678760527722324, guid: ade55c56e3d9bd84db77970ca7bba4ea,
         type: 3}
       propertyPath: m_LocalPosition.x

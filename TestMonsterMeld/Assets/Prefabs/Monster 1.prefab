@@ -52,9 +52,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7fd39813eb13a446b17e8620c2aaac9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showWalkingSpeed: 0
   maxHealth: 100
   agro: 0
-  minDistance: 5
+  minDistance: 3
   orbPrefab: {fileID: 3529501776409808087, guid: 9637de023023ecf44a5c342a4d4fd151,
     type: 3}
 --- !u!195 &5646721663330001954
