@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : HealthUser
 {
     private const float GRAVITY = 20.0f;
     private const float JUMP_SPEED = 8.0f;

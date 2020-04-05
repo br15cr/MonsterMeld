@@ -40,7 +40,7 @@ public delegate void MonsterConflictDelegate(Monster ally, Monster enemy);
 
 public delegate void MonsterStatesDelegate(Monster monster,MonsterState state,MonsterCombatState combatState);
 
-public class Monster : MonoBehaviour
+public class Monster : HealthUser
 {
     public bool showWalkingSpeed = false;
     
@@ -59,8 +59,10 @@ public class Monster : MonoBehaviour
 
     //private TextMesh healthText; // Temporary
     private NavMeshAgent body;
-    public int maxHealth = 100;
-    private int health = 100;
+    //public int maxHealth = 100;
+    //private int health = 100;
+
+    //private HealthUser healthComp;
 
     private MonsterGroup group = null;
 
@@ -71,7 +73,7 @@ public class Monster : MonoBehaviour
     protected Transform followTarget; // owner
     protected Transform enemyTarget; // attack target
 
-    private bool isDead = false;
+    //private bool isDead = false;
 
     private Material healthbarMat;
     private Transform healthRing;
@@ -82,9 +84,9 @@ public class Monster : MonoBehaviour
 
     //public Transform target;
 
-    public bool IsDead {
-	get { return this.isDead; }
-    }
+    // public bool IsDead {
+    // 	get { return this.isDead; }
+    // }
 
     private SphereCollider agroSphere;
 
@@ -106,7 +108,8 @@ public class Monster : MonoBehaviour
     protected float currentSpeed = 0;
 
     protected virtual void Start() {
-	health = maxHealth;
+	base.Start();
+	//health = maxHealth;
         body = GetComponent<NavMeshAgent>();
 	healthRing = transform.Find("HEALTH_RING");
 	healthbarMat = healthRing.GetComponent<Renderer>().material;
@@ -121,6 +124,10 @@ public class Monster : MonoBehaviour
 	agroSphere.isTrigger = true;
 
 	anim = this.GetComponent<Animator>();
+
+	// HealthUser
+	
+	
 
 	if(agro)
 	    SetState(MonsterState.AGRO); //state = MonsterState.AGRO;
@@ -143,7 +150,7 @@ public class Monster : MonoBehaviour
 
 
 	// HeathBar
-	healthbarMat.SetFloat("_Offset",health/((float)maxHealth));
+	healthbarMat.SetFloat("_Offset",health/((float)startHealth));
 
 	// https://answers.unity.com/questions/252292/is-there-a-way-to-check-agent-velocity-for-navmesh.html
 	if(anim != null){
@@ -154,18 +161,27 @@ public class Monster : MonoBehaviour
 	}
 
 	// Temporary Self-Healing
-	if(CAN_AUTO_HEAL && state != MonsterState.ATTACK){
-	    if(health < maxHealth){
-		health++;
-	    }else if(health > maxHealth){
-		health = maxHealth;
-	    }
-	}
+	// if(CAN_AUTO_HEAL && state != MonsterState.ATTACK){
+	//     if(health < startHealth){
+	// 	health++;
+	//     }else if(health > startHealth){
+	// 	health = startHealth;
+	//     }
+	// }
 //TEMPCOMMENTED OUT FOR A NULL REFERNECE ERROR 
 /*	if(Vector3.Distance(this.transform.position,group.transform.position) > 30.0f){
 	    transform.position = group.transform.position + teleportOffset;
 	}*/
     }
+
+
+    // void InitHealth(){
+    // 	healthComp = GetComponent<HealthUser>();
+    // 	if(healthComp == null){
+    // 	    healthComp = this.gameObject.AddComponent(typeof(HealthUser)) as HealthUser;
+    // 	    health
+    // 	}
+    // }
 
     // https://answers.unity.com/questions/252292/is-there-a-way-to-check-agent-velocity-for-navmesh.html
 
@@ -232,8 +248,8 @@ public class Monster : MonoBehaviour
         }
     }
 
-    public int GetHealth() {
-        return health;
+    public float GetHealth() {
+        return health.GetHealth();
     }
 
     public MonsterGroup GetGroup() {
@@ -485,7 +501,7 @@ public class Monster : MonoBehaviour
     public virtual void TakeDamage(MonsterAttackInfo attackInfo) {
         health -= attackInfo.baseDamage;
         //healthText.text = health.ToString();
-        if(health <= 0) {
+        if(health.GetHealth() <= 0) {
 
 	    if(attackInfo.attacker != null){
 		Debug.Log("Alas poor " + name + " was killed by " +attackInfo.attacker.name);
@@ -646,7 +662,7 @@ public class Monster : MonoBehaviour
 	    SetState(MonsterCombatState.CHASE);
 	if (Time.time >= attackWait + attackDelay)
 	    SetState(MonsterCombatState.HIT);
-	if(health <= 25)
+	if(health.GetHealth() <= 25)
 	    SetState(MonsterCombatState.FLEE);
     }
 
