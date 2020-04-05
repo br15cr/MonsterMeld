@@ -223,10 +223,6 @@ public class MonsterGroup : MonoBehaviour
     public virtual void MonsterKill(Monster monster,Monster monsterEnemy)
     {
         // find next monster to attack
-        //monster.Follow(transform); // change this???
-	//Debug.Log("MONSTERKILL: IS IN MONSTER GROUP? " + (monster.GetGroup() == this));
-	//Debug.Log("monster is null: " + (monster == null) + " monsterEnemy is null: " + (monsterEnemy == null));
-        //Debug.Log(monster.name + " KILLED ENEMY!!! NEXT TARGET...");
 
 	if (enemyGroup != null){
 	    if (enemyGroup.Count == 0) {
@@ -234,21 +230,13 @@ public class MonsterGroup : MonoBehaviour
 
 		inCombat = false;
 		enemyGroup = null;
-		//monster.Follow(transform);
-		//Follow(transform);
 		Follow(followTarget);
 
 	    } else {
-		//Debug.Log(monster.name + ": FINDING NEXT ENEMY");
-
 		//will change states in monster script//monster.Follow(transform);
 
 		Monster enemyFound = monster.ChooseEnemy(enemyGroup.GetMonsters());
-		//if (enemyFound == null)
-		//{
-		//    UnityEditor.EditorApplication.isPlaying = false;
-		//    throw new System.Exception("you dun goofed");
-		//}
+
 	    }
 	}else{
 	    Follow(followTarget); // temp solution, pls fix

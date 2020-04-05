@@ -28,8 +28,8 @@ public class PlayerCamera : MonoBehaviour
 
     private CamScript camScript;
 
-    private bool cutscene;
-    private bool cutsceneEnd;
+    // private bool cutscene;
+    // private bool cutsceneEnd;
 
     public Vector3 targetOffset = new Vector3(0, 1, 1);
     public Vector3 zoomOffset = new Vector3(-3,2,-2);
@@ -55,13 +55,11 @@ public class PlayerCamera : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-
-	cutscene = camScript.cutscene;
-	cutsceneEnd = camScript.cutsceneEnd;
-	panZoom = camScript.panZoom;
-	moveFor = camScript.moveFor;
+    void Update(){
+	// cutscene = camScript.cutscene;
+	// cutsceneEnd = camScript.cutsceneEnd;
+	// panZoom = camScript.panZoom;
+	// moveFor = camScript.moveFor;
 	//Pan the camera in movement direction
 	if(cutsceneEnd){ 
 	    target = playerTarget;

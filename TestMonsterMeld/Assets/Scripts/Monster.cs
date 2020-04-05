@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using UnityEngine;
 using UnityEngine.AI;
 
+// https://answers.unity.com/questions/540120/how-do-you-update-navmesh-rotation-after-stopping.html
+
 
 public enum MonsterState
 {
@@ -40,10 +42,14 @@ public delegate void MonsterStatesDelegate(Monster monster,MonsterState state,Mo
 
 public class Monster : MonoBehaviour
 {
-    private const float ATTACK_DISTANCE = 2.0f;
-    private const float ATTACK_DELAY = 1.0f; // change to variable
+    protected float attackDistance = 2.0f;
+    protected float attackDelay = 1.0f; // change to variable
+    protected int attackDamage = 10;
     private const bool CAN_AUTO_HEAL = false;
+    
     //private const bool SHOW_DEBUG_TEXT = false;
+
+    private float turnSpeed = 5;
 
     private float angle;
 
@@ -60,8 +66,8 @@ public class Monster : MonoBehaviour
     private MonsterCombatState combatState;
     private float attackWait;
 
-    private Transform followTarget; // owner
-    private Transform enemyTarget; // attack target
+    protected Transform followTarget; // owner
+    protected Transform enemyTarget; // attack target
 
     private bool isDead = false;
 
@@ -91,7 +97,7 @@ public class Monster : MonoBehaviour
 
     private Vector3 teleportOffset = new Vector3(5,5,0);
 
-    void Start() {
+    protected virtual void Start() {
 	health = maxHealth;
         body = GetComponent<NavMeshAgent>();
 	healthRing = transform.Find("HEALTH_RING");
@@ -117,7 +123,7 @@ public class Monster : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update() {
+    protected virtual void Update() {
 	// Run monster behaviour
         Behaviour();
 	
@@ -161,7 +167,7 @@ public class Monster : MonoBehaviour
 			   //Debug.Log("Angle: "+(angle*Mathf.Rad2Deg()))
 	    		   transform.rotation = Quaternion.Euler(0,angle,0); //transform.rotation = Quaternion.Euler(0,angle*Mathf.Rad2Deg -90,0);
 			   */
-			   LookAt(enemyTarget.position);
+			   //LookAt(enemyTarget.position);
 	    }
         }
 
@@ -273,10 +279,8 @@ public class Monster : MonoBehaviour
 	SetState(MonsterState.FOLLOW);
     }
 
-    /// <summary>
-    ///   Picks an available enemy from enemyGroup to fight and returns it.
-    /// </summary>
-    public virtual Monster ChooseEnemy(ReadOnlyCollection<Monster> enemyGroup){
+
+    protected virtual Monster FindBestEnemy(ReadOnlyCollection<Monster> enemyGroup){
 	Monster bestEnemy = null; // best choice so far for an enemy;
 	float bestDist = 0;
 	Debug.Log(this.gameObject.name+" looking for enemy...");
@@ -323,10 +327,21 @@ public class Monster : MonoBehaviour
 		}
 	    }
 	}
-	Debug.Log("\t" +name + " Found Enemy: " + bestEnemy);
-	this.AttackMonster(bestEnemy);
-        Debug.Log(name + " chose " + enemyTarget.name + " as their enemy");
+	//Debug.Log("\t" +name + " Found Enemy: " + bestEnemy);
+	
+	//this.AttackMonster(bestEnemy);
+	
+        //Debug.Log(name + " chose " + enemyTarget.name + " as their enemy");
         return bestEnemy;
+    }
+    
+    /// <summary>
+    ///   Picks an available enemy from enemyGroup to fight and returns it.
+    /// </summary>
+    public virtual Monster ChooseEnemy(ReadOnlyCollection<Monster> enemyGroup){
+	Monster bestEnemy = FindBestEnemy(enemyGroup);
+	this.AttackMonster(bestEnemy);
+	return bestEnemy;
     }
 
     
@@ -403,14 +418,14 @@ public class Monster : MonoBehaviour
     /// </summary>
     /// <param name="monster">Monster to hit.</param>
     public void HitMonster() {
-	if(Vector3.Distance(transform.position,enemyTarget.position) <= ATTACK_DISTANCE){ // only apply the attack if they're close enough
+	if(Vector3.Distance(transform.position,enemyTarget.position) <= attackDistance){ // only apply the attack if they're close enough
 	    Monster monster = enemyTarget.GetComponent<Monster>();
 	    // send damage data to 'monster'
 	    //monster.TakeDamage(new MonsterAttackInfo(this, 10));
 	    // spawn attack box instead of directly sending damage
-	    AttackBox attack = Instantiate(attackPrefab,transform.position + transform.forward*(ATTACK_DISTANCE/2),Quaternion.identity).GetComponent<AttackBox>();
+	    AttackBox attack = Instantiate(attackPrefab,transform.position + transform.forward*(attackDistance/2),Quaternion.identity).GetComponent<AttackBox>();
 	    //attack.SetAttacker(this);
-	    attack.SetInfo(new MonsterAttackInfo(this,10));
+	    attack.SetInfo(new MonsterAttackInfo(this,attackDamage));
 	}
     }
 
@@ -418,20 +433,19 @@ public class Monster : MonoBehaviour
     /// Applies damage to this monster.
     /// </summary>
     /// <param name="attack">Contains damage info.</param>
-    public void TakeDamage(MonsterAttackInfo attackInfo) {
+    
+    public virtual void TakeDamage(MonsterAttackInfo attackInfo) {
         health -= attackInfo.baseDamage;
         //healthText.text = health.ToString();
         if(health <= 0) {
-	    // Should this be here???
-            //OnDeath += group.MonsterDeath;
-            //OnDeath(this,enemyTarget.GetComponent<Monster>());  // send event to this monster group
-            //OnDeath.
+
 	    if(attackInfo.attacker != null){
 		Debug.Log("Alas poor " + name + " was killed by " +attackInfo.attacker.name);
 		
 	    }else{
 		Debug.Log("Alas poor " + name + " was killed by natural causes (probably a status effect)");
 	    }
+	    
             Die(attackInfo);
         }
 
@@ -495,23 +509,23 @@ public class Monster : MonoBehaviour
 	}
     }
 
-    private void LookAt(Vector3 targetPos){
-	//transform.rotation = Quaternion.LookRotation(enemyTarget.position,transform.up); // fix this
-	Vector2 vec = new Vector2(targetPos.x-transform.position.x,targetPos.z-transform.position.z);
+    // private void LookAt(Vector3 targetPos){
+    // 	//transform.rotation = Quaternion.LookRotation(enemyTarget.position,transform.up); // fix this
+    // 	Vector2 vec = new Vector2(targetPos.x-transform.position.x,targetPos.z-transform.position.z);
 			   
-	float div = vec.x/vec.y; //float div = vec.y/vec.x;
-	//Debug.Log("X: "+vec.x.ToString() + " Y: "+vec.y.ToString()+"Div: " + div.ToString());
-	//angle = Mathf.Atan(div);
-	angle = Mathf.Atan(div)*Mathf.Rad2Deg;
-	if(vec.y < 0){
-	    //Debug.Log("Y < 0!!!!!!!!!!!!");
-	    angle -= 180;
-	}
-	//Debug.Log("Angle: "+(angle*Mathf.Rad2Deg()))
+    // 	float div = vec.x/vec.y; //float div = vec.y/vec.x;
+    // 	//Debug.Log("X: "+vec.x.ToString() + " Y: "+vec.y.ToString()+"Div: " + div.ToString());
+    // 	//angle = Mathf.Atan(div);
+    // 	angle = Mathf.Atan(div)*Mathf.Rad2Deg;
+    // 	if(vec.y < 0){
+    // 	    //Debug.Log("Y < 0!!!!!!!!!!!!");
+    // 	    angle -= 180;
+    // 	}
+    // 	//Debug.Log("Angle: "+(angle*Mathf.Rad2Deg()))
 
-	//transform.rotation = Quaternion.Euler(0,angle,0); 
-	//transform.rotation = Quaternion.Euler(0,angle*Mathf.Rad2Deg -90,0);
-    }
+    // 	//transform.rotation = Quaternion.Euler(0,angle,0); 
+    // 	//transform.rotation = Quaternion.Euler(0,angle*Mathf.Rad2Deg -90,0);
+    // }
 
     protected virtual void Behaviour(){
 	switch (state) {
@@ -543,6 +557,7 @@ public class Monster : MonoBehaviour
 
     protected virtual void FollowBehaviour(float minimumDistance){
 	if(followTarget != null){ //if (target != null) {
+	    LookAt(followTarget.position);
 	    if (Vector3.Distance(transform.position, followTarget.position) > minimumDistance)
 	    {
 		if (body.isStopped)
@@ -556,19 +571,19 @@ public class Monster : MonoBehaviour
 
     protected virtual void ChaseBehaviour(){
 	// Get close enough to enemy
-	if (Vector3.Distance(transform.position, enemyTarget.transform.position) > ATTACK_DISTANCE) { //if (Vector3.Distance(transform.position, target.transform.position) > ATTACK_DISTANCE) {
+	if (Vector3.Distance(transform.position, enemyTarget.transform.position) > attackDistance) { //if (Vector3.Distance(transform.position, target.transform.position) > attackDistance) {
 			
 	    if (body.isStopped)
 		body.isStopped = false;
 			
 	    body.SetDestination(enemyTarget.position);
 	    //Debug.Log(enemyTarget);
+	    
+	} else {
+	    
+	    // when close enough to the enemy
+	    SetState(MonsterCombatState.HIT);
 	}
-	else
-	    {
-		// when close enough to the enemy
-		SetState(MonsterCombatState.HIT);
-	    }
     }
 
     protected virtual void HitBehaviour(){
@@ -579,9 +594,9 @@ public class Monster : MonoBehaviour
     }
 
     protected virtual void ChargeBehaviour(){
-	if(Vector3.Distance(transform.position,enemyTarget.position) > ATTACK_DISTANCE) // if the enemy becomes too far away, chase it again
+	if(Vector3.Distance(transform.position,enemyTarget.position) > attackDistance) // if the enemy becomes too far away, chase it again
 	    SetState(MonsterCombatState.CHASE);
-	if (Time.time >= attackWait + ATTACK_DELAY)
+	if (Time.time >= attackWait + attackDelay)
 	    SetState(MonsterCombatState.HIT);
 	if(health <= 25)
 	    SetState(MonsterCombatState.FLEE);
@@ -594,8 +609,19 @@ public class Monster : MonoBehaviour
 	FollowBehaviour(0); // follow the target with no regards for personal space.
     }
 
+    private void LookAt(Vector3 position){
+	Vector3 pos = (position - transform.position).normalized;
+	Quaternion faceDir = Quaternion.LookRotation(pos);
+	transform.rotation = Quaternion.Slerp(transform.rotation,faceDir,Time.deltaTime * turnSpeed);
+    }
+
     protected virtual void AttackBehaviour(){
 	if(enemyTarget != null){ //if (target != null) {
+	    // Face the enemy
+	    if( ((int)combatState) < 3 )
+		LookAt(enemyTarget.position);
+	    
+	    // Combat Behaviours
 	    switch (combatState) {
 		// CHASE //
 	    case MonsterCombatState.CHASE:

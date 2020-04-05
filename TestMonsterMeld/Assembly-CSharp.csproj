@@ -66,6 +66,7 @@
      <Compile Include="Assets\Scripts\Logger.cs" />
      <Compile Include="Assets\Scripts\MainMenu.cs" />
      <Compile Include="Assets\Scripts\MainMenu_Button1.cs" />
+     <Compile Include="Assets\Scripts\Miniboss.cs" />
      <Compile Include="Assets\Scripts\Monster.cs" />
      <Compile Include="Assets\Scripts\MonsterGroup.cs" />
      <Compile Include="Assets\Scripts\MonsterInfoPanel.cs" />
