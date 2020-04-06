@@ -2972,6 +2972,68 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 182657731}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &193712109
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 193712110}
+  - component: {fileID: 193712112}
+  - component: {fileID: 193712111}
+  m_Layer: 0
+  m_Name: Miniboss
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &193712110
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 193712109}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 3.95, y: 1.12, z: 13.76}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1142905215368178322}
+  m_Father: {fileID: 1913410566}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &193712111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 193712109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89fa262ac664bf64a99ddb4986fd3fc4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  followTarget: {fileID: 0}
+  monsterPrefab: {fileID: 456590611538437231, guid: 53ce0130dc9072140b7d40776af60e13,
+    type: 3}
+  spawnOffset: {x: 0, y: 0, z: 2}
+  groupColor: {r: 1, g: 0, b: 0.6556754, a: 1}
+--- !u!114 &193712112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 193712109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46dc25ef6a6fda14f8a19a1d1ae96e45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &199076506
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16925,12 +16987,12 @@ GameObject:
   - component: {fileID: 1466729748}
   - component: {fileID: 1466729747}
   m_Layer: 0
-  m_Name: EnemyTestGroup (2)
+  m_Name: OLDMiniboss
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1466729747
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22423,6 +22485,7 @@ Transform:
   - {fileID: 1466729749}
   - {fileID: 1309408693}
   - {fileID: 1376146728}
+  - {fileID: 193712110}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -25585,6 +25648,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5279727330147344895, guid: 62c0fb91206a56641b8673fc77e85f04,
     type: 3}
   m_PrefabInstance: {fileID: 1142453813667853850}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1142905215368178322 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5781721481641424545, guid: 05777519d679cb14ab4e9ca543011d17,
+    type: 3}
+  m_PrefabInstance: {fileID: 6908705657592831027}
   m_PrefabAsset: {fileID: 0}
 --- !u!218 &2004919087115943680
 Terrain:
@@ -42728,6 +42797,80 @@ Transform:
   m_Father: {fileID: 6217234820977047085}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: -17.08, y: 26.231, z: -8.235001}
+--- !u!1001 &6908705657592831027
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 193712110}
+    m_Modifications:
+    - target: {fileID: 2608171302525378762, guid: 05777519d679cb14ab4e9ca543011d17,
+        type: 3}
+      propertyPath: m_Name
+      value: Miniboss
+      objectReference: {fileID: 0}
+    - target: {fileID: 5781721481641424545, guid: 05777519d679cb14ab4e9ca543011d17,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -4.626519
+      objectReference: {fileID: 0}
+    - target: {fileID: 5781721481641424545, guid: 05777519d679cb14ab4e9ca543011d17,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.13
+      objectReference: {fileID: 0}
+    - target: {fileID: 5781721481641424545, guid: 05777519d679cb14ab4e9ca543011d17,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -2.3924084
+      objectReference: {fileID: 0}
+    - target: {fileID: 5781721481641424545, guid: 05777519d679cb14ab4e9ca543011d17,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5781721481641424545, guid: 05777519d679cb14ab4e9ca543011d17,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5781721481641424545, guid: 05777519d679cb14ab4e9ca543011d17,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5781721481641424545, guid: 05777519d679cb14ab4e9ca543011d17,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.000003010034
+      objectReference: {fileID: 0}
+    - target: {fileID: 5781721481641424545, guid: 05777519d679cb14ab4e9ca543011d17,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5781721481641424545, guid: 05777519d679cb14ab4e9ca543011d17,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5781721481641424545, guid: 05777519d679cb14ab4e9ca543011d17,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -180.00002
+      objectReference: {fileID: 0}
+    - target: {fileID: 5781721481641424545, guid: 05777519d679cb14ab4e9ca543011d17,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6376275225351499430, guid: 05777519d679cb14ab4e9ca543011d17,
+        type: 3}
+      propertyPath: startHealth
+      value: 300
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 05777519d679cb14ab4e9ca543011d17, type: 3}
 --- !u!1001 &7002678760253593920
 PrefabInstance:
   m_ObjectHideFlags: 0

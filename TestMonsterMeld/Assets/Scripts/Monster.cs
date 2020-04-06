@@ -92,7 +92,7 @@ public class Monster : HealthUser
 
     public bool agro;
 
-    public event MonsterConflictDelegate OnDeath;
+    //public event MonsterConflictDelegate OnDeath;
     public event MonsterConflictDelegate OnKillTarget;
     public event MonsterConflictDelegate OnAttacked;    // this monster was attacked when it was in FOLLOW or IDLE mode
     public event MonsterStatesDelegate OnStatesChanged;
@@ -427,14 +427,12 @@ public class Monster : HealthUser
     /// <param name="monster">The monster to start combat with.</param>
     
     public void AttackMonster(Monster monster) {
-        //this.target = monster.transform;
-	//Debug.Log("MONSTER IS NULL? " + (monster == null));
 	
         if (monster.AskAttack(this) || monster.HasEnemy()) {
             this.enemyTarget = monster.transform;
-	    //Debug.Log(this.name + " ATTACK APPROVED BY " + enemyTarget);
-            //state = MonsterState.ATTACK;
-            //combatState = MonsterCombatState.CHASE;
+
+
+
 	    SetState(MonsterCombatState.CHASE);
             //enemyTarget.GetComponent<Monster>().OnDeath += TargetDeath;
 	    enemyTarget.GetComponent<HealthUser>().OnDeath += TargetDeath;
@@ -444,31 +442,53 @@ public class Monster : HealthUser
 	}
     }
 
+    public void AttackEnemy(HealthUser enemy){
+	if(enemy.IsMonster()){
+	    AttackMonster(enemy.GetComponent<Monster>());
+	}else if(enemy.IsPlayer()){
+	    this.enemyTarget = enemy.transform;
+	    enemyTarget.GetComponent<HealthUser>().OnDeath += TargetDeath;
+	}
+    }
+
 
     /// <summary>
     /// Runs when target dies.
     /// </summary>
     /// <param name="monster">Target that died, as Monster.</param>
-    public void TargetDeath(Monster monster,Monster enemy) {
-	Debug.Log("TAORIJOIJGEOIJGOIEWJGOIEJWGIOEJWOFHJNEWOFBNEWIBNFIOU");
+    // public void TargetDeath(Monster monster,Monster enemy) {
+    // 	Debug.Log("TAORIJOIJGEOIJGOIEWJGOIEJWGIOEJWOFHJNEWOFBNEWIBNFIOU");
+    //     if (OnKillTarget != null) {
+
+    //         // if enemy target is null then it might not call this
+    //         if (enemyTarget != null)
+    //         {
+    //             OnKillTarget(this, enemyTarget.GetComponent<Monster>());
+    // 		//Debug.Log(name+" is setting their enemy to null");
+    // 		//enemyTarget = null;
+    //         }
+    //         else
+    //         {
+    //             //Debug.LogError("ON TARGET KILL TO NULL TARGET!!!");
+    //         }
+    //     }
+    //     //combatState = MonsterCombatState.CHASE;
+    //     //enemyTarget = null;
+    //     //state = MonsterState.IDLE; // change to fight next monster
+        
+    // }
+
+    public void TargetDeath(AttackInstanceInfo info) {
+	//Debug.Log("TAORIJOIJGEOIJGOIEWJGOIEJWGIOEJWOFHJNEWOFBNEWIBNFIOU");
         if (OnKillTarget != null) {
 
             // if enemy target is null then it might not call this
-            if (enemyTarget != null)
-            {
+            if (enemyTarget != null){
                 OnKillTarget(this, enemyTarget.GetComponent<Monster>());
-		//Debug.Log(name+" is setting their enemy to null");
-		//enemyTarget = null;
-            }
-            else
-            {
-                //Debug.LogError("ON TARGET KILL TO NULL TARGET!!!");
+            } else {
+                Debug.LogError("ON TARGET KILL TO NULL TARGET!!!");
             }
         }
-        //combatState = MonsterCombatState.CHASE;
-        //enemyTarget = null;
-        //state = MonsterState.IDLE; // change to fight next monster
-        
     }
 
     /// <summary>
@@ -742,12 +762,15 @@ public class Monster : HealthUser
     void OnTriggerEnter(Collider c){
 	if(state == MonsterState.AGRO){
 	    // attack enemy
-	    Monster m = c.gameObject.GetComponent<Monster>();
-	    if(m != null){
-		if(m.GetGroup() != this.group){
+	    //Monster m = c.gameObject.GetComponent<Monster>();
+	    HealthUser enemy = c.gameObject.GetComponent<HealthUser>();
+	    if(enemy != null){
+		Debug.Log("ENEMY ENTERED TRIGGER");
+		if(enemy.GetGroup() != this.group){
 		    Debug.Log("AGROED MONSTER");
-		    group.Attack(m);
-		    AttackMonster(m);
+		    group.Attack(enemy);
+		    //AttackMonster(enemy);
+		    AttackEnemy(enemy);
 		    Debug.Log(group.InCombat);
 		}
 	    }

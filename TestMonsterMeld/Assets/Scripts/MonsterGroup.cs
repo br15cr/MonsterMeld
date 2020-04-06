@@ -117,6 +117,14 @@ public class MonsterGroup : MonoBehaviour
         }
     }
 
+    public void Attack(HealthUser enemy){
+	if(enemy.IsMonster()){
+	    Attack(enemy.GetComponent<Monster>());
+	}else{
+	    Debug.Log("ATTACK PLAYER");
+	}
+    }
+
     public void Attack(Monster enemyMonster) // attack MonsterGroup variant?
     {
 	if(Count > 0){
@@ -209,8 +217,13 @@ public class MonsterGroup : MonoBehaviour
     }
 
 
-    public virtual void MonsterDeath(Monster monster,Monster monsterEnemy)
+    //public virtual void MonsterDeath(Monster monster,Monster monsterEnemy)
+    public virtual void MonsterDeath(AttackInstanceInfo info)
     {
+	Monster monster = info.defender.GetComponent<Monster>();
+	if(monster == null){
+	    return;
+	}
 	RemoveMonster(monster);
 	if(Count == 0){
 	    //Debug.Log("NO MORE MONSTERS!");

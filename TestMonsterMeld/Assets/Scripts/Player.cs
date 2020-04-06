@@ -53,6 +53,7 @@ public class Player : HealthUser
         playerMonsters = GetComponent<MonsterGroup>();
 	orbs = GetComponent<OrbPouch>();
 	attackPrefab = Resources.Load<GameObject>("Prefabs/DamageBox");
+	base.Start();
     }
 
     void Update()
@@ -61,6 +62,10 @@ public class Player : HealthUser
 	    if(Time.time > dashStart + dashLength)
 		dashing = false;
 	}
+    }
+
+    public override MonsterGroup GetGroup(){
+	return playerMonsters;
     }
 
     // https://docs.unity3d.com/ScriptReference/CharacterController.Move.html
@@ -292,6 +297,7 @@ public class Player : HealthUser
 	GUI.Label(new Rect(10,10,100,100),"Orbs: " + orbs.Count.ToString());
 	// Player Info
 	GUI.Label(new Rect(10,50,100,100),"Velocity: " + velocity.ToString());
+	GUI.Label(new Rect(300,10,200,200),"Health: " + health.GetHealth().ToString());
     }
 
     void OnDrawGizmos(){

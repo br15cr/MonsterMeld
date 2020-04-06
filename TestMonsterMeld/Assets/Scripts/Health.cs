@@ -19,16 +19,28 @@ public struct AttackInfo {
     }
 }
 
-// full info on the attack, including the receiver
+// full info on the attack, including the defender
 public struct AttackInstanceInfo {
-    public AttackInfo attackInfo;
-    public HealthUser receiver;
+    //public AttackInfo attackInfo;
+    public float baseDamage;
+    public HealthUser attacker;
+    public HealthUser defender;
     public bool fatalAttack;
 
-    public AttackInstanceInfo(HealthUser Attacker, float BaseDamage, HealthUser Receiver){
-	attackInfo = new AttackInfo(Attacker,BaseDamage);
-	receiver = Receiver;
+    public AttackInstanceInfo(HealthUser Attacker, float BaseDamage, HealthUser Defender){
+	//attackInfo = new AttackInfo(Attacker,BaseDamage);
+	attacker = Attacker;
+	baseDamage = BaseDamage;
+	defender = Defender;
 	fatalAttack = false;
+    }
+
+    public AttackInstanceInfo(AttackInfo prevInfo, HealthUser Defender,bool Died){
+	//attackInfo = prevInfo;
+	baseDamage = prevInfo.baseDamage;
+	attacker = prevInfo.attacker;
+	defender = Defender;
+	fatalAttack = Died;
     }
 
     
@@ -91,6 +103,7 @@ public struct HealthData {
 }
 
 public delegate void AttackInfoDelegate(AttackInfo info); // add attacker to parameters
+public delegate void AttackInstanceInfoDelegate(AttackInstanceInfo info);
 
 public class HealthUser : MonoBehaviour
 {
@@ -100,7 +113,7 @@ public class HealthUser : MonoBehaviour
     protected HealthData health;
     protected bool isDead = false;
 
-    public event AttackInfoDelegate OnDeath;
+    public event AttackInstanceInfoDelegate OnDeath;
 
     public float startHealth = 100;
     
@@ -154,7 +167,7 @@ public class HealthUser : MonoBehaviour
 	    if(!isDead){
 		isDead = true;
 		if(OnDeath != null)
-		    OnDeath(attackInfo);
+		    OnDeath(new AttackInstanceInfo(attackInfo,this,true));
 		Die(attackInfo);
 	    }
 	}
