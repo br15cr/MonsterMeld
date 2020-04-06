@@ -52,8 +52,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7fd39813eb13a446b17e8620c2aaac9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startHealth: 100
   showWalkingSpeed: 0
-  maxHealth: 100
   agro: 0
   minDistance: 3
   orbPrefab: {fileID: 3529501776409808087, guid: 9637de023023ecf44a5c342a4d4fd151,
@@ -390,20 +390,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 965569949100446277, guid: 9963cfce0f263d948ab87bd0a22c9f88,
         type: 3}
-      propertyPath: icons.Array.size
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 965569949100446277, guid: 9963cfce0f263d948ab87bd0a22c9f88,
-        type: 3}
       propertyPath: monster
       value: 
       objectReference: {fileID: 7391129581144906118}
-    - target: {fileID: 965569949100446277, guid: 9963cfce0f263d948ab87bd0a22c9f88,
-        type: 3}
-      propertyPath: icons.Array.data[7]
-      value: 
-      objectReference: {fileID: 21300000, guid: fbee92c8aee83c3469d983fea4582098,
-        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9963cfce0f263d948ab87bd0a22c9f88, type: 3}
 --- !u!4 &5736234732423106739 stripped

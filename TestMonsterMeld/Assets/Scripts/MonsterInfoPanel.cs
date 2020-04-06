@@ -48,11 +48,11 @@ public class MonsterInfoPanel : MonoBehaviour
 		enemyText.color = Color.white;
 	    }
 	    if(!monster.IsDead){
-		if(monster.GetState() == MonsterState.ATTACK){
-		    stateText.text = "A: " + monster.GetCombatState().ToString();
-		}else{
+		// if(monster.InAttackState()){
+		//     stateText.text = "A: " + monster.GetCombatState().ToString();
+		// }else{
 		    stateText.text = monster.GetState().ToString();
-		}
+		//}
 	    }else{
 		stateText.text = "DEAD";
 	    }

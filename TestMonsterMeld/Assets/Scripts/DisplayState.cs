@@ -19,7 +19,8 @@ public class DisplayState : MonoBehaviour
 	}
 
 	if(monster.agro){
-	    StateChanged(monster,monster.GetState(),monster.GetCombatState());
+	    //StateChanged(monster,monster.GetState(),monster.GetCombatState());
+	    StateChanged(monster,monster.GetState());
 	}
 	monster.OnStatesChanged += StateChanged;
     }
@@ -28,10 +29,12 @@ public class DisplayState : MonoBehaviour
 	transform.LookAt(Camera.main.transform,Camera.main.transform.up);
     }
 
-    void StateChanged(Monster m,MonsterState state,MonsterCombatState combatState){
+    void StateChanged(Monster m,MonsterState state)
+    {
 	int st = (int)state;
-	int cst = (int)combatState;
-	int stateNum = st == 2 ? st+cst : st;
+	//int cst = (int)combatState;
+	//int stateNum = st == 2 ? st+cst : st;
+	int stateNum = st;
 	int currentState = GetMonsterState();
 	if(stateIndex != currentState){
 	    //Debug.Log("State change from " + stateIndex.ToString() + " to " + currentState.ToString());
@@ -39,16 +42,17 @@ public class DisplayState : MonoBehaviour
 	    try {
 		sprite.sprite = icons[stateIndex];
 	    } catch (System.IndexOutOfRangeException e){
-		Debug.LogError("stateIndex out of Sprite array range ("+icons.Length.ToString()+"). stateIndex is " + stateIndex.ToString()+".\nMonster State: " + state.ToString() + "\nCombat State: " + combatState.ToString(),this);
+		Debug.LogError("stateIndex out of Sprite array range ("+icons.Length.ToString()+"). stateIndex is " + stateIndex.ToString()+".\nMonster State: " + state.ToString(),this);
 	    }
 	}
     }
 
     private int GetMonsterState(){
 	int state = (int)monster.GetState();
-	int cstate = (int)monster.GetCombatState();
-	if(state == 3)
-	    return 7;
-	return state == 2 ? state+cstate : state;
+	// int cstate = (int)monster.GetCombatState();
+	// if(state == 3)
+	//     return 7;
+	// return state == 2 ? state+cstate : state;
+	return state;
     }
 }

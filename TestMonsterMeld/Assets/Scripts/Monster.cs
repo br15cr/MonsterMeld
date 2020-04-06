@@ -10,19 +10,24 @@ using UnityEngine.AI;
 public enum MonsterState
 {
     IDLE,
-    FOLLOW,
-    ATTACK,
     AGRO,
-}
-
-public enum MonsterCombatState
-{
+    FOLLOW,
+//    ATTACK,
     CHASE,      // run after the enemy
     HIT,        // deal the damage
     CHARGE,     // attack recoil (go back go hit after done)
     RECOVER,     // stun if hit?
     FLEE
 }
+
+// public enum MonsterCombatState
+// {
+//     CHASE,      // run after the enemy
+//     HIT,        // deal the damage
+//     CHARGE,     // attack recoil (go back go hit after done)
+//     RECOVER,     // stun if hit?
+//     FLEE
+// }
 
 public struct MonsterAttackInfo
 {
@@ -38,7 +43,8 @@ public struct MonsterAttackInfo
 public delegate void MonsterInfoDelegate(Monster monster);
 public delegate void MonsterConflictDelegate(Monster ally, Monster enemy);
 
-public delegate void MonsterStatesDelegate(Monster monster,MonsterState state,MonsterCombatState combatState);
+//public delegate void MonsterStatesDelegate(Monster monster,MonsterState state,MonsterCombatState combatState);
+public delegate void MonsterStatesDelegate(Monster monster,MonsterState state);
 
 public class Monster : HealthUser
 {
@@ -67,7 +73,7 @@ public class Monster : HealthUser
     private MonsterGroup group = null;
 
     private MonsterState state;
-    private MonsterCombatState combatState;
+    //private MonsterCombatState combatState;
     private float attackWait;
 
     protected Transform followTarget; // owner
@@ -188,29 +194,10 @@ public class Monster : HealthUser
 
 
     void LateUpdate() {
-        if(state == MonsterState.ATTACK && combatState != MonsterCombatState.CHASE){
-            if(enemyTarget != null){
-	    		   /*
-            		   //transform.rotation = Quaternion.LookRotation(enemyTarget.position,transform.up); // fix this
-			   Vector2 vec = new Vector2(enemyTarget.position.x-transform.position.x,enemyTarget.position.z-transform.position.z);
-			   
-			   float div = vec.x/vec.y; //float div = vec.y/vec.x;
-			   //Debug.Log("X: "+vec.x.ToString() + " Y: "+vec.y.ToString()+"Div: " + div.ToString());
-			   //angle = Mathf.Atan(div);
-			   angle = Mathf.Atan(div)*Mathf.Rad2Deg;
-			   if(vec.y < 0){
-			   	    //Debug.Log("Y < 0!!!!!!!!!!!!");
-				    angle -= 180;
-			   }
-			   //Debug.Log("Angle: "+(angle*Mathf.Rad2Deg()))
-	    		   transform.rotation = Quaternion.Euler(0,angle,0); //transform.rotation = Quaternion.Euler(0,angle*Mathf.Rad2Deg -90,0);
-			   */
-			   //LookAt(enemyTarget.position);
-	    }
-        }
+        
 
 	// Test look at player
-	if(false && state != MonsterState.ATTACK){
+	if(false && !InAttackState()){
             		   //transform.rotation = Quaternion.LookRotation(enemyTarget.position,transform.up); // fix this
 			   Vector2 vec = new Vector2(followTarget.position.x-transform.position.x,followTarget.position.z-transform.position.z);
 			   
@@ -290,7 +277,8 @@ public class Monster : HealthUser
 	
 	state = newState;
 	if(OnStatesChanged != null)
-	    OnStatesChanged(this,state,combatState);
+	    OnStatesChanged(this,state);
+	    //OnStatesChanged(this,state,combatState);
 	// update animation state
 	if(anim != null){
 	    anim.SetInteger("state", ((int)state));
@@ -298,26 +286,26 @@ public class Monster : HealthUser
 	}
     }
 
-    private void SetState(MonsterCombatState newCombatState){
-	if(state == MonsterState.ATTACK){
-	    if(combatState == newCombatState)
-		return;
-	}
-	state = MonsterState.ATTACK;
-	combatState = newCombatState;
-	if(OnStatesChanged != null)
-	    OnStatesChanged(this,state,combatState);
+    // private void SetState(MonsterCombatState newCombatState){
+    // 	if(state == MonsterState.ATTACK){
+    // 	    if(combatState == newCombatState)
+    // 		return;
+    // 	}
+    // 	state = MonsterState.ATTACK;
+    // 	combatState = newCombatState;
+    // 	if(OnStatesChanged != null)
+    // 	    OnStatesChanged(this,state,combatState);
 
-	// update animation state
-	if(anim != null){
-	    anim.SetInteger("state",((int)state)+((int)combatState));
-	    anim.SetTrigger("stateChange");
-	}
-    }
+    // 	// update animation state
+    // 	if(anim != null){
+    // 	    anim.SetInteger("state",((int)state)+((int)combatState));
+    // 	    anim.SetTrigger("stateChange");
+    // 	}
+    // }
 
-    public MonsterCombatState GetCombatState() {
-        return combatState;
-    }
+    // public MonsterCombatState GetCombatState() {
+    //     return combatState;
+    // }
 
 
     public void Follow(Transform target) {
@@ -434,7 +422,7 @@ public class Monster : HealthUser
 
 
 
-	    SetState(MonsterCombatState.CHASE);
+	    SetState(MonsterState.CHASE);
             //enemyTarget.GetComponent<Monster>().OnDeath += TargetDeath;
 	    enemyTarget.GetComponent<HealthUser>().OnDeath += TargetDeath;
         }else{
@@ -525,7 +513,7 @@ public class Monster : HealthUser
 
     public override void Damage(AttackInfo attackInfo){
 	base.Damage(attackInfo);
-	if(state != MonsterState.ATTACK && attackInfo.attacker != null && !attackInfo.attacker.IsDead){
+	if(!InAttackState() && attackInfo.attacker != null && !attackInfo.attacker.IsDead){
 	    if(attackInfo.attacker.IsMonster()){
 		AttackMonster(attackInfo.attacker.GetComponent<Monster>());
 		if(OnAttacked != null){
@@ -652,7 +640,7 @@ public class Monster : HealthUser
 	case MonsterState.AGRO:
 	    TenseBehaviour();
 	    break;
-            case MonsterState.ATTACK:
+	default:
                 AttackBehaviour();
 		break;
         }
@@ -696,24 +684,24 @@ public class Monster : HealthUser
 	} else {
 	    
 	    // when close enough to the enemy
-	    SetState(MonsterCombatState.HIT);
+	    SetState(MonsterState.HIT);
 	}
     }
 
     protected virtual void HitBehaviour(){
 	HitMonster();
-	SetState(MonsterCombatState.CHARGE);
+	SetState(MonsterState.CHARGE);
 	// update the last time attacked
 	attackWait = Time.time;
     }
 
     protected virtual void ChargeBehaviour(){
 	if(Vector3.Distance(transform.position,enemyTarget.position) > attackDistance) // if the enemy becomes too far away, chase it again
-	    SetState(MonsterCombatState.CHASE);
+	    SetState(MonsterState.CHASE);
 	if (Time.time >= attackWait + attackDelay)
-	    SetState(MonsterCombatState.HIT);
+	    SetState(MonsterState.HIT);
 	if(health.GetHealth() <= 25)
-	    SetState(MonsterCombatState.FLEE);
+	    SetState(MonsterState.FLEE);
     }
 
     protected virtual void FleeBehaviour(){
@@ -732,24 +720,25 @@ public class Monster : HealthUser
     protected virtual void AttackBehaviour(){
 	if(enemyTarget != null){ //if (target != null) {
 	    // Face the enemy
-	    if( ((int)combatState) < 3 )
+	    //if( ((int)combatState) < 3 )
+	    if(((int)state) < 6)
 		LookAt(enemyTarget.position);
 	    
 	    // Combat Behaviours
-	    switch (combatState) {
+	    switch (state) {
 		// CHASE //
-	    case MonsterCombatState.CHASE:
+	    case MonsterState.CHASE:
 		ChaseBehaviour();
 		    break;
 		    // HIT //
-		case MonsterCombatState.HIT:
+		case MonsterState.HIT:
 		    HitBehaviour();
 		    break;
 		    // RECHARGE
-		case MonsterCombatState.CHARGE:
+		case MonsterState.CHARGE:
 		    ChargeBehaviour();
 		    break;
-		case MonsterCombatState.FLEE:
+		case MonsterState.FLEE:
 		    FleeBehaviour();
 		    //FollowBehaviour();
 		    break;
@@ -800,5 +789,9 @@ public class Monster : HealthUser
 	if(showWalkingSpeed){
 	    GUI.Label(new Rect(200,200,200,200),"Walking Speed: " + currentSpeed.ToString());
 	}
+    }
+
+    public bool InAttackState(){
+	return ((int)state) > 2;
     }
 }

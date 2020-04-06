@@ -140,7 +140,8 @@ public class MonsterGroup : MonoBehaviour
 
 
 	    foreach(Monster m in monsters){
-		if(!(m.HasEnemy() && m.GetState() == MonsterState.ATTACK)){
+		//if(!(m.HasEnemy() && m.GetState() == MonsterState.ATTACK)){
+		if(!(m.HasEnemy() && m.InAttackState())){
 		    m.ChooseEnemy(enemyGroup.GetMonsters());
 		}
 	    }
