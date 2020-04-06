@@ -16,7 +16,7 @@ public class OrbFeeder : OrbPouch
     }
 
     public override void AddOrb(){
-	MonsterAttackInfo info = new MonsterAttackInfo(null,-HEAL_AMOUNT);
-	monster.TakeDamage(info);
+	AttackInfo info = new AttackInfo(null,-HEAL_AMOUNT);
+	monster.Damage(info);
     }
 }

@@ -11,8 +11,8 @@ public class HealEffect : StatusEffect
     }
 
     protected override void EffectBehaviour(){
-	MonsterAttackInfo info = new MonsterAttackInfo(null,-1);
-	targetMonster.TakeDamage(info);
+	AttackInfo info = new AttackInfo(null,-1);
+	targetMonster.Damage(info);
 	if(targetMonster.GetHealth() == 100){
 	    EndEffect();
 	}

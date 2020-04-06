@@ -6,7 +6,8 @@ public struct AttackInfo {
     public float baseDamage;
     //public Monster attacker;
     public HealthUser attacker;
-    public AttackInfo(float BaseDamage,HealthUser Attacker){
+    
+    public AttackInfo(HealthUser Attacker,float BaseDamage){
 	baseDamage = BaseDamage;
 	attacker = Attacker;
     }
@@ -16,6 +17,21 @@ public struct AttackInfo {
 	HealthData hd = new HealthData(health.GetHealth()-baseDamage,health.GetMaxHealth());
 	return hd;
     }
+}
+
+// full info on the attack, including the receiver
+public struct AttackInstanceInfo {
+    public AttackInfo attackInfo;
+    public HealthUser receiver;
+    public bool fatalAttack;
+
+    public AttackInstanceInfo(HealthUser Attacker, float BaseDamage, HealthUser Receiver){
+	attackInfo = new AttackInfo(Attacker,BaseDamage);
+	receiver = Receiver;
+	fatalAttack = false;
+    }
+
+    
 }
 
 public struct HealthData {
@@ -74,7 +90,7 @@ public struct HealthData {
     }
 }
 
-public delegate void AttackInfoDelegate(); // add attacker to parameters
+public delegate void AttackInfoDelegate(AttackInfo info); // add attacker to parameters
 
 public class HealthUser : MonoBehaviour
 {
@@ -118,25 +134,42 @@ public class HealthUser : MonoBehaviour
     }
     */
 
-    public void Damage(AttackInfo attackInfo){
+    public virtual void Damage(AttackInfo attackInfo){
 	//SubHealth(attackInfo.baseDamage);
 	health -= attackInfo;
-	CheckDeath();
+	CheckDeath(attackInfo);
     }
 
-    public void Damage(float amount){
-	health -= amount;
-	CheckDeath();
+    // public void Damage(float amount){
+    // 	health -= amount;
+    // 	CheckDeath();
+    // }
+
+    public virtual MonsterGroup GetGroup(){
+	return null;
     }
 
-    private void CheckDeath(){
+    private void CheckDeath(AttackInfo attackInfo){
 	if(health == 0){
 	    if(!isDead){
 		isDead = true;
 		if(OnDeath != null)
-		    OnDeath();
+		    OnDeath(attackInfo);
+		Die(attackInfo);
 	    }
 	}
+    }
+
+    protected virtual void Die(AttackInfo finalBlow){
+	Destroy(this.gameObject);
+    }
+
+    public virtual bool IsMonster(){
+	return false;
+    }
+
+    public virtual bool IsPlayer(){
+	return false;
     }
 
     /*

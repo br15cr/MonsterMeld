@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class AttackBox : MonoBehaviour
 {
-    private MonsterAttackInfo info;
-    private Monster attacker;
+    // private MonsterAttackInfo info;
+    // private Monster attacker;
+
+    private AttackInfo info;
+    private HealthUser attacker;
 
     private bool hasInfo = false;
     private bool attacking = false;
@@ -26,11 +29,22 @@ public class AttackBox : MonoBehaviour
 	    Destroy(this.gameObject);
     }
 
-    public void SetAttacker(Monster a){
+    // public void SetAttacker(Monster a){
+    // 	//attacker = a;
+    // 	SetAttacker
+    // }
+
+    public void SetAttacker(HealthUser a){
 	attacker = a;
     }
 
-    public void SetInfo(MonsterAttackInfo i){
+    // public void SetInfo(MonsterAttackInfo i){
+    // 	this.GetComponent<Collider>().enabled = true;
+    // 	info = i;
+    // 	hasInfo = true;
+    // }
+
+    public void SetInfo(AttackInfo i){
 	this.GetComponent<Collider>().enabled = true;
 	info = i;
 	hasInfo = true;
@@ -46,27 +60,31 @@ public class AttackBox : MonoBehaviour
 	    return;
 	}
 	
-	Monster monster = c.GetComponent<Monster>();
+	//Monster monster = c.GetComponent<Monster>();
+	HealthUser target = c.GetComponent<HealthUser>();
+
+
 	//Debug.Log(c.transform.name + " ENTERED TRIGGER!");
 	// damage any monsters that isn't the attacker or on the attacker's team
 	
-	if(monster != null){
-	    // damage monster
+	if(target != null){
+	    // damage target
 	    // destroy self
-	    if(monster.Equals(info.attacker)){
-		Debug.Log(monster.name + " tried to attack themself!");
+	    if(target.Equals(info.attacker)){
+		Debug.Log(target.name + " tried to attack themself!");
 		attacking = false;
 		return;
 	    }
 	    if(info.attacker != null && info.attacker.GetGroup() != null){
-		if(info.attacker.GetGroup().Equals(monster.GetGroup())){
-		    Debug.Log(monster.name + " tried to attack their teammates!");
+		if(info.attacker.GetGroup().Equals(target.GetGroup())){
+		    //Debug.Log(monster.name + " tried to attack their teammates!");
 		    attacking = false;
 		    return;
 		}
 	    }
 	    Debug.Log("MONSTER ENTERED TRIGGER");
-	    monster.TakeDamage(info);
+	    //monster.TakeDamage(info);
+	    target.Damage(info);
 	    Destroy(this.gameObject);
 	}
     }

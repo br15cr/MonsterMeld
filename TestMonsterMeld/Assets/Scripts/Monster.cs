@@ -252,7 +252,7 @@ public class Monster : HealthUser
         return health.GetHealth();
     }
 
-    public MonsterGroup GetGroup() {
+    public override MonsterGroup GetGroup() {
         return group;
     }
 
@@ -425,6 +425,7 @@ public class Monster : HealthUser
     /// Initiate combat with a monster
     /// </summary>
     /// <param name="monster">The monster to start combat with.</param>
+    
     public void AttackMonster(Monster monster) {
         //this.target = monster.transform;
 	//Debug.Log("MONSTER IS NULL? " + (monster == null));
@@ -435,7 +436,8 @@ public class Monster : HealthUser
             //state = MonsterState.ATTACK;
             //combatState = MonsterCombatState.CHASE;
 	    SetState(MonsterCombatState.CHASE);
-            enemyTarget.GetComponent<Monster>().OnDeath += TargetDeath;
+            //enemyTarget.GetComponent<Monster>().OnDeath += TargetDeath;
+	    enemyTarget.GetComponent<HealthUser>().OnDeath += TargetDeath;
         }else{
 	    Debug.LogWarning(name+"'s attack request was denied by " + monster.name);
 	    //Debug.LogError("ATTACK DENIED!");
@@ -448,6 +450,7 @@ public class Monster : HealthUser
     /// </summary>
     /// <param name="monster">Target that died, as Monster.</param>
     public void TargetDeath(Monster monster,Monster enemy) {
+	Debug.Log("TAORIJOIJGEOIJGOIEWJGOIEJWGIOEJWOFHJNEWOFBNEWIBNFIOU");
         if (OnKillTarget != null) {
 
             // if enemy target is null then it might not call this
@@ -489,8 +492,23 @@ public class Monster : HealthUser
 	    // spawn attack box instead of directly sending damage
 	    AttackBox attack = Instantiate(attackPrefab,transform.position + transform.forward*(attackDistance/2),Quaternion.identity).GetComponent<AttackBox>();
 	    //attack.SetAttacker(this);
-	    attack.SetInfo(new MonsterAttackInfo(this,attackDamage));
+	    //attack.SetInfo(new MonsterAttackInfo(this,attackDamage));
+	    attack.SetInfo(new AttackInfo(this,attackDamage));
 	//}
+    }
+
+    public override bool IsMonster(){
+	return true;
+    }
+
+
+    public override void Damage(AttackInfo attackInfo){
+	base.Damage(attackInfo);
+	if(state != MonsterState.ATTACK && attackInfo.attacker != null && !attackInfo.attacker.IsDead){
+	    if(attackInfo.attacker.IsMonster()){
+		AttackMonster(attackInfo.attacker.GetComponent<Monster>());
+	    }
+	}
     }
 
     /// <summary>
@@ -498,7 +516,7 @@ public class Monster : HealthUser
     /// </summary>
     /// <param name="attack">Contains damage info.</param>
     
-    public virtual void TakeDamage(MonsterAttackInfo attackInfo) {
+    public virtual void TakeDamageOLD(MonsterAttackInfo attackInfo) {
         health -= attackInfo.baseDamage;
         //healthText.text = health.ToString();
         if(health.GetHealth() <= 0) {
@@ -510,7 +528,7 @@ public class Monster : HealthUser
 		Debug.Log("Alas poor " + name + " was killed by natural causes (probably a status effect)");
 	    }
 	    
-            Die(attackInfo);
+            //Die(attackInfo);
         }
 
         if(state != MonsterState.ATTACK && attackInfo.attacker != null && !attackInfo.attacker.IsDead) {
@@ -550,21 +568,22 @@ public class Monster : HealthUser
     }
     */
 
-    private void Die(MonsterAttackInfo finalBlow) {
-	isDead = true;
-	Debug.Log(name + " Died");
+    //private void Die(MonsterAttackInfo finalBlow) {
+    //private void Die(AttackInfo finalBlow) {
+	//isDead = true;
+	//Debug.Log(name + " Died");
 	/*
 	if(enemyTarget != null){
 	    OnDeath(this,enemyTarget.GetComponent<Monster>());  // send event to this monster group
 	}else{
 	    OnDeath(this,null);
 	}*/
-	OnDeath(this,finalBlow.attacker);
-	Debug.Log(name + " Getting Destroyed!");
+	//OnDeath(this,finalBlow.attacker);
+	//Debug.Log(name + " Getting Destroyed!");
 	//DropLoot();
-        Destroy(this.gameObject);
-	Debug.Log(name + " Destroyed?!?");
-    }
+        //Destroy(this.gameObject);
+	//Debug.Log(name + " Destroyed?!?");
+    //}
 
     private void DropLoot(){
 	for(int i = 0; i < 8; i++){

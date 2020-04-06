@@ -13,13 +13,15 @@ public class Miniboss : Monster
 	attackDelay = 1.5f;
     }
 
-    public override void TakeDamage(MonsterAttackInfo attackInfo)
+    public override void Damage(AttackInfo attackInfo)
     {
-	base.TakeDamage(attackInfo);
+	base.Damage(attackInfo);
 	if(attackInfo.attacker != null){
-	    Monster attacker = attackInfo.attacker;
-	    if((transform.position - enemyTarget.transform.position).magnitude > outOfRangeDistance){
-		AttackMonster(attacker);
+	    Monster attacker = attackInfo.attacker.GetComponent<Monster>();
+	    if(attacker != null){
+		if((transform.position - enemyTarget.transform.position).magnitude > outOfRangeDistance){
+		    AttackMonster(attacker);
+		}
 	    }
 	}
     }

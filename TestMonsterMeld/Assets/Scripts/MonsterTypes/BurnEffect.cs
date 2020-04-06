@@ -14,7 +14,7 @@ public class BurnEffect : StatusEffect
     }
     
     protected override void EffectBehaviour(){
-	MonsterAttackInfo info = new MonsterAttackInfo(null,damage);
-	targetMonster.TakeDamage(info);
+	AttackInfo info = new AttackInfo(null,damage);
+	targetMonster.Damage(info);
     }
 }

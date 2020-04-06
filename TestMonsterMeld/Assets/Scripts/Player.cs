@@ -159,7 +159,8 @@ public class Player : HealthUser
 	Debug.Log("Player Attacking");
 	AttackBox attack = Instantiate(attackPrefab,transform.position + transform.forward*-1,Quaternion.identity).GetComponent<AttackBox>();
 	attack.transform.parent = this.transform;
-	attack.SetInfo(new MonsterAttackInfo(null,ATTACK_AMOUNT));
+	//attack.SetInfo(new MonsterAttackInfo(null,ATTACK_AMOUNT));
+	attack.SetInfo(new AttackInfo(null,ATTACK_AMOUNT));
     }
 
     public void CallMonsters()
