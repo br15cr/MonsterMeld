@@ -94,7 +94,8 @@ public class Monster : HealthUser
 
     //public event MonsterConflictDelegate OnDeath;
     public event MonsterConflictDelegate OnKillTarget;
-    public event MonsterConflictDelegate OnAttacked;    // this monster was attacked when it was in FOLLOW or IDLE mode
+    //public event MonsterConflictDelegate OnAttacked;    // this monster was attacked when it was in FOLLOW or IDLE mode
+    public event AttackInstanceInfoDelegate OnAttacked;
     public event MonsterStatesDelegate OnStatesChanged;
 
     public float minDistance = 0;
@@ -527,6 +528,10 @@ public class Monster : HealthUser
 	if(state != MonsterState.ATTACK && attackInfo.attacker != null && !attackInfo.attacker.IsDead){
 	    if(attackInfo.attacker.IsMonster()){
 		AttackMonster(attackInfo.attacker.GetComponent<Monster>());
+		if(OnAttacked != null){
+		    //OnAttacked(this,attackInfo.attacker);
+		    OnAttacked(new AttackInstanceInfo(attackInfo,this,IsDead));
+		}
 	    }
 	}
     }
@@ -535,7 +540,9 @@ public class Monster : HealthUser
     /// Applies damage to this monster.
     /// </summary>
     /// <param name="attack">Contains damage info.</param>
+
     
+    /*
     public virtual void TakeDamageOLD(MonsterAttackInfo attackInfo) {
         health -= attackInfo.baseDamage;
         //healthText.text = health.ToString();
@@ -554,11 +561,15 @@ public class Monster : HealthUser
         if(state != MonsterState.ATTACK && attackInfo.attacker != null && !attackInfo.attacker.IsDead) {
             AttackMonster(attackInfo.attacker);
             if(OnAttacked != null)
-                OnAttacked(this,attackInfo.attacker);
+                OnAttacked(new AttackInstanceInfo(attackInfo,this,IsDead)); //OnAttacked(this,attackInfo.attacker);
         }
 
         //Debug.Log(this.name + " Attacked! Health: " + this.health.ToString());
     }
+    */
+
+
+    
 
     /*
     private void UpdateText() {

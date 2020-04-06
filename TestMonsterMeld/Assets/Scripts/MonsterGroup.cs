@@ -210,10 +210,12 @@ public class MonsterGroup : MonoBehaviour
         return this.monsters.AsReadOnly();
     }
 
-    public virtual void MonsterAttacked(Monster monster,Monster monsterEnemy) {
+    //public virtual void MonsterAttacked(Monster monster,Monster monsterEnemy)
+    public virtual void MonsterAttacked(AttackInstanceInfo info)
+    {
 	// this group begins attack on enemy group
 	//Debug.Log(monster.name + " IS GETTING ATTACKED!");
-	Attack(monsterEnemy);
+	Attack(info.attacker);
     }
 
 

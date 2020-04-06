@@ -397,7 +397,7 @@ PrefabInstance:
         type: 3}
       propertyPath: monster
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 6376275225351499430}
     - target: {fileID: 965569949100446277, guid: 9963cfce0f263d948ab87bd0a22c9f88,
         type: 3}
       propertyPath: icons.Array.data[7]
