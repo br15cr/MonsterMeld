@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2359901302761507295}
   - component: {fileID: 4433035784756272906}
   - component: {fileID: 5285047060657764907}
+  - component: {fileID: 5186020288489798208}
   m_Layer: 10
   m_Name: Monster 1
   m_TagString: Untagged
@@ -129,6 +130,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &5186020288489798208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 456590611538437231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa6c0b368accac943b373303528e498f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  display: {fileID: 5736234732423106738}
 --- !u!1 &3386806181338841022
 GameObject:
   m_ObjectHideFlags: 0
@@ -401,6 +415,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 4827110962374558455}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5736234732423106738 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 965569949100446277, guid: 9963cfce0f263d948ab87bd0a22c9f88,
+    type: 3}
+  m_PrefabInstance: {fileID: 4827110962374558455}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 649ae0e446b76864ba695e810c82bad3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5471718063535635141
 PrefabInstance:
   m_ObjectHideFlags: 0

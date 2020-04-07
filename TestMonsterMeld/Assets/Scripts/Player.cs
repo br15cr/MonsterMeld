@@ -165,7 +165,7 @@ public class Player : HealthUser
 	AttackBox attack = Instantiate(attackPrefab,transform.position + transform.forward*-1,Quaternion.identity).GetComponent<AttackBox>();
 	attack.transform.parent = this.transform;
 	//attack.SetInfo(new MonsterAttackInfo(null,ATTACK_AMOUNT));
-	attack.SetInfo(new AttackInfo(null,ATTACK_AMOUNT));
+	attack.SetInfo(new AttackInfo(this,ATTACK_AMOUNT));
     }
 
     public void CallMonsters()
@@ -298,6 +298,7 @@ public class Player : HealthUser
 	// Player Info
 	GUI.Label(new Rect(10,50,100,100),"Velocity: " + velocity.ToString());
 	GUI.Label(new Rect(300,10,200,200),"Health: " + health.GetHealth().ToString());
+	GUI.Label(new Rect(300,30,200,200),"Monsters: " + playerMonsters.Count);
     }
 
     void OnDrawGizmos(){

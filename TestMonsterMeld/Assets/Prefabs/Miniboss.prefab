@@ -92,6 +92,7 @@ GameObject:
   - component: {fileID: 190341944989617530}
   - component: {fileID: 2297251192387689391}
   - component: {fileID: 7727179746594274958}
+  - component: {fileID: 7513170365646791214}
   m_Layer: 10
   m_Name: Miniboss
   m_TagString: Untagged
@@ -207,6 +208,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &7513170365646791214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2608171302525378762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa6c0b368accac943b373303528e498f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  display: {fileID: 7926058672020788247}
 --- !u!1 &5020017285167874906
 GameObject:
   m_ObjectHideFlags: 0
@@ -412,6 +426,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 6960700933002528338}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7926058672020788247 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 965569949100446277, guid: 9963cfce0f263d948ab87bd0a22c9f88,
+    type: 3}
+  m_PrefabInstance: {fileID: 6960700933002528338}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 649ae0e446b76864ba695e810c82bad3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7605249157426806368
 PrefabInstance:
   m_ObjectHideFlags: 0

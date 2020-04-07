@@ -134,7 +134,7 @@ public class Monster : HealthUser
 
 	// HealthUser
 	
-	
+	// healthbarMat
 
 	if(agro)
 	    SetState(MonsterState.AGRO); //state = MonsterState.AGRO;
@@ -144,6 +144,8 @@ public class Monster : HealthUser
 	
 	//body.enabled = false;
 	body.Warp(transform.position);
+
+	healthbarMat.SetColor("_Color",teamColor);
     }
 
     // Update is called once per frame
@@ -274,7 +276,7 @@ public class Monster : HealthUser
     private void SetState(MonsterState newState){
 	if(state == newState)
 	    return;
-	
+	MonsterState oldState = state;
 	state = newState;
 	if(OnStatesChanged != null)
 	    OnStatesChanged(this,state);
@@ -283,6 +285,9 @@ public class Monster : HealthUser
 	if(anim != null){
 	    anim.SetInteger("state", ((int)state));
 	    anim.SetTrigger("stateChange");
+	    // if((oldState == MonsterState.HIT || oldState == MonsterState.CHARGE) && (newState < MonsterState.HIT || newState > MonsterState.CHARGE)){
+	    // 	anim.SetTrigger("attackInterrupt");
+	    // }
 	}
     }
 
@@ -494,16 +499,11 @@ public class Monster : HealthUser
 
     
     public void MakeAttack(){
-	//if(Vector3.Distance(transform.position,enemyTarget.position) <= attackDistance){ // only apply the attack if they're close enough
-	    //Monster monster = enemyTarget.GetComponent<Monster>();
-	    // send damage data to 'monster'
-	    //monster.TakeDamage(new MonsterAttackInfo(this, 10));
-	    // spawn attack box instead of directly sending damage
+	// only make the attack if the monster is actually attacking
+	if(state == MonsterState.HIT || state == MonsterState.CHARGE){
 	    AttackBox attack = Instantiate(attackPrefab,transform.position + transform.forward*(attackDistance/2),Quaternion.identity).GetComponent<AttackBox>();
-	    //attack.SetAttacker(this);
-	    //attack.SetInfo(new MonsterAttackInfo(this,attackDamage));
 	    attack.SetInfo(new AttackInfo(this,attackDamage));
-	//}
+	}
     }
 
     public override bool IsMonster(){
