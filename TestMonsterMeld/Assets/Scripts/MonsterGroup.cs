@@ -34,6 +34,7 @@ public class MonsterGroup : MonoBehaviour
     private MonsterGroup enemyGroup; // group to fight against
 
     private bool playerGroup; // is the players group
+    private Player player;
 
     public Transform followTarget;
     
@@ -45,6 +46,8 @@ public class MonsterGroup : MonoBehaviour
     public GameObject monsterPrefab;
     public Vector3 spawnOffset = new Vector3(0,0.25f,2);
     public Color groupColor;
+
+    public Material healthbarMat;
 
     // Events //
     public event MonsterInfoDelegate OnAddMonster;
@@ -75,7 +78,9 @@ public class MonsterGroup : MonoBehaviour
 	if(followTarget == null){
 	    followTarget = transform;
 	}
-	if(this.GetComponent<Player>() != null){
+
+	player = this.GetComponent<Player>();
+	if(player != null){
 	    Debug.Log("IS PLAYER!!!");
 	    playerGroup = true;
 	}
@@ -101,12 +106,29 @@ public class MonsterGroup : MonoBehaviour
 
     public Monster CreateMonster()
     {
+	Debug.Log("CREATED MONSTER");
         Monster monster = GameObject.Instantiate(monsterPrefab).GetComponent<Monster>();
         monster.transform.position = transform.position + spawnOffset;
-	monster.DebugPosition();
+	//monster.DebugPosition();
+	if(healthbarMat != null){
+	    Debug.Log("SETTING MONSTER'S HEALTHBAR MAT");
+	    monster.SetHealthbarMat(healthbarMat);
+	}
         AddMonster(monster);
 	return monster;
         // set monster to status quo
+    }
+
+    public Monster CreateMonster(GameObject prefab,Vector3 position){
+	Monster monster = GameObject.Instantiate(prefab).GetComponent<Monster>();
+        monster.transform.position = position;
+	//monster.DebugPosition();
+	if(healthbarMat != null){
+	    Debug.Log("SETTING MONSTER'S HEALTHBAR MAT");
+	    monster.SetHealthbarMat(healthbarMat);
+	}
+        AddMonster(monster);
+	return monster;
     }
     
     public void Follow(Transform target)
@@ -117,20 +139,21 @@ public class MonsterGroup : MonoBehaviour
         }
     }
 
-    public void Attack(HealthUser enemy){
-	if(enemy.IsMonster()){
-	    Attack(enemy.GetComponent<Monster>());
-	}else{
-	    Debug.Log("ATTACK PLAYER");
-	}
-    }
+    // public void Attack(HealthUser enemy){
+    // 	if(enemy.IsMonster()){
+    // 	    Attack(enemy.GetComponent<Monster>());
+    // 	}else{
+    // 	    Debug.Log("ATTACK PLAYER");
+    // 	}
+    // }
 
-    public void Attack(Monster enemyMonster) // attack MonsterGroup variant?
+    //public void Attack(Monster enemyMonster) // attack MonsterGroup variant?
+    public void Attack(HealthUser enemy)
     {
 	if(Count > 0){
 	    // if(enemyGroup == null){
 		string team = "";
-		enemyGroup = enemyMonster.GetGroup();
+		enemyGroup = enemy.GetGroup();
 		foreach(Monster m in monsters){
 		    team += m.name + " ";
 		}
@@ -142,7 +165,8 @@ public class MonsterGroup : MonoBehaviour
 	    foreach(Monster m in monsters){
 		//if(!(m.HasEnemy() && m.GetState() == MonsterState.ATTACK)){
 		if(!(m.HasEnemy() && m.InAttackState())){
-		    m.ChooseEnemy(enemyGroup.GetMonsters());
+		    //m.ChooseEnemy(enemyGroup.GetMonsters());
+		    m.ChooseEnemy(enemyGroup.GetMembers());
 		}
 	    }
 	}
@@ -184,7 +208,7 @@ public class MonsterGroup : MonoBehaviour
     public void AddMonster(Monster monster)
     {
         monster.SetGroup(this);
-        monster.SetColor(groupColor);
+        //monster.SetColor(groupColor);
 	Debug.Log("NameList Count: " + nameList.Count.ToString());
         //monster.name = nameList[Random.Range(0, nameList.Count)];
 	monster.name = "Unnamed Monster";
@@ -209,6 +233,13 @@ public class MonsterGroup : MonoBehaviour
 
     public ReadOnlyCollection<Monster> GetMonsters() {
         return this.monsters.AsReadOnly();
+    }
+
+    public ReadOnlyCollection<HealthUser> GetMembers() {
+	List<HealthUser> members = new List<HealthUser>(monsters);
+	if(player != null)
+	    members.Insert(0,player);
+	return members.AsReadOnly();
     }
 
     //public virtual void MonsterAttacked(Monster monster,Monster monsterEnemy)
@@ -251,7 +282,8 @@ public class MonsterGroup : MonoBehaviour
 	    } else {
 		//will change states in monster script//monster.Follow(transform);
 
-		Monster enemyFound = monster.ChooseEnemy(enemyGroup.GetMonsters());
+		//Monster enemyFound = monster.ChooseEnemy(enemyGroup.GetMonsters());
+		HealthUser enemyFound = monster.ChooseEnemy(enemyGroup.GetMembers());
 
 	    }
 	}else{

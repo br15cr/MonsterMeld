@@ -118,7 +118,8 @@ public class Monster : HealthUser
 	base.Start();
 	//health = maxHealth;
         body = GetComponent<NavMeshAgent>();
-	healthRing = transform.Find("HEALTH_RING");
+	if(healthRing == null)
+	    healthRing = transform.Find("HEALTH_RING");
 	healthbarMat = healthRing.GetComponent<Renderer>().material;
         //healthText = GetComponentInChildren<TextMesh>();
 	//healthText.gameObject.SetActive(SHOW_DEBUG_TEXT);
@@ -145,7 +146,10 @@ public class Monster : HealthUser
 	//body.enabled = false;
 	body.Warp(transform.position);
 
-	healthbarMat.SetColor("_Color",teamColor);
+	//healthbarMat.SetColor("_Color",teamColor);
+
+	// if enemy then use enemy healthbar texture
+	
     }
 
     // Update is called once per frame
@@ -158,7 +162,7 @@ public class Monster : HealthUser
 	    //UpdateText(); // Display debuging information above monster
 
 
-	// HeathBar
+	// HealthBar
 	healthbarMat.SetFloat("_Offset",health/((float)startHealth));
 
 	// https://answers.unity.com/questions/252292/is-there-a-way-to-check-agent-velocity-for-navmesh.html
@@ -254,6 +258,15 @@ public class Monster : HealthUser
 	OnAttacked += group.MonsterAttacked;
     }
 
+    public void SetHealthbarMat(Material mat){
+	Debug.Log("SETTING HEALTHBAR MAT");
+	if(healthRing == null){
+	    healthRing = transform.Find("HEALTH_RING");
+	}
+	healthRing.GetComponent<Renderer>().material = mat;
+	healthbarMat = healthRing.GetComponent<Renderer>().material;
+    }
+
     public void LeaveGroup(){
 	OnDeath -= group.MonsterDeath;
 	OnKillTarget -= group.MonsterKill;
@@ -328,6 +341,72 @@ public class Monster : HealthUser
 	SetState(MonsterState.FOLLOW);
     }
 
+    
+    protected virtual HealthUser FindBestEnemy(ReadOnlyCollection<HealthUser> enemyGroup){
+	HealthUser bestEnemy = null;
+	float bestDist = 0;
+	bool enemyIsPlayer = false;
+
+	Debug.Log("FINDING BEST ENEMY");
+	foreach(HealthUser e in enemyGroup){
+	    if(e == null){
+		Debug.Log("E IS NULL!");
+	    }
+	    if(!e.IsDead){ // don't fight dead monsters
+		if(bestEnemy != null){
+		    float dist = Vector3.Distance(transform.position,e.transform.position);
+		    if(enemyIsPlayer){
+			// if bestEnemy is a player, then the rest are monsters
+			Monster m = e.GetComponent<Monster>();
+			if(!m.HasEnemy()){
+			    if(dist < bestDist){
+				// m is clearly the better enemy
+				bestEnemy = m;
+				bestDist = dist;
+				enemyIsPlayer = false;
+			    }
+			}
+			// sorry, this monster is taken
+		    }else{
+			Monster bestMonst = bestEnemy.GetComponent<Monster>();
+			Monster m = e.GetComponent<Monster>();
+
+			if(bestMonst == null){
+			    Debug.Log("BESTMONST IS NULL. IsPlayer? : " + bestMonst.IsPlayer().ToString());
+			}
+			if(bestMonst.HasEnemy()){
+			    if(!m.HasEnemy()){ // prioritize enemies that aren't already fighting someone
+				bestEnemy = m;
+				bestDist = dist;
+			    }else{
+				if(dist < bestDist){
+				    bestEnemy = m;
+				    bestDist = dist;
+				}
+			    }
+			}else{
+			    if(!m.HasEnemy()){
+				if(dist < bestDist){
+				    bestEnemy = m;
+				    bestDist = dist;
+				}
+			    }
+			}
+		    }
+
+		}else{
+		    // first item on list should always be the player (if there is one on the list)
+		    bestEnemy = e;
+		    bestDist = (transform.position - e.transform.position).magnitude;
+		    if(bestEnemy.IsPlayer()){
+			enemyIsPlayer = true;
+			Debug.Log("FIRST ENEMY IS PLAYER");
+		    }
+		}
+	    }
+	}
+	return bestEnemy;
+    }
 
     protected virtual Monster FindBestEnemy(ReadOnlyCollection<Monster> enemyGroup){
 	Monster bestEnemy = null; // best choice so far for an enemy;
@@ -393,6 +472,12 @@ public class Monster : HealthUser
 	return bestEnemy;
     }
 
+    public virtual HealthUser ChooseEnemy(ReadOnlyCollection<HealthUser> enemyGroup){
+	HealthUser bestEnemy = FindBestEnemy(enemyGroup);
+	this.AttackEnemy(bestEnemy);
+	return bestEnemy;
+    }
+
     
     /// <summary>
     /// Checks to see of this monster already has an enemy. If it doesn't then the 'attacker' becomes its enemy.
@@ -436,11 +521,13 @@ public class Monster : HealthUser
 	}
     }
 
+
     public void AttackEnemy(HealthUser enemy){
 	if(enemy.IsMonster()){
 	    AttackMonster(enemy.GetComponent<Monster>());
 	}else if(enemy.IsPlayer()){
 	    this.enemyTarget = enemy.transform;
+	    SetState(MonsterState.CHASE);
 	    enemyTarget.GetComponent<HealthUser>().OnDeath += TargetDeath;
 	}
     }
@@ -513,7 +600,13 @@ public class Monster : HealthUser
 
     public override void Damage(AttackInfo attackInfo){
 	base.Damage(attackInfo);
-	if(!InAttackState() && attackInfo.attacker != null && !attackInfo.attacker.IsDead){
+	bool enemyIsPlayer = false;
+	
+	if(enemyTarget != null){
+	    if(enemyTarget.GetComponent<HealthUser>().IsPlayer())
+		enemyIsPlayer = true;
+	}
+	if((!InAttackState() || enemyIsPlayer) && attackInfo.attacker != null && !attackInfo.attacker.IsDead){
 	    if(attackInfo.attacker.IsMonster()){
 		AttackMonster(attackInfo.attacker.GetComponent<Monster>());
 		if(OnAttacked != null){

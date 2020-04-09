@@ -57,10 +57,11 @@ public class FusionBox : MonoBehaviour
     }
 
     void CreateMonster(){
-	Monster monster = GameObject.Instantiate(monsterPrefab).GetComponent<Monster>();
-	monster.transform.position = transform.position+spawnOffset;
-	Debug.Log(spawnOffset);
-	group.AddMonster(monster);
+	// Monster monster = GameObject.Instantiate(monsterPrefab).GetComponent<Monster>();
+	// monster.transform.position = transform.position+spawnOffset;
+	// Debug.Log(spawnOffset);
+	// group.AddMonster(monster);
+	group.CreateMonster(monsterPrefab,transform.position+spawnOffset);
 	//monster.Warp(transform.position+spawnOffset);
     }
 }

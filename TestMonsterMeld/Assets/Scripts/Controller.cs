@@ -30,12 +30,16 @@ public class Controller : MonoBehaviour
 	//player.Move(leftStick,new Vector2(mouse.x-Screen.width/2,mouse.y-Screen.height/2).normalized);
 	Vector2 plyPos = cam.GetPlayerScreenPosition();
 	player.Move(leftStick,new Vector2(mouse.x-plyPos.x,mouse.y-plyPos.y).normalized);
+
+	int attackCall = (int)Input.GetAxis("AttackCall");
+
+	
 			
-	if (Input.GetButtonDown("Call"))
-	    {
-		Debug.Log("Calling Monsters");
-		player.CallMonsters();
-	    }
+	if (Input.GetButtonDown("Call") || attackCall == -1)
+	{
+	    Debug.Log("Calling Monsters");
+	    player.CallMonsters();
+	}
 
 	if(Input.GetButtonDown("Jump")){
 	    Debug.Log("JUMPING");
@@ -66,10 +70,12 @@ public class Controller : MonoBehaviour
 	//     player.SpawnMonster();
 	// }
 
-	if (Input.GetButtonDown("Attack"))
+	if (Input.GetButtonDown("Attack") || attackCall == 1)
 	    {
 		player.AttackMonsters();
 	    }
 	//}
     }
 }
+
+

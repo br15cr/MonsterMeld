@@ -68,6 +68,10 @@ public class Player : HealthUser
 	return playerMonsters;
     }
 
+    public override bool IsPlayer(){
+	return true;
+    }
+
     // https://docs.unity3d.com/ScriptReference/CharacterController.Move.html
 
     public void Move(Vector2 direction,Vector2 lookDir)
@@ -180,7 +184,7 @@ public class Player : HealthUser
 
     public void AttackMonsters()
     {
-        //Debug.Log("ATTACK");
+        Debug.Log("PLAYERGROUP ATTACK");
         Collider[] cols = Physics.OverlapSphere(transform.position, 10);
         //Debug.Log("Found Colliders: " + cols.Length.ToString());
         for(int i = 0; i < cols.Length; i++)
