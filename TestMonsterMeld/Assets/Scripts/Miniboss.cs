@@ -5,7 +5,7 @@ using UnityEngine;
 public class Miniboss : Monster
 {
     // the distance the miniboss gives up chasing an enemy
-    private float outOfRangeDistance = 5.0f;
+    protected float outOfRangeDistance = 5.0f;
     
     protected override void Start(){
         base.Start();

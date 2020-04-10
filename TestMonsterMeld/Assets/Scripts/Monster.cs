@@ -609,7 +609,7 @@ public class Monster : HealthUser
 	if((!InAttackState() || enemyIsPlayer) && attackInfo.attacker != null && !attackInfo.attacker.IsDead){
 	    if(attackInfo.attacker.IsMonster()){
 		AttackMonster(attackInfo.attacker.GetComponent<Monster>());
-		if(OnAttacked != null){
+		if(OnAttacked != null){ // OnAttacked != null
 		    //OnAttacked(this,attackInfo.attacker);
 		    OnAttacked(new AttackInstanceInfo(attackInfo,this,IsDead));
 		}

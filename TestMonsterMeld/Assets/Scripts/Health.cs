@@ -105,6 +105,8 @@ public struct HealthData {
 public delegate void AttackInfoDelegate(AttackInfo info); // add attacker to parameters
 public delegate void AttackInstanceInfoDelegate(AttackInstanceInfo info);
 
+
+
 public class HealthUser : MonoBehaviour
 {
     //private int health;
@@ -114,6 +116,11 @@ public class HealthUser : MonoBehaviour
     protected bool isDead = false;
 
     public event AttackInstanceInfoDelegate OnDeath;
+    //public event AttackInstanceInfoDelegate OnAttacked;
+
+    // protected bool CanOnAttacked {
+    // 	get { return this.OnAttacked != null; }
+    // }
 
     public float startHealth = 100;
     
@@ -190,4 +197,12 @@ public class HealthUser : MonoBehaviour
 	return health/maxHealth;
     }
     */
+
+    public static bool IsValid(HealthUser user){
+	if(user == null)
+	    return false;
+	if(user.IsDead)
+	    return false;
+	return true;
+    }
 }

@@ -139,25 +139,19 @@ public class MonsterGroup : MonoBehaviour
         }
     }
 
-    // public void Attack(HealthUser enemy){
-    // 	if(enemy.IsMonster()){
-    // 	    Attack(enemy.GetComponent<Monster>());
-    // 	}else{
-    // 	    Debug.Log("ATTACK PLAYER");
-    // 	}
-    // }
+
 
     //public void Attack(Monster enemyMonster) // attack MonsterGroup variant?
     public void Attack(HealthUser enemy)
     {
 	if(Count > 0){
 	    // if(enemyGroup == null){
-		string team = "";
-		enemyGroup = enemy.GetGroup();
-		foreach(Monster m in monsters){
-		    team += m.name + " ";
-		}
-		Debug.Log(name + " group join the fight! " + team + " enter the battlefield.");
+	    string team = "";
+	    enemyGroup = enemy.GetGroup();
+	    foreach(Monster m in monsters){
+		team += m.name + " ";
+	    }
+	    Debug.Log(name + " group join the fight! " + team + " enter the battlefield.");
 	    //}
 	    inCombat = true;
 
@@ -173,32 +167,32 @@ public class MonsterGroup : MonoBehaviour
 
 	
         /*
-        foreach(Monster m in monsters)
-        {
-            if(m.GetState() != MonsterState.ATTACK) {
-                m.AttackMonster(monster);
-            }
-            //if(m.GetState() != MonsterState.ATTACK)
-            //    m.AttackMonster(monster);
-        }
+	  foreach(Monster m in monsters)
+	  {
+	  if(m.GetState() != MonsterState.ATTACK) {
+	  m.AttackMonster(monster);
+	  }
+	  //if(m.GetState() != MonsterState.ATTACK)
+	  //    m.AttackMonster(monster);
+	  }
         */
 
 
 
-	    /*
-        foreach (Monster e in enemyGroup.GetMonsters()) {
-            if (!e.HasEnemy()) {
-                bool allOccupied = true;   // if all our monsters are attacking
-                foreach (Monster m in monsters) {
-                    if (!m.HasEnemy()) {
-                        m.AttackMonster(e);
-                        allOccupied = false;
-                    }
-                }
-                if (allOccupied)
-                    return;
-            }
-        }*/
+	/*
+	  foreach (Monster e in enemyGroup.GetMonsters()) {
+	  if (!e.HasEnemy()) {
+	  bool allOccupied = true;   // if all our monsters are attacking
+	  foreach (Monster m in monsters) {
+	  if (!m.HasEnemy()) {
+	  m.AttackMonster(e);
+	  allOccupied = false;
+	  }
+	  }
+	  if (allOccupied)
+	  return;
+	  }
+	  }*/
 
         // Attack Monster group
         // Find available enemy in group (doesn't have enemy and is close enough)
@@ -247,6 +241,11 @@ public class MonsterGroup : MonoBehaviour
     {
 	// this group begins attack on enemy group
 	//Debug.Log(monster.name + " IS GETTING ATTACKED!");
+	// Check if monster is valid
+	Attack(info.attacker);
+    }
+
+    public virtual void MemberAttacked(AttackInstanceInfo info){
 	Attack(info.attacker);
     }
 

@@ -59,7 +59,7 @@ GameObject:
   - component: {fileID: 1692368414402214120}
   - component: {fileID: 2300088149912174055}
   m_Layer: 5
-  m_Name: Image (1)
+  m_Name: Xbox Control
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -82,7 +82,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 30, y: 30}
+  m_SizeDelta: {x: 32, y: 32}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1692368414402214120
 CanvasRenderer:
@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 3648411616243872525}
   - component: {fileID: 6090524654534007979}
   m_Layer: 5
-  m_Name: Text (1)
+  m_Name: Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -215,7 +215,7 @@ GameObject:
   - component: {fileID: 7319436026398559717}
   - component: {fileID: 8337093979628384262}
   m_Layer: 5
-  m_Name: Text (2)
+  m_Name: Control
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
