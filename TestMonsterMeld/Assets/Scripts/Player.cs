@@ -337,4 +337,8 @@ public class Player : HealthUser
 	    return moveDirection;
 	}
     }
+
+    protected override void Die(AttackInfo finalBlow){
+	// Prevent game object from being destroyed.
+    }
 }

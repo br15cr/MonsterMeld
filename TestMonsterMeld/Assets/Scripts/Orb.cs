@@ -19,6 +19,8 @@ public class Orb : MonoBehaviour
     private bool onGround = false;
     private SphereCollider col;
     private Rigidbody body;
+
+    public AnimationCurve movement;
     
     void Start(){
         col = GetComponent<SphereCollider>();
