@@ -624,6 +624,11 @@ PrefabInstance:
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -1504981713932161579, guid: cf2dee9a59b0f7d4c98197bd6a42d5d6,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: e08890f31ede3164ba62fb5f77377a40, type: 2}
     - target: {fileID: 4603906056506640937, guid: 53ce0130dc9072140b7d40776af60e13,
         type: 3}
       propertyPath: m_Name

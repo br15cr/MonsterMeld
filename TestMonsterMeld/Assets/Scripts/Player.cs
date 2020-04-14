@@ -298,11 +298,11 @@ public class Player : HealthUser
     }
 
     void OnGUI(){
-	GUI.Label(new Rect(10,10,100,100),"Orbs: " + orbs.Count.ToString());
+	//GUI.Label(new Rect(10,10,100,100),"Orbs: " + orbs.Count.ToString());
 	// Player Info
-	GUI.Label(new Rect(10,50,100,100),"Velocity: " + velocity.ToString());
-	GUI.Label(new Rect(300,10,200,200),"Health: " + health.GetHealth().ToString());
-	GUI.Label(new Rect(300,30,200,200),"Monsters: " + playerMonsters.Count);
+	//GUI.Label(new Rect(10,50,100,100),"Velocity: " + velocity.ToString());
+	//GUI.Label(new Rect(300,10,200,200),"Health: " + health.GetHealth().ToString());
+	//GUI.Label(new Rect(300,30,200,200),"Monsters: " + playerMonsters.Count);
     }
 
     void OnDrawGizmos(){

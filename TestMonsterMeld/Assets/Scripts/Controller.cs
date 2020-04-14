@@ -20,6 +20,12 @@ public class Controller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+	if(!player.IsDead)
+	    Controls();
+    }
+
+    private void Controls()
+    {
     	//gameState = cam.GetComponent<GameState>();
     	//gameplay = gameState.gameplayBegun;
 
@@ -71,10 +77,10 @@ public class Controller : MonoBehaviour
 	// }
 
 	if (Input.GetButtonDown("Attack") || attackCall == 1)
-	    {
-		player.AttackMonsters();
-	    }
-	//}
+	{
+	    player.AttackMonsters();
+	}
+	//}	
     }
 }
 

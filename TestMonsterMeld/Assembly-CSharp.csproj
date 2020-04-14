@@ -72,6 +72,7 @@
      <Compile Include="Assets\Scripts\Miniboss.cs" />
      <Compile Include="Assets\Scripts\Monster.cs" />
      <Compile Include="Assets\Scripts\MonsterAnimationHandler.cs" />
+     <Compile Include="Assets\Scripts\MonsterCounter.cs" />
      <Compile Include="Assets\Scripts\MonsterGroup.cs" />
      <Compile Include="Assets\Scripts\MonsterInfoPanel.cs" />
      <Compile Include="Assets\Scripts\MonsterTypes\BurnEffect.cs" />

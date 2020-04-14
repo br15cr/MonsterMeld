@@ -74,6 +74,11 @@ public struct HealthData {
 	return maxHealth;
     }
 
+    // returns the current health in relation to maxhealth as a float between 0 and 1
+    public float GetHealthFloat(){
+	return health/maxHealth;
+    }
+
     public static HealthData operator +(HealthData a,float b){
 	HealthData hd = new HealthData(a.GetHealth()+b,a.GetMaxHealth());
 	return hd;
@@ -140,6 +145,11 @@ public class HealthUser : MonoBehaviour
     void Update(){
         
     }
+
+    public HealthData GetHealth(){
+	return health;
+    }
+
 
     /*
     private void SubHealth(float amount){
