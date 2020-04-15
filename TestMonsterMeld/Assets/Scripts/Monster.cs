@@ -114,6 +114,10 @@ public class Monster : HealthUser
 
     protected float currentSpeed = 0;
 
+    protected Renderer modelRenderer;
+    protected Material normalMat;
+    public Material hurtMat;
+
     protected virtual void Start() {
 	base.Start();
 	//health = maxHealth;
@@ -133,6 +137,10 @@ public class Monster : HealthUser
 
 	anim = this.GetComponent<Animator>();
 
+	modelRenderer = GetComponentsInChildren<Renderer>()[0];
+	normalMat = modelRenderer.material;
+	//Debug.Log("NORMAL MATERIAL: "+ normalMat.ToString());
+
 	// HealthUser
 	
 	// healthbarMat
@@ -149,7 +157,7 @@ public class Monster : HealthUser
 	//healthbarMat.SetColor("_Color",teamColor);
 
 	// if enemy then use enemy healthbar texture
-	
+	//hurtMat = Resources.Load<Material>("Materials/Damage");
     }
 
     // Update is called once per frame
@@ -597,10 +605,27 @@ public class Monster : HealthUser
 	return true;
     }
 
+    public void DamagedMat(){
+	Debug.Log("DAMAGED MAT");
+	Material[] mats = modelRenderer.materials;
+        mats[0] = hurtMat;
+	modelRenderer.materials = mats;
+    }
+
+    public void NormalMat(){
+	GetComponentsInChildren<Renderer>()[0].material = normalMat;
+	//modelRenderer.materials[0] = normalMat;
+    }
+
 
     public override void Damage(AttackInfo attackInfo){
 	base.Damage(attackInfo);
 	bool enemyIsPlayer = false;
+
+	if(anim != null){
+	    Debug.Log("TRIGGER 'hit' SET!");
+	    anim.SetTrigger("hit");
+	}
 	
 	if(enemyTarget != null){
 	    if(enemyTarget.GetComponent<HealthUser>().IsPlayer())

@@ -59,6 +59,8 @@ MonoBehaviour:
   minDistance: 3
   orbPrefab: {fileID: 3529501776409808087, guid: 9637de023023ecf44a5c342a4d4fd151,
     type: 3}
+  normalMat: {fileID: 2100000, guid: 303d82b4679d4af41b0078bc7895dde5, type: 2}
+  hurtMat: {fileID: 2100000, guid: db314771b5305a149ac707292261133a, type: 2}
 --- !u!195 &5646721663330001954
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -259,15 +261,15 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8239610718968164868}
     m_Modifications:
-    - target: {fileID: 9141728499708150927, guid: 144f2dea7f9c3074a8c63159fb127d4c,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 4005590642232768924, guid: 1a68f3c381909b241aa0e304b47bb23a,
         type: 3}
       propertyPath: m_Name
       value: HEALTH_RING
+      objectReference: {fileID: 0}
+    - target: {fileID: 9141728499708150927, guid: 144f2dea7f9c3074a8c63159fb127d4c,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4156677108812610858, guid: 1a68f3c381909b241aa0e304b47bb23a,
         type: 3}

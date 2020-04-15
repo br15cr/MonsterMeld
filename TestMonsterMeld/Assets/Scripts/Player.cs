@@ -45,6 +45,8 @@ public class Player : HealthUser
 
 
     public PlayerCamera plyCam;
+
+    public bool hasFusionBox = false;
     
     void Start()
     {
@@ -126,7 +128,7 @@ public class Player : HealthUser
 	  }
 	  transform.rotation = Quaternion.Euler(0, angle, 0);
 	*/
-	if(fusionBox != null){
+	if(hasFusionBox && fusionBox != null){
 	    if(direction.magnitude > 0.5f)
 		TakeDropBox(); // auto-take the fusion box
 	}
@@ -254,8 +256,17 @@ public class Player : HealthUser
 	
     }
 
+    public void GiveFusionBox(){
+	if(!hasFusionBox){
+	    hasFusionBox = true;
+	    //fusionBox = box;
+	    backbox.gameObject.SetActive(true);
+	    TakeDropBox();
+	}
+    }
+
     public void GrabDropBox(){
-	if(fusionBox == null){
+	if(hasFusionBox && fusionBox == null){
 	    // Drop (Spawn) FusionBox
 	    // hide backbox
 	    // assign box to fusionBox;
@@ -287,7 +298,7 @@ public class Player : HealthUser
 	      }
 	      }
 	    */
-	    if(Vector3.Distance(transform.position,fusionBox.transform.position) <= 3){
+	    if(hasFusionBox && Vector3.Distance(transform.position,fusionBox.transform.position) <= 3){
 		TakeDropBox();
 		// Destroy(fusionBox.gameObject);
 		// playerMonsters.ClearFollowTarget();
