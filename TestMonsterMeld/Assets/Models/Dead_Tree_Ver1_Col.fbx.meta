@@ -1,35 +1,9 @@
 fileFormatVersion: 2
-guid: c9a48a71f289ca246a18054f5c0db119
+guid: 6e6ae97efcdeccb4fb4cf20b815661d4
 ModelImporter:
   serializedVersion: 26
-  internalIDToNameTable:
-  - first:
-      74: 7485281474926307522
-    second: AncientDoor_Rig|AncientDoor_Open
-  - first:
-      74: -6340118441390538490
-    second: AncientDoor_Rig|AncientDoor_LeftAction
-  - first:
-      74: -5886874349201475908
-    second: AncientDoor_Rig|AncientDoor_RightAction
-  - first:
-      74: 2623339138380805887
-    second: AncientDoor_Left|AncientDoor_LeftAction
-  - first:
-      74: -8309062615384917877
-    second: AncientDoor_Left|AncientDoor_RightAction
-  - first:
-      74: -3910919693646569340
-    second: AncientDoor_Right|AncientDoor_LeftAction
-  - first:
-      74: 8329475455308536239
-    second: AncientDoor_Right|AncientDoor_RightAction
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Material.001
-    second: {fileID: 2100000, guid: 01ba298b5beb9be45bec9c91e748c292, type: 2}
+  internalIDToNameTable: []
+  externalObjects: {}
   materials:
     importMaterials: 1
     materialName: 0
@@ -49,7 +23,7 @@ ModelImporter:
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
     importConstraints: 0
-    animationCompression: 3
+    animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
@@ -84,7 +58,7 @@ ModelImporter:
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
-    useFileScale: 1
+    useFileScale: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -110,10 +84,10 @@ ModelImporter:
     globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
-    hasExtraRoot: 1
+    hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 0
   humanoidOversampling: 1
   additionalBone: 0
   userData: 

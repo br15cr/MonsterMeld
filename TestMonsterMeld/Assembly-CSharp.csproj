@@ -59,6 +59,7 @@
      <Compile Include="Assets\Scripts\Boss.cs" />
      <Compile Include="Assets\Scripts\CamScript.cs" />
      <Compile Include="Assets\Scripts\Controller.cs" />
+     <Compile Include="Assets\Scripts\DestroyOnPlay.cs" />
      <Compile Include="Assets\Scripts\DisplayState.cs" />
      <Compile Include="Assets\Scripts\FusionBox.cs" />
      <Compile Include="Assets\Scripts\GameState.cs" />
