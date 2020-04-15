@@ -34,8 +34,11 @@ public class PlayerCamera : MonoBehaviour
     public Vector3 targetOffset = new Vector3(0, 1, 1);
     public Vector3 zoomOffset = new Vector3(-3,2,-2);
     private Vector3 defaultOffset;
+    public Vector3 bossOffset = new Vector3(0,1,1);
     private Vector3 initialPlaycamPos;
     private Vector3 initialPlaycamRot;
+
+    private bool bossFight = false;
 
     // Start is called before the first frame update
     void Start() {
@@ -51,7 +54,12 @@ public class PlayerCamera : MonoBehaviour
     }
 
     public void ZoomOut(){
-	targetOffset = defaultOffset;
+	targetOffset = (bossFight ? bossOffset : defaultOffset);
+    }
+
+    public void OnBossTrigger(){
+	targetOffset = bossOffset;
+	bossFight = true;
     }
 
     // Update is called once per frame

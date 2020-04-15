@@ -57,11 +57,13 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\AttackBox.cs" />
      <Compile Include="Assets\Scripts\Boss.cs" />
+     <Compile Include="Assets\Scripts\BossTrigger.cs" />
      <Compile Include="Assets\Scripts\CamScript.cs" />
      <Compile Include="Assets\Scripts\Controller.cs" />
      <Compile Include="Assets\Scripts\DestroyOnPlay.cs" />
      <Compile Include="Assets\Scripts\DisplayState.cs" />
      <Compile Include="Assets\Scripts\FusionBox.cs" />
+     <Compile Include="Assets\Scripts\GameOverScreen.cs" />
      <Compile Include="Assets\Scripts\GameState.cs" />
      <Compile Include="Assets\Scripts\GameTrigger.cs" />
      <Compile Include="Assets\Scripts\GroupHUD.cs" />

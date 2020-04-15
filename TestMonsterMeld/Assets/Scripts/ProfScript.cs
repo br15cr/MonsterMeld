@@ -7,10 +7,14 @@ public class ProfScript : MonoBehaviour
     public GameObject dummyBox;
     private bool boxTaken = false;
     public GameObject dialogue;
+    public TextMesh text;
+
+    [MultilineAttribute]
+    public string profText;
     
     void Start()
     {
-        dialogue.SetActive(false);
+        //dialogue.SetActive(false);
     }
 
 
@@ -19,7 +23,8 @@ public class ProfScript : MonoBehaviour
 	    boxTaken = true;
 	    Destroy(dummyBox);
 	    player.GiveFusionBox();
-	    dialogue.SetActive(true);
+	    //dialogue.SetActive(true);
+	    text.text = profText;
 	}
     }
 
