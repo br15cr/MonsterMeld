@@ -47,6 +47,8 @@ public class Player : HealthUser
     public PlayerCamera plyCam;
 
     public bool hasFusionBox = false;
+
+    public Animator anim;
     
     void Start()
     {
@@ -112,6 +114,9 @@ public class Player : HealthUser
 	//body.SimpleMove(moveDirection*speed*100);
 	//body.Move(velocity);
 
+	if(Time.timeScale > 0)
+	    anim.SetLayerWeight(1,velocity.magnitude / speed );
+	
 	velocity += (yVel-GRAVITY*Time.deltaTime)*Vector3.up;
 	body.Move(velocity*Time.deltaTime);
 

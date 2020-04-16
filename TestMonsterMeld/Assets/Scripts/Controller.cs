@@ -20,7 +20,7 @@ public class Controller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-	if(!player.IsDead)
+	if(!player.IsDead && Time.timeScale > 0)
 	    Controls();
     }
 

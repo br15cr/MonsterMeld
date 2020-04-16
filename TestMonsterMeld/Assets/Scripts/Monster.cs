@@ -883,9 +883,9 @@ public class Monster : HealthUser
 	    //Monster m = c.gameObject.GetComponent<Monster>();
 	    HealthUser enemy = c.gameObject.GetComponent<HealthUser>();
 	    if(enemy != null){
-		Debug.Log("ENEMY ENTERED TRIGGER");
+		//Debug.Log("ENEMY ENTERED TRIGGER");
 		if(enemy.GetGroup() != this.group){
-		    Debug.Log("AGROED MONSTER");
+		    //Debug.Log("AGROED MONSTER");
 		    group.Attack(enemy);
 		    //AttackMonster(enemy);
 		    AttackEnemy(enemy);

@@ -59,7 +59,7 @@ MonoBehaviour:
   minDistance: 0
   orbPrefab: {fileID: 3529501776409808087, guid: 9637de023023ecf44a5c342a4d4fd151,
     type: 3}
-  hurtMat: {fileID: 0}
+  hurtMat: {fileID: 2100000, guid: db314771b5305a149ac707292261133a, type: 2}
 --- !u!195 &7798290797105504391
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -295,16 +295,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5781721481641424545}
     m_Modifications:
-    - target: {fileID: 965569949100446275, guid: 9963cfce0f263d948ab87bd0a22c9f88,
-        type: 3}
-      propertyPath: m_Name
-      value: TestStateDisplay
-      objectReference: {fileID: 0}
-    - target: {fileID: 965569949100446275, guid: 9963cfce0f263d948ab87bd0a22c9f88,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 965569949100446277, guid: 9963cfce0f263d948ab87bd0a22c9f88,
         type: 3}
       propertyPath: icons.Array.size
@@ -376,6 +366,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 965569949100446275, guid: 9963cfce0f263d948ab87bd0a22c9f88,
+        type: 3}
+      propertyPath: m_Name
+      value: TestStateDisplay
+      objectReference: {fileID: 0}
+    - target: {fileID: 965569949100446275, guid: 9963cfce0f263d948ab87bd0a22c9f88,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9963cfce0f263d948ab87bd0a22c9f88, type: 3}
 --- !u!4 &7926058672020788246 stripped
@@ -403,21 +403,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5781721481641424545}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 0c1861faca2bf1f41a3f61cdfee5fbc5,
-        type: 3}
-      propertyPath: m_Name
-      value: testmonster
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 0c1861faca2bf1f41a3f61cdfee5fbc5,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 0c1861faca2bf1f41a3f61cdfee5fbc5,
-        type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 0c1861faca2bf1f41a3f61cdfee5fbc5,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -488,6 +473,21 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 0c1861faca2bf1f41a3f61cdfee5fbc5,
+        type: 3}
+      propertyPath: m_Name
+      value: testmonster
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 0c1861faca2bf1f41a3f61cdfee5fbc5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 0c1861faca2bf1f41a3f61cdfee5fbc5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0c1861faca2bf1f41a3f61cdfee5fbc5, type: 3}
 --- !u!4 &3238634722390889850 stripped
@@ -503,11 +503,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7001061669497660142}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 88e5714fb5532cd4aafb327e15063a5d,
-        type: 3}
-      propertyPath: m_Name
-      value: leaf_guy
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 88e5714fb5532cd4aafb327e15063a5d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -577,6 +572,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 76.5924
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 88e5714fb5532cd4aafb327e15063a5d,
+        type: 3}
+      propertyPath: m_Name
+      value: leaf_guy
       objectReference: {fileID: 0}
     - target: {fileID: -1504981713932161579, guid: 88e5714fb5532cd4aafb327e15063a5d,
         type: 3}
